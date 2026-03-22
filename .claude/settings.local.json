@@ -20,7 +20,12 @@
       "WebFetch(domain:athletics.cmu.edu)",
       "WebFetch(domain:www.ncaa.com)",
       "Read(//Users/briando/**)",
-      "Bash(zip -r peak-aquatic-sports.zip peak-aquatic-sports --exclude \"peak-aquatic-sports/node_modules/*\" --exclude \"peak-aquatic-sports/.git/*\" --exclude \"peak-aquatic-sports/dist/*\")"
+      "Bash(zip -r peak-aquatic-sports.zip peak-aquatic-sports --exclude \"peak-aquatic-sports/node_modules/*\" --exclude \"peak-aquatic-sports/.git/*\" --exclude \"peak-aquatic-sports/dist/*\")",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git config:*)"
     ]
   }
 }
