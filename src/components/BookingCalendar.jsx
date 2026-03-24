@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -29,6 +29,8 @@ export default function BookingCalendar() {
   const [selectedSession, setSelectedSession] = useState(null)
   const [selectedTime, setSelectedTime] = useState(null)
   const [confirmed, setConfirmed] = useState(false)
+  const [videoFile, setVideoFile] = useState(null)
+  const fileRef = useRef()
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth)
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth)
@@ -78,6 +80,7 @@ export default function BookingCalendar() {
   const dateStr = selectedDate ? `${MONTHS[currentMonth]} ${selectedDate}, ${currentYear}` : ''
 
   if (confirmed) {
+    const isVideo = selectedSession === 'video'
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
@@ -86,7 +89,7 @@ export default function BookingCalendar() {
           background: 'var(--surface2)',
           border: '1px solid var(--border)',
           borderRadius: 12,
-          padding: '3rem 2rem',
+          padding: '2.5rem 2rem',
           textAlign: 'center',
         }}
       >
@@ -95,8 +98,56 @@ export default function BookingCalendar() {
         <p style={{ color: 'var(--muted)', fontSize: '0.85rem', lineHeight: 1.7, maxWidth: 340, margin: '0 auto 1.5rem' }}>
           {sessionObj?.label} on {dateStr} at {selectedTime}. We'll confirm via email within 24 hours.
         </p>
+
+        {isVideo && (
+          <div style={{
+            background: 'var(--bg)',
+            border: '1px solid var(--border)',
+            borderRadius: 10,
+            padding: '1.5rem',
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+          }}>
+            <p style={{ color: 'var(--text)', fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.5rem' }}>
+              Upload Your Video
+            </p>
+            <p style={{ color: 'var(--muted)', fontSize: '0.78rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+              Attach your stroke or race video so Coach Phil can annotate it before your review call.
+            </p>
+            <div
+              onClick={() => fileRef.current?.click()}
+              style={{
+                border: '2px dashed var(--border2)',
+                borderRadius: 8,
+                padding: '1.5rem 1rem',
+                cursor: 'pointer',
+                transition: 'border-color 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#a78bfa'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border2)'}
+            >
+              <input
+                ref={fileRef}
+                type="file"
+                accept="video/*"
+                onChange={(e) => setVideoFile(e.target.files[0])}
+                style={{ display: 'none' }}
+              />
+              <p style={{ color: videoFile ? 'var(--text)' : 'var(--muted)', fontSize: '0.82rem' }}>
+                {videoFile ? videoFile.name : 'Click to upload video (MP4, MOV)'}
+              </p>
+              <p style={{ color: 'var(--muted)', fontSize: '0.7rem', marginTop: '0.4rem' }}>Max 200MB · 30–60 seconds ideal</p>
+            </div>
+            {videoFile && (
+              <p style={{ color: '#a78bfa', fontSize: '0.78rem', marginTop: '0.75rem' }}>
+                Video attached — we'll review it before your call.
+              </p>
+            )}
+          </div>
+        )}
+
         <button
-          onClick={() => { setConfirmed(false); setSelectedDate(null); setSelectedTime(null); setSelectedSession(null) }}
+          onClick={() => { setConfirmed(false); setSelectedDate(null); setSelectedTime(null); setSelectedSession(null); setVideoFile(null) }}
           style={{
             background: 'none',
             border: '1px solid var(--border)',
