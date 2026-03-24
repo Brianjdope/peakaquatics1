@@ -1,138 +1,307 @@
-import React, { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import Ticker from '../components/Ticker'
-import StatsBar from '../components/StatsBar'
 import SchoolLogo from '../components/SchoolLogo'
 import Testimonials from '../components/Testimonials'
-import { ABOUT } from '../data'
+import Preloader from '../components/Preloader'
+import { ABOUT, STATS } from '../data'
 
-const HERO_IMG = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/f6ab90ae-4c57-4688-98b9-652657e80ec4/Banner1.jpg'
+const SPLIT_IMG = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/90b365f8-2070-408e-923b-733800a81069/Light+grey2.jpg'
 
-const fadeUp = {
-  hidden:  { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
-}
-
-const FEATURED_SCHOOLS = [
-  'Princeton University',
-  'University of Texas',
-  'Harvard University',
-  'Brown University',
-  'West Point',
-  'Wesleyan University',
-  'Tufts University',
-  'Cornell University',
-  'Northwestern University',
-  'Purdue University',
-  'Colgate University',
-  'University of Maine',
+const ATHLETE_SLIDES = [
+  {
+    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/d3b952ce-2c1f-45b3-9b55-e89f16d79cbc/Chloe+World+Junior+picture.jpg',
+    label: 'PRINCETON UNIVERSITY',
+    title: 'CHLOE KIM',
+    subtitle: '4th Place, World Junior Championships 2025',
+  },
+  {
+    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1730135596929-CT3TH0EQRII0VQI725SB/Timothy+Harvard.jpg',
+    label: 'HARVARD UNIVERSITY',
+    title: 'TIMOTHY LEE',
+  },
+  {
+    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1731428215434-9FS9VU8Z5XPAH034V7OE/Kate+Hurst+Budapest.jpg',
+    label: 'UNIVERSITY OF TEXAS',
+    title: 'KATE HURST',
+    subtitle: 'USA National Team 2024-2025',
+  },
+  {
+    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/bd5ba723-bf99-4d78-afee-529b7e7cc2ed/Private+Swimming+Lessons+%26+Swimming+Consultancy%7C+Paramus+%26+Tenafly%2C+New+Jersey',
+    label: 'OUR APPROACH',
+    title: 'COACHING THAT GETS RESULTS',
+  },
 ]
 
+const FEATURED_SCHOOLS = [
+  'Princeton University','University of Texas','Harvard University',
+  'Brown University','West Point','Wesleyan University',
+  'Tufts University','Cornell University','Northwestern University',
+  'Purdue University','Colgate University','University of Maine',
+]
+
+const FEATURES = [
+  'Personalized stroke analysis & technique coaching',
+  'Collegiate recruitment consulting & guidance',
+  'Race strategy & mental performance training',
+  'Direct connections with D1/D3 college coaches',
+  'Year-round structured training programs',
+]
+
+function useCountUp(target, duration = 1800, start = false) {
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    if (!start) return
+    const num = parseInt(target.replace(/\D/g, '')) || 0
+    if (num === 0) { setCount(target); return }
+    const suffix = target.replace(/[0-9]/g, '')
+    let startTime = null
+    const step = (ts) => {
+      if (!startTime) startTime = ts
+      const progress = Math.min((ts - startTime) / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.floor(eased * num) + suffix)
+      if (progress < 1) requestAnimationFrame(step)
+      else setCount(target)
+    }
+    requestAnimationFrame(step)
+  }, [start, target, duration])
+  return count
+}
+
+function StatItem({ s, inView }) {
+  const val = useCountUp(s.num, 1800, inView)
+  return (
+    <div className="hero-stat-item">
+      <span className="hero-stat-num">{inView ? val : '0'}</span>
+      <span className="hero-stat-label">{s.label}</span>
+    </div>
+  )
+}
+
+function RevealSection({ children, delay = 0, className = '', style = {} }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  return (
+    <motion.div
+      ref={ref}
+      animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 40 }}
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={className}
+      style={style}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function FullSlide({ img, label, title, subtitle, onClick, isHero }) {
+  return (
+    <section
+      className={`full-slide${isHero ? ' full-slide--hero' : ''}`}
+      onClick={onClick}
+    >
+      {img && (
+        <>
+          <div className="full-slide-bg" style={{ backgroundImage: `url(${img})` }} />
+          <div className="full-slide-overlay" />
+        </>
+      )}
+      <div className={`full-slide-text${isHero ? ' full-slide-text--center' : ''}`}>
+        {label && (
+          <motion.div
+            className="full-slide-label"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {label}
+          </motion.div>
+        )}
+        <motion.h2
+          className="full-slide-title"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {title}
+        </motion.h2>
+        {subtitle && (
+          <motion.div
+            className="full-slide-subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {subtitle}
+          </motion.div>
+        )}
+      </div>
+    </section>
+  )
+}
+
 export default function HomePage({ setPage }) {
-  const bgRef = useRef(null)
+  const statsRef     = useRef(null)
+  const [statsInView, setStatsInView] = useState(false)
+  const [preloaderDone, setPreloaderDone] = useState(false)
+  const handlePreloaderComplete = useCallback(() => setPreloaderDone(true), [])
 
   useEffect(() => {
-    const onScroll = () => {
-      if (bgRef.current) {
-        bgRef.current.style.transform = `translateY(${window.scrollY * 0.28}px)`
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const observer = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setStatsInView(true) },
+      { threshold: 0.3 }
+    )
+    if (statsRef.current) observer.observe(statsRef.current)
+    return () => observer.disconnect()
   }, [])
 
   return (
     <div>
-      {/* Hero */}
-      <section className="hero">
-        <div ref={bgRef} className="hero-bg" style={{ backgroundImage: `url(${HERO_IMG})` }} />
-        <div className="hero-overlay" />
-        <div className="hero-glow" />
 
-        <div className="hero-content">
-          <motion.p className="hero-eyebrow" variants={fadeUp} initial="hidden" animate="visible"
-            transition={{ duration: 0.9, delay: 0.1 }}>
-            Ramsey, NJ · Elite Competitive Swimming
-          </motion.p>
+      {/* ── PRELOADER ── */}
+      {!preloaderDone && <Preloader onComplete={handlePreloaderComplete} />}
 
-          <motion.h1 variants={fadeUp} initial="hidden" animate="visible"
-            transition={{ duration: 0.95, delay: 0.25 }}>
-            Go Above <em>&amp; Beyond</em>
-          </motion.h1>
+      {/* ── SLIDE 1: HERO ── */}
+      <FullSlide
+        isHero
+        title="PEAK AQUATIC SPORTS"
+        subtitle="Go Above & Beyond"
+      />
 
-          <motion.p className="hero-sub" variants={fadeUp} initial="hidden" animate="visible"
-            transition={{ duration: 0.95, delay: 0.4 }}>
-            Refine your skill and maximize your efficiency in the water.
-          </motion.p>
+      {/* ── ATHLETE SLIDES ── */}
+      {ATHLETE_SLIDES.map((slide, i) => (
+        <FullSlide
+          key={i}
+          img={slide.img}
+          label={slide.label}
+          title={slide.title}
+          subtitle={slide.subtitle}
+          onClick={() => setPage('placements')}
+        />
+      ))}
 
-          <motion.div className="hero-actions" variants={fadeUp} initial="hidden" animate="visible"
-            transition={{ duration: 0.95, delay: 0.55 }}>
-            <button className="btn btn-solid" onClick={() => setPage('contact')}>Get In Touch</button>
-            <button className="btn" onClick={() => setPage('about')}>Learn More</button>
-          </motion.div>
-        </div>
-
-        <div className="hero-scroll">
-          <div className="hero-scroll-line" />
-          <span>Scroll</span>
-        </div>
-      </section>
-
-      {/* Ticker */}
+      {/* ── TICKER ── */}
       <Ticker />
 
-      {/* Stats */}
-      <StatsBar />
-
-      {/* What We Do */}
-      <section style={{ background: 'var(--surface)', padding: '6rem 0' }}>
+      {/* ── WHAT WE DO ── */}
+      <section style={{ background:'var(--bg)', padding:'9rem 0', borderTop:'1px solid rgba(255,255,255,0.08)' }}>
         <div className="container">
           <div className="what-we-do-grid">
-            <div>
+            <RevealSection delay={0}>
               <p className="section-label">What We Do</p>
-              <h2>A Consultancy Built<br />for Champions</h2>
-            </div>
-            <div>
-              <p style={{ fontSize: '1rem', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '1.2rem' }}>
-                {ABOUT.homeIntro}
-              </p>
-              <p style={{ fontSize: '1rem', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '2rem' }}>
-                {ABOUT.homeBody}
-              </p>
-              <button className="btn btn-solid" onClick={() => setPage('about')}>Learn More</button>
-            </div>
+              <h2 style={{ lineHeight:1.05, marginTop:'0.5rem' }}>
+                A Consultancy<br />Built for<br />Champions
+              </h2>
+            </RevealSection>
+            <RevealSection delay={0.15}>
+              <div className="what-we-do-content">
+                <p>{ABOUT.homeIntro}</p>
+                <p>{ABOUT.homeBody}</p>
+                <div style={{ display:'flex', gap:'0.75rem', flexWrap:'wrap', marginBottom:'2.5rem' }}>
+                  <button className="btn btn-solid" onClick={() => setPage('about')}>Learn More</button>
+                  <button className="btn" onClick={() => setPage('services')}>View Services</button>
+                </div>
+                <div className="feature-list">
+                  {FEATURES.map((f, i) => (
+                    <motion.div
+                      className="feature-item"
+                      key={i}
+                      initial={{ opacity:0, x:-16 }}
+                      whileInView={{ opacity:1, x:0 }}
+                      viewport={{ once:true }}
+                      transition={{ duration:0.5, delay: i * 0.07, ease:[0.16,1,0.3,1] }}
+                    >
+                      <span className="feature-dot" />
+                      {f}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </RevealSection>
           </div>
         </div>
       </section>
 
-      {/* Academic Excellence — School Emblems */}
-      <section style={{ background: 'var(--bg)', padding: '6rem 0', borderTop: '1px solid var(--border)' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <p className="section-label">Academic Excellence</p>
-          <h2 style={{ marginBottom: '0.75rem' }}>Where Our Athletes Go</h2>
-          <p style={{ color: 'var(--muted)', maxWidth: '500px', margin: '0 auto 3.5rem', fontSize: '0.9rem' }}>
-            Our athletes compete and succeed at the nation's most prestigious universities.
-          </p>
+      {/* ── IMAGE SPLIT ── */}
+      <motion.div
+        className="img-split"
+        initial={{ opacity:0 }}
+        whileInView={{ opacity:1 }}
+        viewport={{ once:true, margin:'-60px' }}
+        transition={{ duration:0.9 }}
+      >
+        <div className="img-split-photo">
+          <img src={SPLIT_IMG} alt="Peak Aquatic coaching" />
+        </div>
+        <div className="img-split-content">
+          <RevealSection delay={0.1}>
+            <p className="section-label">Our Approach</p>
+            <h2 style={{ marginBottom:'1.2rem' }}>Coaching That<br />Gets Results</h2>
+            <p style={{ marginBottom:'2rem' }}>
+              We combine elite stroke technique, race strategy, and direct college coach connections
+              to give every swimmer an unfair advantage in the pool and in recruiting.
+            </p>
+            <button className="btn btn-solid" onClick={() => setPage('services')}>View Services</button>
+          </RevealSection>
+        </div>
+      </motion.div>
+
+      {/* ── STATS ── */}
+      <section style={{ background:'var(--bg)', padding:'5rem 0', borderTop:'1px solid var(--border)' }}>
+        <div className="container">
+          <div className="hero-stat-strip" ref={statsRef}>
+            {STATS.map((s, i) => <StatItem key={i} s={s} inView={statsInView} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHERE OUR ATHLETES GO ── */}
+      <section style={{ background:'var(--bg)', padding:'9rem 0', borderBottom:'1px solid var(--border)' }}>
+        <div className="container">
+          <RevealSection>
+            <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', marginBottom:'3.5rem', flexWrap:'wrap', gap:'1.5rem' }}>
+              <div>
+                <p className="section-label">Academic Excellence</p>
+                <h2 style={{ marginTop:'0.5rem' }}>Where Our<br />Athletes Go</h2>
+              </div>
+              <p style={{ color:'var(--muted)', maxWidth:'280px', fontSize:'0.88rem', lineHeight:1.8 }}>
+                Our athletes compete at the nation's most prestigious universities.
+              </p>
+            </div>
+          </RevealSection>
+
           <div className="schools-emblem-grid">
-            {FEATURED_SCHOOLS.map(school => (
-              <button
+            {FEATURED_SCHOOLS.map((school, i) => (
+              <motion.button
                 key={school}
                 className="school-emblem-card"
                 onClick={() => setPage('placements')}
                 title={school}
+                initial={{ opacity:0, y:24 }}
+                whileInView={{ opacity:1, y:0 }}
+                viewport={{ once:true }}
+                transition={{ duration:0.5, delay: i * 0.05, ease:[0.16,1,0.3,1] }}
+                whileHover={{ y:-4, transition:{ duration:0.2 } }}
               >
-                <SchoolLogo school={school} size={72} />
+                <SchoolLogo school={school} size={64} />
                 <span className="school-emblem-name">{school}</span>
-              </button>
+              </motion.button>
             ))}
           </div>
-          <div style={{ marginTop: '3rem' }}>
-            <button className="btn" onClick={() => setPage('placements')}>View All Placements</button>
+
+          <div style={{ marginTop:'3rem', display:'flex', justifyContent:'center' }}>
+            <button className="btn" onClick={() => setPage('placements')}>
+              View All Placements →
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* ── TESTIMONIALS ── */}
       <Testimonials />
     </div>
   )

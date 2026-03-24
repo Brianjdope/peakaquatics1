@@ -85,6 +85,11 @@ export default function PlacementsPage() {
             <div className="testimonials-carousel" ref={carouselRef}>
               {TESTIMONIALS.map((t, i) => (
                 <div className="testimonial-card" key={i}>
+                  {t.image && (
+                    <div className="testimonial-avatar">
+                      <img src={t.image} alt={t.name} />
+                    </div>
+                  )}
                   <div className="testimonial-quote-mark">"</div>
                   <p className="testimonial-text">{t.quote}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '1rem' }}>

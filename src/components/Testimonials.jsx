@@ -40,6 +40,11 @@ export default function Testimonials() {
         >
           {TESTIMONIALS.map((t, i) => (
             <div className="testimonial-card" key={i}>
+              {t.image && (
+                <div className="testimonial-avatar">
+                  <img src={t.image} alt={t.name} />
+                </div>
+              )}
               <div className="testimonial-quote-mark">"</div>
               <p className="testimonial-text">{t.quote}</p>
               <div className="testimonial-name">{t.name}</div>
