@@ -3,6 +3,9 @@ import { View, Text, ScrollView, StyleSheet, FlatList, Dimensions } from 'react-
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors, spacing, fonts } from '../theme'
 import { STATS, TESTIMONIALS } from '../data'
+import SwimIn from '../components/SwimIn'
+import WaveBackground from '../components/WaveBackground'
+import StrokeAnalysis from '../components/StrokeAnalysis'
 
 const { width } = Dimensions.get('window')
 
@@ -12,37 +15,60 @@ export default function HomeScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
 
         <View style={styles.hero}>
-          <Text style={styles.eyebrow}>RAMSEY, NJ · EST. 2021</Text>
-          <Text style={styles.title}>Peak Aquatic{'\n'}Sports</Text>
-          <Text style={styles.sub}>Elite swimming coaching and collegiate recruitment consulting.</Text>
+          <WaveBackground height={80} color="rgba(255,255,255,0.02)" speed={8000} />
+          <SwimIn delay={100} direction="up">
+            <Text style={styles.eyebrow}>RAMSEY, NJ · EST. 2021</Text>
+          </SwimIn>
+          <SwimIn delay={250} direction="up">
+            <Text style={styles.title}>Peak Aquatic{'\n'}Sports</Text>
+          </SwimIn>
+          <SwimIn delay={400} direction="up">
+            <Text style={styles.sub}>Elite swimming coaching and collegiate recruitment consulting.</Text>
+          </SwimIn>
         </View>
 
         <View style={styles.statsGrid}>
           {STATS.map((s, i) => (
-            <View key={i} style={[styles.stat, i % 2 !== 0 && styles.statRight]}>
-              <Text style={styles.statNum}>{s.num}</Text>
-              <Text style={styles.statLabel}>{s.label}</Text>
-            </View>
+            <SwimIn key={i} delay={500 + i * 120} direction={i % 2 === 0 ? 'left' : 'right'}>
+              <View style={[styles.stat, i % 2 !== 0 && styles.statRight]}>
+                <Text style={styles.statNum}>{s.num}</Text>
+                <Text style={styles.statLabel}>{s.label}</Text>
+              </View>
+            </SwimIn>
           ))}
         </View>
 
+        <WaveBackground height={50} color="rgba(255,255,255,0.015)" speed={10000} />
+
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>ATHLETE VOICES</Text>
+          <SwimIn delay={900} direction="up">
+            <Text style={styles.sectionLabel}>ATHLETE VOICES</Text>
+          </SwimIn>
           <FlatList
             data={TESTIMONIALS}
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(_, i) => String(i)}
-            renderItem={({ item }) => (
-              <View style={styles.testimonial}>
-                <Text style={styles.quote}>"{item.quote}"</Text>
-                <Text style={styles.quoteMeta}>{item.name} · {item.school}</Text>
-              </View>
+            renderItem={({ item, index }) => (
+              <SwimIn delay={1000 + index * 100} direction="right" distance={30}>
+                <View style={styles.testimonial}>
+                  <Text style={styles.quote}>"{item.quote}"</Text>
+                  <Text style={styles.quoteMeta}>{item.name} · {item.school}</Text>
+                </View>
+              </SwimIn>
             )}
             contentContainerStyle={{ paddingRight: spacing.lg }}
           />
         </View>
 
+        {/* Stroke Analysis Animation */}
+        <SwimIn delay={1200} direction="up">
+          <StrokeAnalysis />
+        </SwimIn>
+
+        <WaveBackground height={40} color="rgba(255,255,255,0.02)" speed={7000} />
+
+        <View style={{ height: spacing.xxl }} />
       </ScrollView>
     </SafeAreaView>
   )
@@ -55,6 +81,7 @@ const styles = StyleSheet.create({
     paddingTop: spacing.xxl,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
+    overflow: 'hidden',
   },
   eyebrow: {
     color: colors.accent,
@@ -78,7 +105,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   stat: {
-    width: '50%',
+    width: '100%',
     padding: spacing.xl,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,

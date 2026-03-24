@@ -52,7 +52,10 @@ export default function Footer({ setPage }) {
 
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Peak Aquatic Sports. All rights reserved.</span>
-          <span>Ramsey, NJ · 150 Triangle Plaza</span>
+          <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.35rem' }}>
+            <button className="footer-nav-btn" onClick={() => setPage('terms')} style={{ fontSize: '0.78rem' }}>Terms & Conditions</button>
+            <span>Ramsey, NJ · 150 Triangle Plaza</span>
+          </span>
         </div>
       </div>
     </footer>

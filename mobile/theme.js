@@ -1,12 +1,14 @@
 export const colors = {
-  bg: '#0a0e1a',
-  surface: '#111827',
-  surface2: '#1a2235',
-  border: '#1e2d45',
-  accent: '#c9a84c',
-  accentDim: '#a8843a',
-  text: '#e8eaf0',
-  muted: '#6b7a99',
+  bg: '#030303',
+  surface: '#0a0a0a',
+  surface2: '#111111',
+  surface3: '#1a1a1a',
+  border: 'rgba(255,255,255,0.08)',
+  border2: 'rgba(255,255,255,0.15)',
+  accent: '#fcfcfc',
+  accentDim: 'rgba(252,252,252,0.8)',
+  text: '#fcfcfc',
+  muted: 'rgba(252,252,252,0.35)',
   white: '#ffffff',
 }
 

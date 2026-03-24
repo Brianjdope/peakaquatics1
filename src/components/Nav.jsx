@@ -52,7 +52,7 @@ export default function Nav({ page, setPage }) {
           <a href="mailto:Philip.jkang@gmail.com" aria-label="Email">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
           </a>
-          <a href="tel:+12017887197" aria-label="Phone">
+          <a href="tel:+12013595688" aria-label="Phone">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
           </a>
         </div>
@@ -93,6 +93,25 @@ export default function Nav({ page, setPage }) {
             </div>
 
             <div className="nav-drawer-footer">
+              <button
+                className="nav-drawer-terms"
+                onClick={() => handleNav('terms')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'rgba(255,255,255,0.35)',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.5px',
+                  cursor: 'pointer',
+                  padding: 0,
+                  marginBottom: '0.5rem',
+                  transition: 'color 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}
+              >
+                Terms & Conditions
+              </button>
               <span>Peak Aquatic Sports</span>
               <span>Ramsey, NJ</span>
             </div>

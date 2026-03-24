@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { SERVICES_DATA, FAQS } from '../data'
+import BookingCalendar from '../components/BookingCalendar'
 
 const SERVICES_HERO = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/d5442bc1-106e-4cbb-b97c-1bf08cf27df3/AdobeStock_135671836.jpeg'
 
@@ -57,6 +58,69 @@ export default function ServicesPage({ setPage }) {
               ))}
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Book a Session */}
+      <section className="page-section" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
+        <div className="container">
+          <div className="contact-grid">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <p className="section-label">Schedule</p>
+              <h2 style={{ marginBottom: '0.75rem' }}>Book a Session</h2>
+              <p style={{ color: 'var(--muted)', maxWidth: 440, marginBottom: '2rem', lineHeight: 1.7 }}>
+                Pick a session type, choose a date and time, and we'll confirm your booking within 24 hours.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {[
+                  { step: '01', title: 'Choose Your Session', desc: 'Select from intro calls, video reviews, private or group sessions.' },
+                  { step: '02', title: 'Pick a Date & Time', desc: 'Browse available slots on the calendar and choose what works for you.' },
+                  { step: '03', title: 'Get Confirmation', desc: 'We\'ll confirm your booking via email within 24 hours.' },
+                ].map((s, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
+                    style={{
+                      display: 'flex',
+                      gap: '1.25rem',
+                      alignItems: 'flex-start',
+                      padding: '1.25rem',
+                      background: 'var(--surface2)',
+                      borderRadius: 8,
+                      border: '1px solid var(--border)',
+                    }}
+                  >
+                    <span style={{
+                      fontFamily: 'var(--mono)',
+                      fontSize: '0.8rem',
+                      color: 'var(--accent)',
+                      fontWeight: 700,
+                      minWidth: 32,
+                      paddingTop: 2,
+                    }}>{s.step}</span>
+                    <div>
+                      <h4 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{s.title}</h4>
+                      <p style={{ color: 'var(--muted)', fontSize: '0.85rem', lineHeight: 1.6 }}>{s.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <BookingCalendar />
+            </motion.div>
+          </div>
         </div>
       </section>
 

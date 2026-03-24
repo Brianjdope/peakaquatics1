@@ -9,6 +9,7 @@ import RecordsPage from './pages/RecordsPage'
 import ServicesPage from './pages/ServicesPage'
 import PlacementsPage from './pages/PlacementsPage'
 import ContactPage from './pages/ContactPage'
+import TermsPage from './pages/TermsPage'
 
 const pageVariants = {
   initial: { opacity: 0, y: 18 },
@@ -43,6 +44,7 @@ export default function App() {
       case 'services':   return <ServicesPage setPage={setPage} />
       case 'placements': return <PlacementsPage />
       case 'contact':    return <ContactPage />
+      case 'terms':      return <TermsPage />
       default:           return <HomePage setPage={setPage} />
     }
   }
