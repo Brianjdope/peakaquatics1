@@ -9,10 +9,10 @@
 // ==========================================
 
 var SHEET_NAME = 'Sheet1'
-var PHIL_EMAIL = 'Philip.jkang@gmail.com'
+var PHIL_EMAIL = 'peakaquaticsports@gmail.com'
 var LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
 var SITE_URL = 'https://brianjdope.github.io/peakaquatics1/'
-var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1ou0HOhKFngIFr-nSC5FETmBi9CVjQw5YR0-C-d0AsXRcC4PJJQwdXNuIH3QqBmOn/exec'
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHsyLmVhtoHqSf0H7AUC1xKDurWrbJZWDwSq87azhcHSjAPp6cc8XPQQ-nGgF3JQCs/exec'
 
 function doPost(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME)
@@ -128,6 +128,11 @@ function handleCancellation(sheet, data) {
   for (var i = 1; i < rows.length; i++) {
     // A (0) = BookingID, D (3) = Email, G (6) = Status
     if (rows[i][0] === data.bookingId && rows[i][3].toString().toLowerCase() === data.email.toLowerCase()) {
+      // Check if already cancelled
+      if (rows[i][6] === 'Cancelled') {
+        return jsonResponse({ success: false, error: 'This booking has already been cancelled.' })
+      }
+
       // Check 24-hour cancellation policy
       var bookingDate = parseBookingDate(rows[i][4])
       if (bookingDate) {

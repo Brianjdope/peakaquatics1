@@ -17,10 +17,44 @@ const pageVariants = {
   exit:    { opacity: 0, y: -12, transition: { duration: 0.3 } },
 }
 
+// Parse cancel hash from confirmation emails: #cancel?id=XXX&email=YYY
+function parseCancelHash() {
+  const hash = window.location.hash
+  if (hash.startsWith('#cancel')) {
+    const params = new URLSearchParams(hash.replace('#cancel?', ''))
+    const id = params.get('id')
+    const email = params.get('email')
+    if (id && email) {
+      return { bookingId: id, email }
+    }
+  }
+  return null
+}
+
 export default function App() {
-  const [page, setPage] = useState('home')
+  const initialCancel = parseCancelHash()
+  const [page, setPage] = useState(initialCancel ? 'services' : 'home')
   const [scrollPct, setScrollPct] = useState(0)
-  const [scrollToBooking, setScrollToBooking] = useState(false)
+  const [scrollToBooking, setScrollToBooking] = useState(!!initialCancel)
+  const [cancelParams, setCancelParams] = useState(initialCancel)
+
+  // Clean up hash after reading it, and handle future hash changes
+  useEffect(() => {
+    if (window.location.hash.startsWith('#cancel')) {
+      window.history.replaceState(null, '', window.location.pathname)
+    }
+    const handleHash = () => {
+      const cancel = parseCancelHash()
+      if (cancel) {
+        setCancelParams(cancel)
+        setScrollToBooking(true)
+        setPage('services')
+        setTimeout(() => { window.history.replaceState(null, '', window.location.pathname) }, 0)
+      }
+    }
+    window.addEventListener('hashchange', handleHash)
+    return () => window.removeEventListener('hashchange', handleHash)
+  }, [])
 
   const goToBooking = () => {
     if (page === 'services') {
@@ -58,7 +92,7 @@ export default function App() {
       case 'about':      return <AboutPage />
       case 'news':       return <NewsPage />
       case 'records':    return <RecordsPage />
-      case 'services':   return <ServicesPage setPage={setPage} />
+      case 'services':   return <ServicesPage setPage={setPage} cancelParams={cancelParams} onCancelParamsUsed={() => setCancelParams(null)} />
       case 'placements': return <PlacementsPage />
       case 'contact':    return <ContactPage />
       case 'terms':      return <TermsPage />

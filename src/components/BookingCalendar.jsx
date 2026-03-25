@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const SHEETS_API = 'https://script.google.com/macros/s/AKfycbw1ou0HOhKFngIFr-nSC5FETmBi9CVjQw5YR0-C-d0AsXRcC4PJJQwdXNuIH3QqBmOn/exec'
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwHsyLmVhtoHqSf0H7AUC1xKDurWrbJZWDwSq87azhcHSjAPp6cc8XPQQ-nGgF3JQCs/exec'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -95,7 +95,7 @@ function getFirstDayOfMonth(year, month) {
   return new Date(year, month, 1).getDay()
 }
 
-export default function BookingCalendar() {
+export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const today = new Date()
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
@@ -120,6 +120,37 @@ export default function BookingCalendar() {
   const [lookupDone, setLookupDone] = useState(false)
   const [cancellingId, setCancellingId] = useState('')
   const [cancelSuccess, setCancelSuccess] = useState('')
+
+  // Handle cancel link from confirmation email
+  useEffect(() => {
+    if (cancelParams?.bookingId && cancelParams?.email) {
+      setMode('cancel')
+      setCancelEmail(cancelParams.email)
+      onCancelParamsUsed?.()
+      // Auto-trigger lookup after state updates
+      setTimeout(async () => {
+        setLookupLoading(true)
+        setError('')
+        setBookings([])
+        setLookupDone(false)
+        setCancelSuccess('')
+        try {
+          const res = await fetch(`${SHEETS_API}?action=lookup&email=${encodeURIComponent(cancelParams.email)}`)
+          const text = await res.text()
+          const data = JSON.parse(text)
+          if (data.success) {
+            setBookings(data.bookings || [])
+            setLookupDone(true)
+          } else {
+            setError(data.error || 'Lookup failed.')
+          }
+        } catch {
+          setError('Could not connect to booking system. Please try again.')
+        }
+        setLookupLoading(false)
+      }, 100)
+    }
+  }, [cancelParams])
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth)
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth)
@@ -161,6 +192,14 @@ export default function BookingCalendar() {
     return d === 0 || d === 6
   }
 
+  const sendEmailFallback = () => {
+    const subject = encodeURIComponent(`New Booking: ${sessionObj?.label} — ${dateStr} at ${selectedTime}`)
+    const body = encodeURIComponent(
+      `New booking request:\n\nSession: ${sessionObj?.label} (${sessionObj?.duration})\nDate: ${dateStr}\nTime: ${selectedTime}\n\nClient: ${clientName}\nEmail: ${clientEmail}\nPhone: ${clientPhone || 'Not provided'}\n`
+    )
+    window.open(`mailto:peakaquaticsports@gmail.com?subject=${subject}&body=${body}`, '_blank')
+  }
+
   const handleConfirm = async () => {
     setSubmitting(true)
     setError('')
@@ -180,23 +219,27 @@ export default function BookingCalendar() {
             time: selectedTime,
           }),
         })
-        const data = await res.json()
-        if (data.success) {
-          setBookingId(data.bookingId)
+        const text = await res.text()
+        try {
+          const data = JSON.parse(text)
+          if (data.success) {
+            setBookingId(data.bookingId)
+            setConfirmed(true)
+          } else {
+            setError(data.error || 'Booking failed. Please try again.')
+          }
+        } catch {
+          // API returned non-JSON (likely HTML error page) — fall back to email
+          sendEmailFallback()
           setConfirmed(true)
-        } else {
-          setError(data.error || 'Booking failed. Please try again.')
         }
       } catch {
-        setError('Could not connect to booking system. Please try again or email us directly.')
+        // API failed — fall back to email
+        sendEmailFallback()
+        setConfirmed(true)
       }
     } else {
-      // Fallback to mailto if API not configured
-      const subject = encodeURIComponent(`New Booking: ${sessionObj?.label} — ${dateStr} at ${selectedTime}`)
-      const body = encodeURIComponent(
-        `New booking request:\n\nSession: ${sessionObj?.label} (${sessionObj?.duration})\nDate: ${dateStr}\nTime: ${selectedTime}\n\nClient: ${clientName}\nEmail: ${clientEmail}\nPhone: ${clientPhone || 'Not provided'}\n`
-      )
-      window.open(`mailto:peakaquaticsports@gmail.com?subject=${subject}&body=${body}`, '_blank')
+      sendEmailFallback()
       setConfirmed(true)
     }
     setSubmitting(false)
@@ -211,22 +254,27 @@ export default function BookingCalendar() {
     setCancelSuccess('')
 
     if (!SHEETS_API) {
-      setError('Booking system not configured. Please email peakaquaticsports@gmail.com to cancel.')
+      setError('To cancel a booking, please email peakaquaticsports@gmail.com or call 201-359-5688.')
       setLookupLoading(false)
       return
     }
 
     try {
       const res = await fetch(`${SHEETS_API}?action=lookup&email=${encodeURIComponent(cancelEmail)}`)
-      const data = await res.json()
-      if (data.success) {
-        setBookings(data.bookings || [])
-        setLookupDone(true)
-      } else {
-        setError(data.error || 'Lookup failed.')
+      const text = await res.text()
+      try {
+        const data = JSON.parse(text)
+        if (data.success) {
+          setBookings(data.bookings || [])
+          setLookupDone(true)
+        } else {
+          setError(data.error || 'Lookup failed.')
+        }
+      } catch {
+        setError('To cancel a booking, please email peakaquaticsports@gmail.com or call 201-359-5688.')
       }
     } catch {
-      setError('Could not connect to booking system. Please try again.')
+      setError('To cancel a booking, please email peakaquaticsports@gmail.com or call 201-359-5688.')
     }
     setLookupLoading(false)
   }

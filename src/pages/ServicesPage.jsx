@@ -37,7 +37,7 @@ const ServiceIcon = ({ type }) => {
   return icons[type] || null
 }
 
-export default function ServicesPage({ setPage }) {
+export default function ServicesPage({ setPage, cancelParams, onCancelParamsUsed }) {
   return (
     <div className="page-wrapper">
       <div className="page-header">
@@ -150,7 +150,7 @@ export default function ServicesPage({ setPage }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <BookingCalendar />
+              <BookingCalendar cancelParams={cancelParams} onCancelParamsUsed={onCancelParamsUsed} />
             </motion.div>
           </div>
         </div>

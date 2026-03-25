@@ -8,6 +8,7 @@ const LINKS = [
   { label: 'About',      page: 'about' },
   { label: 'Records',    page: 'records' },
   { label: 'Services',   page: 'services' },
+  { label: 'News & Events', page: 'news' },
   { label: 'Contact',    page: 'contact' },
 ]
 
