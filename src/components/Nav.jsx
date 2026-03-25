@@ -42,18 +42,18 @@ export default function Nav({ page, setPage, goToBooking }) {
 
   return (
     <>
-      {/* Top bar — hamburger/X left, social right */}
-      <nav className={`nav${scrolled || page !== 'home' ? ' scrolled' : ''}`} style={menuOpen ? { background: '#0c1a33', backdropFilter: 'none' } : {}}>
-        <button
-          className="nav-hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Menu"
-          style={{ zIndex: 200 }}
-        >
-          <span className={`hamburger-line${menuOpen ? ' open' : ''}`} />
-          <span className={`hamburger-line${menuOpen ? ' open' : ''}`} />
-        </button>
+      {/* Hamburger/X — standalone fixed, always on top of everything */}
+      <button
+        className="nav-hamburger"
+        onClick={() => setMenuOpen(!menuOpen)}
+        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+      >
+        <span className={`hamburger-line${menuOpen ? ' open' : ''}`} />
+        <span className={`hamburger-line${menuOpen ? ' open' : ''}`} />
+      </button>
 
+      {/* Top bar — social icons right */}
+      <nav className={`nav${scrolled || page !== 'home' ? ' scrolled' : ''}`} style={menuOpen ? { background: '#0c1a33', backdropFilter: 'none' } : {}}>
         {/* Social icons — always visible in nav bar */}
         <div className="nav-social">
           <a href="https://www.instagram.com/philkangg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
