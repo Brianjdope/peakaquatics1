@@ -669,19 +669,19 @@ export const ABOUT = {
 
 export const SERVICES_DATA = [
   {
-    icon: '🏊',
+    icon: 'private',
     title: 'Private Sessions',
     desc: 'Swimmers who decide to take one-on-one lessons will receive the coach\'s full attention for the entirety of the lesson.',
     duration: '1 hour',
   },
   {
-    icon: '👥',
+    icon: 'semi',
     title: 'Semi-Group Sessions',
     desc: 'Semi group sessions combine the individual attention, specificity of training and stroke refinement of private lessons with the peer interaction of a smaller group lesson.',
     duration: '1.5 hours',
   },
   {
-    icon: '🏆',
+    icon: 'group',
     title: 'Group Sessions',
     desc: 'Group sessions offer social interactions, peer encouragement and motivation with fellow teammates.',
     duration: '1.5 hours',

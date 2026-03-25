@@ -5,6 +5,38 @@ import BookingCalendar from '../components/BookingCalendar'
 
 const SERVICES_HERO = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/d5442bc1-106e-4cbb-b97c-1bf08cf27df3/AdobeStock_135671836.jpeg'
 
+const ServiceIcon = ({ type }) => {
+  const size = 28
+  const color = 'rgba(252,252,252,0.9)'
+  const icons = {
+    private: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M6 21v-2a6 6 0 0 1 12 0v2"/>
+      </svg>
+    ),
+    semi: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="9" cy="7" r="3.5"/>
+        <path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/>
+        <circle cx="18" cy="8" r="2.5"/>
+        <path d="M18 13.5a4 4 0 0 1 4 4V21"/>
+      </svg>
+    ),
+    group: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="5" r="3"/>
+        <path d="M5 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/>
+        <circle cx="4" cy="9" r="2.5"/>
+        <path d="M4 14a4 4 0 0 0-3 4v3"/>
+        <circle cx="20" cy="9" r="2.5"/>
+        <path d="M20 14a4 4 0 0 1 3 4v3"/>
+      </svg>
+    ),
+  }
+  return icons[type] || null
+}
+
 export default function ServicesPage({ setPage }) {
   return (
     <div className="page-wrapper">
@@ -29,7 +61,7 @@ export default function ServicesPage({ setPage }) {
           >
             {SERVICES_DATA.map((s, i) => (
               <div className="service-card" key={i}>
-                <div className="service-icon">{s.icon}</div>
+                <div className="service-icon"><ServiceIcon type={s.icon} /></div>
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
                 <div className="service-price">Duration: {s.duration}</div>
@@ -62,7 +94,7 @@ export default function ServicesPage({ setPage }) {
       </section>
 
       {/* Book a Session */}
-      <section className="page-section" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
+      <section id="booking" className="page-section" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
         <div className="container">
           <div className="contact-grid">
             <motion.div

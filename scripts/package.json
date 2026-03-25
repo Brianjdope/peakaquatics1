@@ -1,0 +1,15 @@
+{
+  "name": "calendar-compiler",
+  "version": "1.0.0",
+  "description": "Compiles Google Calendar + Notion calendar into a single .ics file",
+  "type": "commonjs",
+  "scripts": {
+    "compile": "node compile-calendar.js",
+    "setup": "node setup-google-auth.js"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "dotenv": "^16.4.5",
+    "googleapis": "^144.0.0"
+  }
+}

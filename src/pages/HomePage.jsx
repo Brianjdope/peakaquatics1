@@ -144,7 +144,7 @@ function FullSlide({ img, label, title, subtitle, onClick, isHero }) {
   )
 }
 
-export default function HomePage({ setPage }) {
+export default function HomePage({ setPage, goToBooking }) {
   const statsRef     = useRef(null)
   const [statsInView, setStatsInView] = useState(false)
   const [preloaderDone, setPreloaderDone] = useState(false)
@@ -203,7 +203,7 @@ export default function HomePage({ setPage }) {
                 <p>{ABOUT.homeBody}</p>
                 <div style={{ display:'flex', gap:'0.75rem', flexWrap:'wrap', marginBottom:'2.5rem' }}>
                   <button className="btn btn-solid" onClick={() => setPage('about')}>Learn More</button>
-                  <button className="btn" onClick={() => setPage('services')}>View Services</button>
+                  <button className="btn" onClick={goToBooking}>Book a Session</button>
                 </div>
                 <div className="feature-list">
                   {FEATURES.map((f, i) => (
@@ -245,7 +245,7 @@ export default function HomePage({ setPage }) {
               We combine elite stroke technique, race strategy, and direct college coach connections
               to give every swimmer an unfair advantage in the pool and in recruiting.
             </p>
-            <button className="btn btn-solid" onClick={() => setPage('services')}>View Services</button>
+            <button className="btn btn-solid" onClick={goToBooking}>Book a Session</button>
           </RevealSection>
         </div>
       </motion.div>

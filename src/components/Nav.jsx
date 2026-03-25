@@ -11,7 +11,7 @@ const LINKS = [
   { label: 'Contact',    page: 'contact' },
 ]
 
-export default function Nav({ page, setPage }) {
+export default function Nav({ page, setPage, goToBooking }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 

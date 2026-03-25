@@ -20,9 +20,26 @@ const pageVariants = {
 export default function App() {
   const [page, setPage] = useState('home')
   const [scrollPct, setScrollPct] = useState(0)
+  const [scrollToBooking, setScrollToBooking] = useState(false)
+
+  const goToBooking = () => {
+    if (page === 'services') {
+      const el = document.getElementById('booking')
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return }
+    }
+    setScrollToBooking(true)
+    setPage('services')
+  }
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
+    if (scrollToBooking && page === 'services') {
+      setTimeout(() => {
+        const el = document.getElementById('booking')
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        setScrollToBooking(false)
+      }, 600)
+    }
   }, [page])
 
   useEffect(() => {
@@ -37,7 +54,7 @@ export default function App() {
 
   const renderPage = () => {
     switch (page) {
-      case 'home':       return <HomePage setPage={setPage} />
+      case 'home':       return <HomePage setPage={setPage} goToBooking={goToBooking} />
       case 'about':      return <AboutPage />
       case 'news':       return <NewsPage />
       case 'records':    return <RecordsPage />
@@ -52,7 +69,7 @@ export default function App() {
   return (
     <>
       <div className="scroll-progress" style={{ width: `${scrollPct}%` }} />
-      <Nav page={page} setPage={setPage} />
+      <Nav page={page} setPage={setPage} goToBooking={goToBooking} />
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -67,6 +84,32 @@ export default function App() {
       </AnimatePresence>
 
       <Footer setPage={setPage} />
+
+      {/* Floating Book button */}
+      <button
+        onClick={goToBooking}
+        style={{
+          position: 'fixed',
+          bottom: 28,
+          right: 28,
+          background: '#fcfcfc',
+          color: '#030303',
+          border: 'none',
+          borderRadius: 50,
+          padding: '0.75rem 1.5rem',
+          fontSize: '0.82rem',
+          fontWeight: 700,
+          letterSpacing: '0.5px',
+          cursor: 'pointer',
+          zIndex: 90,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.5)' }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)' }}
+      >
+        Book Now
+      </button>
     </>
   )
 }
