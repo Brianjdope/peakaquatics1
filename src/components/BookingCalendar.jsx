@@ -121,33 +121,36 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const [cancellingId, setCancellingId] = useState('')
   const [cancelSuccess, setCancelSuccess] = useState('')
 
-  // Handle cancel link from confirmation email
+  // Handle cancel link from confirmation email — auto-cancel immediately
   useEffect(() => {
     if (cancelParams?.bookingId && cancelParams?.email) {
       setMode('cancel')
       setCancelEmail(cancelParams.email)
+      setCancellingId(cancelParams.bookingId)
       onCancelParamsUsed?.()
-      // Auto-trigger lookup after state updates
       setTimeout(async () => {
-        setLookupLoading(true)
         setError('')
-        setBookings([])
-        setLookupDone(false)
         setCancelSuccess('')
         try {
-          const res = await fetch(`${SHEETS_API}?action=lookup&email=${encodeURIComponent(cancelParams.email)}`)
-          const text = await res.text()
-          const data = JSON.parse(text)
+          const res = await fetch(SHEETS_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+              action: 'cancel',
+              bookingId: cancelParams.bookingId,
+              email: cancelParams.email,
+            }),
+          })
+          const data = await res.json()
           if (data.success) {
-            setBookings(data.bookings || [])
-            setLookupDone(true)
+            setCancelSuccess(cancelParams.bookingId)
           } else {
-            setError(data.error || 'Lookup failed.')
+            setError(data.error || 'Cancellation failed.')
           }
         } catch {
           setError('Could not connect to booking system. Please try again.')
         }
-        setLookupLoading(false)
+        setCancellingId('')
       }, 100)
     }
   }, [cancelParams])
