@@ -1,20 +1,187 @@
-import React, { useState } from 'react'
+import React, { useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { CONTACT_INFO } from '../data'
 
-const CONTACT_HERO = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/b836c977-cfa8-4164-9d97-5afff61c5640/AdobeStock_466733610.jpeg'
+const LOGO = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
+
+function BusinessCard() {
+  const cardRef = useRef(null)
+  const [flipped, setFlipped] = useState(false)
+  const [style, setStyle] = useState({})
+  const [shinePos, setShinePos] = useState({ x: 50, y: 50 })
+  const [hovering, setHovering] = useState(false)
+
+  const handleMouseMove = useCallback((e) => {
+    const card = cardRef.current
+    if (!card) return
+    const rect = card.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const cx = rect.width / 2
+    const cy = rect.height / 2
+    const rotateX = ((y - cy) / cy) * -12
+    const rotateY = ((x - cx) / cx) * 12
+    setStyle({ transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.04)` })
+    setShinePos({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 })
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setStyle({ transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)', transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)' })
+    setHovering(false)
+  }, [])
+
+  const handleMouseEnter = useCallback(() => {
+    setHovering(true)
+  }, [])
+
+  return (
+    <div style={{ perspective: '1000px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 40, rotateY: -15 }}
+        animate={{ opacity: 1, y: 0, rotateY: 0 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        style={{ width: '100%', maxWidth: 480, cursor: 'pointer' }}
+      >
+        {/* Card wrapper — handles 3D tilt */}
+        <div
+          ref={cardRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          onMouseEnter={handleMouseEnter}
+          onClick={() => setFlipped(f => !f)}
+          style={{
+            ...style,
+            position: 'relative',
+            width: '100%',
+            aspectRatio: '1.75',
+            transformStyle: 'preserve-3d',
+            transition: hovering ? 'transform 0.08s linear' : 'transform 0.6s cubic-bezier(0.16,1,0.3,1)',
+            userSelect: 'none',
+          }}
+        >
+          {/* ── FRONT ── */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backfaceVisibility: 'hidden',
+            borderRadius: 16,
+            background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0d0d0d 100%)',
+            border: '1px solid rgba(255,255,255,0.12)',
+            boxShadow: '0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05) inset',
+            overflow: 'hidden',
+            transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+            transition: 'transform 0.7s cubic-bezier(0.16,1,0.3,1)',
+            display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+            padding: '2rem 2.5rem',
+          }}>
+            {/* Holographic shine */}
+            <div style={{
+              position: 'absolute', inset: 0, borderRadius: 16, pointerEvents: 'none',
+              background: `radial-gradient(circle at ${shinePos.x}% ${shinePos.y}%, rgba(255,255,255,0.12) 0%, rgba(100,180,255,0.06) 30%, transparent 60%)`,
+              mixBlendMode: 'screen',
+              opacity: hovering ? 1 : 0,
+              transition: 'opacity 0.3s',
+            }} />
+            {/* Rainbow foil strip */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 3, borderRadius: '16px 16px 0 0',
+              background: 'linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6, #fb923c, #facc15, #4ade80, #60a5fa)',
+              opacity: 0.7,
+            }} />
+            {/* Top row */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <p style={{ fontFamily: 'var(--mono)', fontSize: '0.6rem', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                  Elite Aquatic Coaching
+                </p>
+                <h2 style={{ fontFamily: 'var(--display)', fontSize: 'clamp(1.4rem, 4vw, 2rem)', color: '#fcfcfc', fontWeight: 400, lineHeight: 0.95, margin: 0, letterSpacing: '-0.02em' }}>
+                  PEAK<br />AQUATIC<br />SPORTS
+                </h2>
+              </div>
+              <img src={LOGO} alt="Peak Aquatic Sports"
+                style={{ width: 52, height: 52, objectFit: 'contain', filter: 'invert(1) brightness(0.85)', opacity: 0.9 }}
+              />
+            </div>
+            {/* Bottom row */}
+            <div>
+              <p style={{ fontFamily: 'var(--sans)', fontSize: '0.95rem', color: '#fcfcfc', fontWeight: 600, margin: '0 0 0.15rem' }}>
+                Philip Kang
+              </p>
+              <p style={{ fontFamily: 'var(--mono)', fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', margin: 0 }}>
+                HEAD COACH &amp; FOUNDER
+              </p>
+              <p style={{ fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.08em', marginTop: '1.2rem' }}>
+                TAP TO FLIP
+              </p>
+            </div>
+            {/* Embossed watermark */}
+            <div style={{
+              position: 'absolute', bottom: '1rem', right: '1.5rem',
+              fontFamily: 'var(--display)', fontSize: '5rem', fontWeight: 400,
+              color: 'rgba(255,255,255,0.03)', lineHeight: 1, userSelect: 'none', letterSpacing: '-0.04em',
+            }}>PAS</div>
+          </div>
+
+          {/* ── BACK ── */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backfaceVisibility: 'hidden',
+            borderRadius: 16,
+            background: 'linear-gradient(135deg, #0d1a2e 0%, #0a1020 50%, #0d1a2e 100%)',
+            border: '1px solid rgba(96,165,250,0.2)',
+            boxShadow: '0 30px 80px rgba(0,0,0,0.7), 0 0 40px rgba(96,165,250,0.05) inset',
+            overflow: 'hidden',
+            transform: flipped ? 'rotateY(0deg)' : 'rotateY(-180deg)',
+            transition: 'transform 0.7s cubic-bezier(0.16,1,0.3,1)',
+            display: 'flex', flexDirection: 'column', justifyContent: 'center',
+            padding: '2rem 2.5rem', gap: '0.9rem',
+          }}>
+            {/* Holographic shine back */}
+            <div style={{
+              position: 'absolute', inset: 0, borderRadius: 16, pointerEvents: 'none',
+              background: `radial-gradient(circle at ${100 - shinePos.x}% ${shinePos.y}%, rgba(96,165,250,0.1) 0%, transparent 60%)`,
+              opacity: hovering ? 1 : 0, transition: 'opacity 0.3s',
+            }} />
+            {/* Rainbow foil strip */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 3, borderRadius: '16px 16px 0 0',
+              background: 'linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6, #fb923c, #facc15, #4ade80, #60a5fa)',
+              opacity: 0.7,
+            }} />
+            {[
+              { label: 'Phone', value: '201-359-5688', href: 'tel:+12013595688' },
+              { label: 'Email', value: 'peakaquaticsports@gmail.com', href: 'mailto:peakaquaticsports@gmail.com' },
+              { label: 'Instagram', value: '@philkangg', href: 'https://instagram.com/philkangg' },
+              { label: 'Location', value: 'Ramsey, NJ 07446', href: null },
+            ].map(item => (
+              <div key={item.label} style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: '0.55rem', letterSpacing: '0.18em', color: 'rgba(96,165,250,0.6)', textTransform: 'uppercase' }}>
+                  {item.label}
+                </span>
+                {item.href ? (
+                  <a href={item.href} onClick={e => e.stopPropagation()}
+                    style={{ fontFamily: 'var(--sans)', fontSize: '0.82rem', color: '#fcfcfc', textDecoration: 'none', fontWeight: 500 }}
+                    onMouseEnter={e => e.currentTarget.style.color = '#60a5fa'}
+                    onMouseLeave={e => e.currentTarget.style.color = '#fcfcfc'}
+                  >{item.value}</a>
+                ) : (
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: '0.82rem', color: '#fcfcfc', fontWeight: 500 }}>
+                    {item.value}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p style={{ textAlign: 'center', fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.12em', marginTop: '1.2rem' }}>
+          HOVER TO TILT · TAP TO FLIP
+        </p>
+      </motion.div>
+    </div>
+  )
+}
 
 export default function ContactPage() {
-  const [submitted, setSubmitted] = useState(false)
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
-
-  const handleChange = (e) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setSubmitted(true)
-  }
-
   return (
     <div className="page-wrapper">
       <div className="page-header">
@@ -41,7 +208,6 @@ export default function ContactPage() {
                 Contact us and we will be in touch with you shortly.
               </p>
 
-              {/* Hours */}
               {CONTACT_INFO.hours.map((h, i) => (
                 <div key={i} style={{ marginBottom: '1.8rem' }}>
                   <div className="contact-detail-label">{h.season}</div>
@@ -50,13 +216,10 @@ export default function ContactPage() {
                 </div>
               ))}
 
-              {/* Location & contact */}
               <div className="contact-detail" style={{ marginTop: '1.5rem' }}>
                 <div className="contact-detail-item">
                   <span className="contact-detail-label">Location</span>
-                  <span className="contact-detail-value" style={{ whiteSpace: 'pre-line' }}>
-                    {CONTACT_INFO.location}
-                  </span>
+                  <span className="contact-detail-value" style={{ whiteSpace: 'pre-line' }}>{CONTACT_INFO.location}</span>
                 </div>
                 <div className="contact-detail-item" style={{ marginTop: '1rem' }}>
                   <span className="contact-detail-label">Email</span>
@@ -69,40 +232,14 @@ export default function ContactPage() {
               </div>
             </motion.div>
 
-            {/* Right: form */}
+            {/* Right: business card */}
             <motion.div
               initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.15 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              style={{ display: 'flex', alignItems: 'center' }}
             >
-              {submitted ? (
-                <div className="form-success">
-                  <p style={{ color: 'var(--accent)', fontSize: '1.1rem', marginBottom: '0.5rem' }}>Thank you!</p>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--muted)' }}>
-                    We will be in touch with you shortly.
-                  </p>
-                </div>
-              ) : (
-                <form className="contact-form" onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <label htmlFor="name">Name</label>
-                    <input type="text" id="name" name="name" value={form.name} onChange={handleChange} required placeholder="Your name" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" value={form.email} onChange={handleChange} required placeholder="your@email.com" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="subject">Subject</label>
-                    <input type="text" id="subject" name="subject" value={form.subject} onChange={handleChange} required placeholder="How can we help?" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="message">Message</label>
-                    <textarea id="message" name="message" value={form.message} onChange={handleChange} required placeholder="Tell us about your goals..." />
-                  </div>
-                  <button type="submit" className="form-submit">Submit</button>
-                </form>
-              )}
+              <BusinessCard />
             </motion.div>
           </div>
         </div>

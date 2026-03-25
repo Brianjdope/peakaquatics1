@@ -278,7 +278,7 @@ section { padding: 8rem 0; }
 .nav {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 100;
+  z-index: 160;
   padding: 1.5rem 2rem;
   display: flex;
   align-items: center;
@@ -354,7 +354,7 @@ section { padding: 8rem 0; }
 }
 .nav-drawer-link {
   font-family: var(--display);
-  font-size: clamp(3.5rem, 9vw, 8.5rem);
+  font-size: clamp(2rem, 5.5vw, 4.5rem);
   line-height: 1.0;
   color: rgba(255,255,255,0.22);
   background: none;
@@ -1690,7 +1690,7 @@ section { padding: 8rem 0; }
 .img-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 560px;
+  min-height: 620px;
 }
 .img-split-photo {
   position: relative;

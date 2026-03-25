@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-const HERO_IMG = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1768921889010-CI1NQOOZMBGTLGYH81VB/IMG_2412.JPEG'
+const HERO_IMG = '/peakaquatics1/photos/kate-usa.jpg'
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 30 },

@@ -6,7 +6,7 @@ import Testimonials from '../components/Testimonials'
 import Preloader from '../components/Preloader'
 import { ABOUT, STATS } from '../data'
 
-const SPLIT_IMG = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/90b365f8-2070-408e-923b-733800a81069/Light+grey2.jpg'
+const SPLIT_IMG = '/peakaquatics1/photos/richard-action.jpg'
 
 const ATHLETE_SLIDES = [
   {
@@ -44,7 +44,6 @@ const FEATURES = [
   'Personalized stroke analysis & technique coaching',
   'Collegiate recruitment consulting & guidance',
   'Race strategy & mental performance training',
-  'Direct connections with D1/D3 college coaches',
   'Year-round structured training programs',
 ]
 
@@ -95,12 +94,18 @@ function RevealSection({ children, delay = 0, className = '', style = {} }) {
   )
 }
 
-function FullSlide({ img, label, title, subtitle, onClick, isHero }) {
+function FullSlide({ img, video, label, title, subtitle, onClick, isHero }) {
   return (
     <section
       className={`full-slide${isHero ? ' full-slide--hero' : ''}`}
       onClick={onClick}
     >
+      {video && (
+        <>
+          <video className="hero-video-bg" autoPlay muted loop playsInline src={video} />
+          <div className="full-slide-overlay" />
+        </>
+      )}
       {img && (
         <>
           <div className="full-slide-bg" style={{ backgroundImage: `url(${img})` }} />
@@ -172,18 +177,6 @@ export default function HomePage({ setPage, goToBooking }) {
         subtitle="Go Above & Beyond"
       />
 
-      {/* ── ATHLETE SLIDES ── */}
-      {ATHLETE_SLIDES.map((slide, i) => (
-        <FullSlide
-          key={i}
-          img={slide.img}
-          label={slide.label}
-          title={slide.title}
-          subtitle={slide.subtitle}
-          onClick={() => setPage('placements')}
-        />
-      ))}
-
       {/* ── TICKER ── */}
       <Ticker />
 
@@ -238,32 +231,35 @@ export default function HomePage({ setPage, goToBooking }) {
         />
       </section>
 
-      {/* ── IMAGE SPLIT ── */}
-      <motion.div
-        className="img-split"
-        initial={{ opacity:0 }}
-        whileInView={{ opacity:1 }}
-        viewport={{ once:true, margin:'-60px' }}
-        transition={{ duration:0.9 }}
-      >
-        <div className="img-split-photo">
-          <img src={SPLIT_IMG} alt="Peak Aquatic coaching" />
-        </div>
-        <div className="img-split-content">
+      {/* ── COACHING CTA ── */}
+      <section style={{ background: 'var(--bg)', padding: '7rem 0', borderTop: '1px solid var(--border)' }}>
+        <div className="container">
           <RevealSection delay={0.1}>
             <p className="section-label">Our Approach</p>
-            <h2 style={{ marginBottom:'1.2rem' }}>Coaching That<br />Gets Results</h2>
-            <p style={{ marginBottom:'2rem' }}>
+            <h2 style={{ marginBottom:'1.2rem', marginTop:'0.5rem' }}>Coaching That<br />Gets Results</h2>
+            <p style={{ color: 'var(--muted)', marginBottom:'2rem', maxWidth: '520px', lineHeight: 1.7 }}>
               We combine elite stroke technique, race strategy, and direct college coach connections
               to give every swimmer an unfair advantage in the pool and in recruiting.
             </p>
             <button className="btn btn-solid" onClick={goToBooking}>Book a Session</button>
           </RevealSection>
         </div>
-      </motion.div>
+      </section>
+
+      {/* ── ATHLETE SLIDES ── */}
+      {ATHLETE_SLIDES.map((slide, i) => (
+        <FullSlide
+          key={i}
+          img={slide.img}
+          label={slide.label}
+          title={slide.title}
+          subtitle={slide.subtitle}
+          onClick={() => setPage('placements')}
+        />
+      ))}
 
       {/* ── STATS ── */}
-      <section style={{ background:'var(--bg)', padding:'5rem 0', borderTop:'1px solid var(--border)' }}>
+      <section style={{ background:'var(--bg)', padding:'5rem 0 0', borderTop:'1px solid var(--border)' }}>
         <div className="container">
           <div className="hero-stat-strip" ref={statsRef}>
             {STATS.map((s, i) => <StatItem key={i} s={s} inView={statsInView} />)}
@@ -272,7 +268,7 @@ export default function HomePage({ setPage, goToBooking }) {
       </section>
 
       {/* ── WHERE OUR ATHLETES GO ── */}
-      <section style={{ background:'var(--bg)', padding:'9rem 0', borderBottom:'1px solid var(--border)' }}>
+      <section style={{ background:'var(--bg)', padding:'5rem 0', borderBottom:'1px solid var(--border)' }}>
         <div className="container">
           <RevealSection>
             <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', marginBottom:'3.5rem', flexWrap:'wrap', gap:'1.5rem' }}>

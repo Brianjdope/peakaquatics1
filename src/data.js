@@ -383,8 +383,8 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'June 21, 2024',
     title: '2024 U.S. Olympic Team Trials',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1718218480265-7HJFGNC8NJXZJTX1H2WF/Kate+USA+2.jpg',
-    imgPos: 'center 30%',
+    img: '/peakaquatics1/photos/kate-olympic-trials.jpg',
+    imgPos: 'center top',
     excerpt: 'Kate Hurst places 4th at finals in the 1500M Freestyle and 6th in the 800M Freestyle at the U.S. Olympic Team Trials!',
     body: [
       'June 15 - 23, 2024 - Lucas Oil Stadium, IN',
@@ -399,8 +399,8 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'June 12, 2024',
     title: 'Good Luck to Our Olympic Trials Qualifers!',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1718217293466-GJKO3J7O457XVTF2A2W8/Richard-Poplawski-By-Jack-Spitser-AL2I9007-1-scaled.jpg',
-    imgPos: 'center 30%',
+    img: '/peakaquatics1/photos/kate-diving.jpg',
+    imgPos: 'center 40%',
     excerpt: 'Congratulations to Kate Hurst, Chloe Kim, Richard Poplawski and Eric Lee! Go USA!',
     body: [
       'June 15 - 23, 2024 - Lucas Oil Stadium, IN',

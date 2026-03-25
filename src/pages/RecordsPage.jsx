@@ -102,12 +102,12 @@ export default function RecordsPage() {
                         <td className="rank-1">{t1}</td>
                         <td>{y1}</td>
                         <td className="rank-2">{n2}</td>
-                        <td>{t2}</td>
+                        <td className="rank-2">{t2}</td>
                         <td>{y2}</td>
                         {table.threeCol && (
                           <>
-                            <td>{n3}</td>
-                            <td style={{ color: 'var(--accent)', fontFamily: 'var(--serif)', fontWeight: 600 }}>{t3}</td>
+                            <td className="rank-3">{n3}</td>
+                            <td className="rank-3">{t3}</td>
                             <td>{y3}</td>
                           </>
                         )}

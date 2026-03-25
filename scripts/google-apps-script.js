@@ -3,8 +3,8 @@
 // (Extensions → Apps Script in your Google Sheet)
 // ==========================================
 //
-// COLUMN LAYOUT:
-// A: BookingID | B: Name | C: Session | D: Email | E: Date | F: Phone | G: Status
+// COLUMN LAYOUT (matches Sheet1 headers):
+// A: Day/Time | B: Session | C: Members (Name) | D: Skill Level | E: Status | F: Booking ID | G: Email
 //
 // ==========================================
 
@@ -47,20 +47,29 @@ function handleBooking(sheet, data) {
   var bookingId = 'PAS-' + Math.random().toString(36).substring(2, 8).toUpperCase()
   var dateTime = data.date + ' at ' + data.time
 
-  // A: BookingID | B: Name | C: Session | D: Email | E: Date | F: Phone | G: Status
+  // A: Day/Time | B: Session | C: Members | D: Skill Level | E: Status | F: Booking ID | G: Email
   sheet.appendRow([
-    bookingId,
-    data.name,
-    data.session,
-    data.email,
     dateTime,
-    data.phone || '',
+    data.session,
+    data.name,
+    data.skillLevel || '',
     'Confirmed',
+    bookingId,
+    data.email,
   ])
 
-  // Color the new row green
+  // Color the new row by session type
+  var sessionColors = {
+    'Intro Call':       '#cfe2ff',
+    'Video Review':     '#e9d8fd',
+    'Private Session':  '#d9ead3',
+    'Semi-Group':       '#fff2cc',
+    'Group Session':    '#fce5cd',
+    'Dryland':          '#d9d9d9',
+  }
+  var rowColor = sessionColors[data.session] || '#d9ead3'
   var lastRow = sheet.getLastRow()
-  sheet.getRange(lastRow, 1, 1, 7).setBackground('#d9ead3')
+  sheet.getRange(lastRow, 1, 1, 7).setBackground(rowColor)
 
   // Email Phil (plain text is fine for internal)
   MailApp.sendEmail(
@@ -126,15 +135,15 @@ function handleCancellation(sheet, data) {
   var rows = sheet.getDataRange().getValues()
 
   for (var i = 1; i < rows.length; i++) {
-    // A (0) = BookingID, D (3) = Email, G (6) = Status
-    if (rows[i][0] === data.bookingId && rows[i][3].toString().toLowerCase() === data.email.toLowerCase()) {
+    // F (5) = BookingID, G (6) = Email, E (4) = Status
+    if (rows[i][5] === data.bookingId && rows[i][6].toString().toLowerCase() === data.email.toLowerCase()) {
       // Check if already cancelled
-      if (rows[i][6] === 'Cancelled') {
+      if (rows[i][4] === 'Cancelled') {
         return jsonResponse({ success: false, error: 'This booking has already been cancelled.' })
       }
 
       // Check 24-hour cancellation policy
-      var bookingDate = parseBookingDate(rows[i][4])
+      var bookingDate = parseBookingDate(rows[i][0])
       if (bookingDate) {
         var hoursUntil = (bookingDate.getTime() - new Date().getTime()) / (1000 * 60 * 60)
         if (hoursUntil < 24) {
@@ -142,30 +151,30 @@ function handleCancellation(sheet, data) {
         }
       }
 
-      // Set status to Cancelled (column G = 7th column)
-      sheet.getRange(i + 1, 7).setValue('Cancelled')
+      // Set status to Cancelled (column E = 5th column)
+      sheet.getRange(i + 1, 5).setValue('Cancelled')
       // Color the row red
       sheet.getRange(i + 1, 1, 1, 7).setBackground('#f4cccc')
 
       // Notify Phil
       MailApp.sendEmail(
         PHIL_EMAIL,
-        'Booking Cancelled: ' + rows[i][0],
-        'Booking ' + rows[i][0] + ' has been cancelled.\n\n' +
-        'Client: ' + rows[i][1] + '\n' +
-        'Session: ' + rows[i][2] + '\n' +
-        'Date: ' + rows[i][4]
+        'Booking Cancelled: ' + rows[i][5],
+        'Booking ' + rows[i][5] + ' has been cancelled.\n\n' +
+        'Client: ' + rows[i][2] + '\n' +
+        'Session: ' + rows[i][1] + '\n' +
+        'Date: ' + rows[i][0]
       )
 
       // Professional HTML cancellation email to client
       var html = emailTemplate(
         'Booking Cancelled',
-        'Hi ' + rows[i][1] + ',',
+        'Hi ' + rows[i][2] + ',',
         'Your booking has been cancelled. Here are the details:',
         [
-          { label: 'Session', value: rows[i][2] },
-          { label: 'Date & Time', value: rows[i][4] },
-          { label: 'Booking ID', value: rows[i][0] },
+          { label: 'Session', value: rows[i][1] },
+          { label: 'Date & Time', value: rows[i][0] },
+          { label: 'Booking ID', value: rows[i][5] },
         ],
         [
           { url: SITE_URL, label: 'Book Again', color: '#1a1a2e' },
@@ -174,10 +183,10 @@ function handleCancellation(sheet, data) {
       )
 
       MailApp.sendEmail({
-        to: rows[i][3],
+        to: rows[i][6],
         subject: 'Booking Cancelled — Peak Aquatic Sports',
         htmlBody: html,
-        body: 'Booking Cancelled — ' + rows[i][2] + ' on ' + rows[i][4] + '. Booking ID: ' + rows[i][0],
+        body: 'Booking Cancelled — ' + rows[i][1] + ' on ' + rows[i][0] + '. Booking ID: ' + rows[i][5],
       })
 
       return jsonResponse({ success: true, message: 'Booking cancelled' })
@@ -192,12 +201,12 @@ function handleLookup(sheet, email) {
   var bookings = []
 
   for (var i = 1; i < rows.length; i++) {
-    // D (3) = Email, G (6) = Status
-    if (rows[i][3].toString().toLowerCase() === email.toLowerCase() && rows[i][6] === 'Confirmed') {
+    // G (6) = Email, E (4) = Status, F (5) = BookingID, B (1) = Session, A (0) = Day/Time
+    if (rows[i][6].toString().toLowerCase() === email.toLowerCase() && rows[i][4] === 'Confirmed') {
       bookings.push({
-        bookingId: rows[i][0],
-        session: rows[i][2],
-        date: rows[i][4],
+        bookingId: rows[i][5],
+        session: rows[i][1],
+        date: rows[i][0],
         time: '',
       })
     }

@@ -108,6 +108,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const [clientName, setClientName] = useState('')
   const [clientEmail, setClientEmail] = useState('')
   const [clientPhone, setClientPhone] = useState('')
+  const [skillLevel, setSkillLevel] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const fileRef = useRef()
@@ -218,6 +219,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             email: clientEmail,
             phone: clientPhone,
             session: sessionObj?.label,
+            skillLevel: skillLevel,
             date: dateStr,
             time: selectedTime,
           }),
@@ -912,6 +914,33 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                   boxSizing: 'border-box',
                 }}
               />
+            </div>
+
+            {/* Skill level */}
+            <div style={{ marginBottom: '0.75rem' }}>
+              <p style={{ color: 'var(--muted)', fontSize: '0.72rem', marginBottom: '0.4rem' }}>Skill Level (optional)</p>
+              <div style={{ display: 'flex', gap: '0.4rem' }}>
+                {['Novice', 'Intermediate', 'Advanced'].map(level => (
+                  <button
+                    key={level}
+                    onClick={() => setSkillLevel(skillLevel === level ? '' : level)}
+                    style={{
+                      flex: 1,
+                      background: skillLevel === level ? (sessionObj?.color || 'var(--text)') : 'var(--surface2)',
+                      color: skillLevel === level ? '#000' : 'var(--muted)',
+                      border: `1px solid ${skillLevel === level ? 'transparent' : 'var(--border)'}`,
+                      borderRadius: 6,
+                      padding: '0.45rem 0.25rem',
+                      fontSize: '0.72rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <button

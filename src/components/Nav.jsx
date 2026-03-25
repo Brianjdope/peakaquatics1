@@ -43,7 +43,7 @@ export default function Nav({ page, setPage, goToBooking }) {
   return (
     <>
       {/* Top bar — hamburger/X left, social right */}
-      <nav className={`nav${scrolled || page !== 'home' ? ' scrolled' : ''}`}>
+      <nav className={`nav${scrolled || page !== 'home' ? ' scrolled' : ''}`} style={menuOpen ? { background: '#0c1a33', backdropFilter: 'none' } : {}}>
         <button
           className="nav-hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -54,14 +54,12 @@ export default function Nav({ page, setPage, goToBooking }) {
           <span className={`hamburger-line${menuOpen ? ' open' : ''}`} />
         </button>
 
-        {/* Social icons in nav bar (hidden when drawer open, shown in drawer instead) */}
-        {!menuOpen && (
-          <div className="nav-social">
-            <a href="https://www.instagram.com/philkangg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
-            <a href="mailto:Philip.jkang@gmail.com" aria-label="Email"><EmailIcon /></a>
-            <a href="tel:+12013595688" aria-label="Phone"><PhoneIcon /></a>
-          </div>
-        )}
+        {/* Social icons — always visible in nav bar */}
+        <div className="nav-social">
+          <a href="https://www.instagram.com/philkangg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
+          <a href="mailto:Philip.jkang@gmail.com" aria-label="Email"><EmailIcon /></a>
+          <a href="tel:+12013595688" aria-label="Phone"><PhoneIcon /></a>
+        </div>
       </nav>
 
       {/* Full-screen McCann-style drawer */}
@@ -74,18 +72,6 @@ export default function Nav({ page, setPage, goToBooking }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Social icons top-right */}
-            <motion.div
-              className="nav-drawer-social"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
-              <a href="https://www.instagram.com/philkangg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
-              <a href="mailto:Philip.jkang@gmail.com" aria-label="Email"><EmailIcon /></a>
-              <a href="tel:+12013595688" aria-label="Phone"><PhoneIcon /></a>
-            </motion.div>
-
             {/* Links — bottom-left aligned like McCann */}
             <div className="nav-drawer-content">
               {LINKS.map((l, i) => (
