@@ -11,6 +11,7 @@ import PlacementsPage from './pages/PlacementsPage'
 import ContactPage from './pages/ContactPage'
 import TermsPage from './pages/TermsPage'
 import GalleryPage from './pages/GalleryPage'
+import InstallAppBanner from './components/InstallAppBanner'
 
 const pageVariants = {
   initial: { opacity: 0, y: 18 },
@@ -105,6 +106,7 @@ export default function App() {
   return (
     <>
       <div className="scroll-progress" style={{ width: `${scrollPct}%` }} />
+      <InstallAppBanner />
       <Nav page={page} setPage={setPage} goToBooking={goToBooking} />
 
       <AnimatePresence mode="wait">
@@ -123,24 +125,8 @@ export default function App() {
 
       {/* Floating Book button */}
       <button
+        className="floating-book-btn"
         onClick={goToBooking}
-        style={{
-          position: 'fixed',
-          bottom: 28,
-          right: 28,
-          background: '#fcfcfc',
-          color: '#030303',
-          border: 'none',
-          borderRadius: 50,
-          padding: '0.75rem 1.5rem',
-          fontSize: '0.82rem',
-          fontWeight: 700,
-          letterSpacing: '0.5px',
-          cursor: 'pointer',
-          zIndex: 90,
-          boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-          transition: 'transform 0.2s, box-shadow 0.2s',
-        }}
         onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.5)' }}
         onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)' }}
       >

@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Peak Aquatic Sports",
+    "slug": "peak-aquatic-sports",
+    "scheme": "peakaquatic",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.peakaquaticsports.mobile"
+    },
+    "extra": {
+      "apiBaseUrl": "https://your-vercel-domain.vercel.app/api"
+    }
+  }
+}

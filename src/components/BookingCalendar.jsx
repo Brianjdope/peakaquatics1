@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const SHEETS_API = 'https://script.google.com/macros/s/AKfycbxBoKfdZks4JK_Gm8N8JG2dVgroi1QTzfC1eYlp6bC0pGKg-SPS7td1-rN8U_LNa20m/exec'
+import { cancelBooking, createBooking, fetchAvailability, lookupBookings } from '../lib/bookingClient'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -145,16 +144,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
         setError('')
         setCancelSuccess('')
         try {
-          const res = await fetch(SHEETS_API, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({
-              action: 'cancel',
-              bookingId: cancelParams.bookingId,
-              email: cancelParams.email,
-            }),
-          })
-          const data = await res.json()
+          const data = await cancelBooking(cancelParams.bookingId, cancelParams.email)
           if (data.success) {
             setCancelSuccess(cancelParams.bookingId)
           } else {
@@ -223,46 +213,33 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     if (!clientName.trim()) { setError('Please enter your name.'); setSubmitting(false); return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) { setError('Please enter a valid email address.'); setSubmitting(false); return }
 
-    if (SHEETS_API) {
-      try {
-        const res = await fetch(SHEETS_API, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({
-            action: 'book',
-            name: clientName,
-            email: clientEmail,
-            phone: clientPhone,
-            session: sessionObj?.label,
-            skillLevel: skillLevel,
-            date: dateStr,
-            time: selectedTime,
-          }),
-        })
-        const text = await res.text()
-        try {
-          const data = JSON.parse(text)
-          if (data.success) {
-            setBookingId(data.bookingId)
-            setConfirmed(true)
-          } else {
-            setError(data.error || 'Booking failed. Please try again.')
-          }
-        } catch {
-          // API returned non-JSON (likely HTML error page) — fall back to email
-          sendEmailFallback()
-          setConfirmed(true)
+    try {
+      const data = await createBooking({
+        name: clientName,
+        email: clientEmail,
+        phone: clientPhone,
+        session: sessionObj?.label,
+        skillLevel,
+        date: dateStr,
+        time: selectedTime,
+      })
+      if (data.success) {
+        setBookingId(data.bookingId)
+        if (data.checkoutUrl) {
+          window.location.href = data.checkoutUrl
+          return
         }
-      } catch {
-        // API failed — fall back to email
-        sendEmailFallback()
         setConfirmed(true)
+      } else {
+        setError(data.error || 'Booking failed. Please try again.')
       }
-    } else {
+    } catch {
       sendEmailFallback()
       setConfirmed(true)
     }
-    setSubmitting(false)
+    finally {
+      setSubmitting(false)
+    }
   }
 
   const handleLookup = async () => {
@@ -273,25 +250,13 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     setLookupDone(false)
     setCancelSuccess('')
 
-    if (!SHEETS_API) {
-      setError('To cancel a booking, please email peakaquaticsports@gmail.com or call 201-359-5688.')
-      setLookupLoading(false)
-      return
-    }
-
     try {
-      const res = await fetch(`${SHEETS_API}?action=lookup&email=${encodeURIComponent(cancelEmail)}`)
-      const text = await res.text()
-      try {
-        const data = JSON.parse(text)
-        if (data.success) {
-          setBookings(data.bookings || [])
-          setLookupDone(true)
-        } else {
-          setError(data.error || 'Lookup failed.')
-        }
-      } catch {
-        setError('To cancel a booking, please email peakaquaticsports@gmail.com or call 201-359-5688.')
+      const data = await lookupBookings(cancelEmail)
+      if (data.success) {
+        setBookings(data.bookings || [])
+        setLookupDone(true)
+      } else {
+        setError(data.error || 'Lookup failed.')
       }
     } catch {
       setError('To cancel a booking, please email peakaquaticsports@gmail.com or call 201-359-5688.')
@@ -305,16 +270,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     setCancelSuccess('')
 
     try {
-      const res = await fetch(SHEETS_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'cancel',
-          bookingId: id,
-          email: cancelEmail,
-        }),
-      })
-      const data = await res.json()
+      const data = await cancelBooking(id, cancelEmail)
       if (data.success) {
         setCancelSuccess(id)
         setBookings(prev => prev.filter(b => b.bookingId !== id))
@@ -801,14 +757,11 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                   setSelectedDate(day)
                   setSelectedTime(null)
                   setBookedTimes([])
-                  if (SHEETS_API) {
-                    const dateStr = `${MONTHS[currentMonth]} ${day}, ${currentYear}`
-                    const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(currentYear, currentMonth, day).getDay()]
-                    fetch(`${SHEETS_API}?action=available&date=${encodeURIComponent(dateStr)}&day=${encodeURIComponent(dayName)}`)
-                      .then(r => r.json())
-                      .then(d => { if (d.success) setBookedTimes(d.booked || []) })
-                      .catch(() => {})
-                  }
+                  const selectedDateStr = `${MONTHS[currentMonth]} ${day}, ${currentYear}`
+                  const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(currentYear, currentMonth, day).getDay()]
+                  fetchAvailability(selectedDateStr, dayName)
+                    .then(d => { if (d.success) setBookedTimes(d.booked || []) })
+                    .catch(() => {})
                 }}
                 style={{
                   aspectRatio: '1',
