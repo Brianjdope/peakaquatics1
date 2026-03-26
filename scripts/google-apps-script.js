@@ -14,8 +14,8 @@
 // 7. After any script change: Deploy → New deployment (never edit existing)
 //
 // COLUMN LAYOUT (A–G):
-//   A: Booking ID  B: Name  C: Session  D: Email
-//   E: Date/Time   F: Phone  G: Status
+//   A: Day/Time  B: Session  C: Members  D: Skill Level
+//   E: Status    F: Booking ID  G: Email
 // ============================================================
 
 var SHEET_NAME  = 'Sheet1'
@@ -25,13 +25,13 @@ var LOGO_URL    = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534
 
 // Column indexes (0-based)
 var COL = {
-  BOOKING_ID: 0,  // A
-  NAME:       1,  // B
-  SESSION:    2,  // C
-  EMAIL:      3,  // D
-  DATETIME:   4,  // E
-  PHONE:      5,  // F
-  STATUS:     6,  // G
+  DATETIME:   0,  // A
+  SESSION:    1,  // B
+  NAME:       2,  // C — Members
+  SKILL:      3,  // D
+  STATUS:     4,  // E
+  BOOKING_ID: 5,  // F
+  EMAIL:      6,  // G
 }
 
 // =============================================================
@@ -63,7 +63,7 @@ function doGet(e) {
 // =============================================================
 // AVAILABILITY — returns booked times for a given date + weekday
 // Called by the booking calendar to grey out taken slots
-// e.g. GET ?action=available&date=Saturday, Mar 29&day=Saturday
+// e.g. GET ?action=available&date=March 25, 2026&day=Wednesday
 // =============================================================
 
 function handleAvailability(date, day) {
@@ -78,13 +78,13 @@ function handleAvailability(date, day) {
     var cellStatus   = rows[i][COL.STATUS].toString()
     if (cellStatus === 'Cancelled') continue
 
-    // Match specific date (e.g. "Saturday, Mar 29 at 2:00 PM")
+    // Match specific date (e.g. "March 25, 2026 at 2:00 PM")
     if (cellDateTime.indexOf(date) > -1) {
       var timeMatch = cellDateTime.match(/at (.+)$/)
       if (timeMatch) booked.push(timeMatch[1].trim())
     }
 
-    // Match recurring day (e.g. "Recurring - Saturday at 2:00 PM")
+    // Match recurring day (e.g. "Recurring - Wednesday at 2:00 PM")
     if (day && cellDateTime.indexOf('Recurring - ' + day) > -1) {
       var recurMatch = cellDateTime.match(/at (.+)$/)
       if (recurMatch) booked.push(recurMatch[1].trim())
@@ -130,13 +130,13 @@ function handleBooking(data) {
 
   // New row
   var row = [
-    bookingId,         // A: Booking ID
-    name,              // B: Name
-    data.session,      // C: Session
-    data.email,        // D: Email
-    dateTime,          // E: Date/Time
-    data.phone || '',  // F: Phone
-    'Confirmed',       // G: Status
+    dateTime,      // A: Day/Time
+    data.session,  // B: Session
+    name,          // C: Members
+    skill,         // D: Skill Level
+    'Confirmed',   // E: Status
+    bookingId,     // F: Booking ID
+    data.email,    // G: Email
   ]
   sheet.appendRow(row)
   var lastRow = sheet.getLastRow()
@@ -233,13 +233,15 @@ function handleLookup(email) {
 
 // =============================================================
 // EMAIL — Confirmation to client
+// FIX: cancel URL uses #cancel?id= hash format to match App.jsx
+// FIX: use data.name instead of out-of-scope `name` variable
 // =============================================================
 
 function sendConfirmationEmail(data, bookingId, dateTime) {
-  var cancelUrl = SITE_URL + '?cancel=' + encodeURIComponent(bookingId) + '&email=' + encodeURIComponent(data.email)
+  var cancelUrl = SITE_URL + '#cancel?id=' + encodeURIComponent(bookingId) + '&email=' + encodeURIComponent(data.email)
   var html = emailTemplate(
     'Booking Confirmed',
-    name ? 'Hi ' + name + ',' : 'Hi there,',
+    data.name ? 'Hi ' + data.name + ',' : 'Hi there,',
     'Your session with Peak Aquatic Sports is confirmed. See details below.',
     [
       { label: 'Session',     value: data.session },
@@ -288,6 +290,7 @@ function sendCancellationEmail(email, bookingId, dateTime, session) {
 
 // =============================================================
 // EMAIL — Notify coach of new booking
+// FIX: use data.name instead of out-of-scope `name` variable
 // =============================================================
 
 function notifyCoach(data, bookingId, dateTime) {
@@ -297,7 +300,7 @@ function notifyCoach(data, bookingId, dateTime) {
     [
       'New booking received.',
       '',
-      'Members:     ' + (name || '(not provided)'),
+      'Members:     ' + (data.name || '(not provided)'),
       'Email:       ' + data.email,
       'Session:     ' + data.session,
       'Skill Level: ' + (data.skillLevel || ''),
@@ -372,35 +375,40 @@ function setupSheet() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME)
   sheet.clear()
 
-  // Headers: A: Booking ID | B: Name | C: Session | D: Email | E: Date/Time | F: Phone | G: Status
-  var headers = [['Booking ID', 'Name', 'Session', 'Email', 'Date/Time', 'Phone', 'Status']]
+  // Headers
+  var headers = [['Day/Time', 'Session', 'Members', 'Skill Level', 'Status', 'Booking ID', 'Email']]
   sheet.getRange(1, 1, 1, 7).setValues(headers)
     .setBackground('#1a1a2e').setFontColor('#ffffff')
     .setFontWeight('bold').setFontSize(10)
 
   // Column widths
-  sheet.setColumnWidth(1, 160)  // Booking ID
-  sheet.setColumnWidth(2, 200)  // Name
-  sheet.setColumnWidth(3, 140)  // Session
-  sheet.setColumnWidth(4, 200)  // Email
-  sheet.setColumnWidth(5, 200)  // Date/Time
-  sheet.setColumnWidth(6, 130)  // Phone
-  sheet.setColumnWidth(7, 110)  // Status
+  sheet.setColumnWidth(1, 200)
+  sheet.setColumnWidth(2, 140)
+  sheet.setColumnWidth(3, 220)
+  sheet.setColumnWidth(4, 120)
+  sheet.setColumnWidth(5, 100)
+  sheet.setColumnWidth(6, 160)
+  sheet.setColumnWidth(7, 200)
 
   // Data validation
-  sheet.getRange('C2:C500').setDataValidation(
+  sheet.getRange('B2:B500').setDataValidation(
     SpreadsheetApp.newDataValidation()
       .requireValueInList(['Intro Call', 'Video Review', 'Private Session', 'Semi-Group', 'Group Session', 'Dryland'])
       .setAllowInvalid(false).build()
   )
-  sheet.getRange('G2:G500').setDataValidation(
+  sheet.getRange('D2:D500').setDataValidation(
+    SpreadsheetApp.newDataValidation()
+      .requireValueInList(['Novice', 'Intermediate', 'Advanced', ''])
+      .setAllowInvalid(true).build()
+  )
+  sheet.getRange('E2:E500').setDataValidation(
     SpreadsheetApp.newDataValidation()
       .requireValueInList(['Confirmed', 'Cancelled', 'Pending', 'Completed', 'Open'])
       .setAllowInvalid(false).build()
   )
 
-  sheet.getRange('B2:B500').setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP)
-  sheet.getRange('A2:A500').setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP)
+  sheet.getRange('C2:C500').setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP)
+  sheet.getRange('F2:F500').setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP)
   sheet.setFrozenRows(1)
 
   Logger.log('Sheet setup complete.')
@@ -412,68 +420,68 @@ function setupSheet() {
 
 function populateSchedule() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME)
-  // Columns: Booking ID | Name | Session | Email | Date/Time | Phone | Status
+  // Columns: Day/Time | Session | Members | Skill Level | Status | Booking ID | Email
   var schedule = [
-    ['', 'ZAK',                                        'Private Session', '', 'Recurring - Monday at 2:30 PM',    '', 'Confirmed'],
-    ['', 'Aanya Jain',                                  'Private Session', '', 'Recurring - Monday at 3:30 PM',    '', 'Confirmed'],
-    ['', 'Daisy Lee',                                   'Private Session', '', 'Recurring - Monday at 4:30 PM',    '', 'Confirmed'],
-    ['', 'Melanie Ilan',                                'Private Session', '', 'Recurring - Monday at 5:30 PM',    '', 'Confirmed'],
-    ['', 'Sienna Plutzer',                              'Private Session', '', 'Recurring - Monday at 6:30 PM',    '', 'Confirmed'],
-    ['', 'Emily Kalna',                                 'Private Session', '', 'Recurring - Monday at 7:30 PM',    '', 'Confirmed'],
-    ['', '',                                            '',                '', 'Recurring - Monday at 8:30 PM',    '', 'Open'     ],
-    ['', '',                                            '',                '', 'Recurring - Tuesday at 1:30 PM',   '', 'Open'     ],
-    ['', 'Adam Boned',                                  'Private Session', '', 'Recurring - Tuesday at 2:30 PM',   '', 'Confirmed'],
-    ['', 'Gio Lee',                                     'Private Session', '', 'Recurring - Tuesday at 3:30 PM',   '', 'Confirmed'],
-    ['', 'Andy Suh',                                    'Private Session', '', 'Recurring - Tuesday at 4:30 PM',   '', 'Confirmed'],
-    ['', 'Isabella Kowalski',                           'Private Session', '', 'Recurring - Tuesday at 5:30 PM',   '', 'Confirmed'],
-    ['', 'Henry Brannan',                               'Private Session', '', 'Recurring - Tuesday at 6:30 PM',   '', 'Confirmed'],
-    ['', 'Yuriel Lee',                                  'Private Session', '', 'Recurring - Tuesday at 7:30 PM',   '', 'Confirmed'],
-    ['', 'Sara\nKatheryn\nGardner\nMelanie',            'Group Session',   '', 'Recurring - Tuesday at 8:30 PM',   '', 'Confirmed'],
-    ['', 'Harrison\nRyker\nCole',                       'Dryland',         '', 'Recurring - Wednesday at 5:50 AM', '', 'Confirmed'],
-    ['', 'Ela',                                         'Private Session', '', 'Recurring - Wednesday at 7:00 AM', '', 'Confirmed'],
-    ['', 'Al Kim',                                      'Private Session', '', 'Recurring - Wednesday at 1:30 PM', '', 'Confirmed'],
-    ['', 'Will Mulder',                                 'Private Session', '', 'Recurring - Wednesday at 2:30 PM', '', 'Confirmed'],
-    ['', 'William Thompson\nDaniel Hong',               'Semi-Group',      '', 'Recurring - Wednesday at 3:30 PM', '', 'Confirmed'],
-    ['', 'Annika',                                      'Private Session', '', 'Recurring - Wednesday at 4:30 PM', '', 'Confirmed'],
-    ['', 'Edgar\nWyatt Swisher',                        'Semi-Group',      '', 'Recurring - Wednesday at 5:30 PM', '', 'Confirmed'],
-    ['', 'Aahana',                                      'Private Session', '', 'Recurring - Wednesday at 6:30 PM', '', 'Confirmed'],
-    ['', 'Ethan Reines',                                'Private Session', '', 'Recurring - Wednesday at 7:30 PM', '', 'Confirmed'],
-    ['', 'Levi\nEla\nBrandon Rho\nAndrew Hinkle\nSanti Sanchez', 'Group Session', '', 'Recurring - Wednesday at 8:30 PM', '', 'Confirmed'],
-    ['', 'Adam Boned',                                  'Private Session', '', 'Recurring - Thursday at 1:30 PM',  '', 'Confirmed'],
-    ['', 'Jay Kim',                                     'Private Session', '', 'Recurring - Thursday at 2:30 PM',  '', 'Confirmed'],
-    ['', 'Daniel Lim',                                  'Private Session', '', 'Recurring - Thursday at 3:30 PM',  '', 'Confirmed'],
-    ['', 'Alex Jeon',                                   'Private Session', '', 'Recurring - Thursday at 4:30 PM',  '', 'Confirmed'],
-    ['', 'Cole Wilson',                                 'Private Session', '', 'Recurring - Thursday at 5:30 PM',  '', 'Confirmed'],
-    ['', 'Aaron Hong',                                  'Private Session', '', 'Recurring - Thursday at 6:30 PM',  '', 'Confirmed'],
-    ['', 'Chase Kim',                                   'Private Session', '', 'Recurring - Thursday at 7:30 PM',  '', 'Confirmed'],
-    ['', 'Ela\nSalma',                                  'Semi-Group',      '', 'Recurring - Thursday at 8:30 PM',  '', 'Confirmed'],
-    ['', 'Josh\nEthan\nChase',                          'Dryland',         '', 'Recurring - Friday at 5:50 AM',    '', 'Confirmed'],
-    ['', 'Ela',                                         'Private Session', '', 'Recurring - Friday at 7:00 AM',    '', 'Confirmed'],
-    ['', 'ZAK',                                         'Private Session', '', 'Recurring - Friday at 1:00 PM',    '', 'Confirmed'],
-    ['', 'Jonas',                                       'Private Session', '', 'Recurring - Friday at 2:00 PM',    '', 'Confirmed'],
-    ['', 'Sean Darder',                                 'Private Session', '', 'Recurring - Friday at 3:00 PM',    '', 'Confirmed'],
-    ['', 'Lucas Kichukov\nMichael',                     'Semi-Group',      '', 'Recurring - Friday at 4:00 PM',    '', 'Confirmed'],
-    ['', 'Max Kim',                                     'Private Session', '', 'Recurring - Friday at 5:00 PM',    '', 'Confirmed'],
-    ['', 'Eric Shin',                                   'Private Session', '', 'Recurring - Friday at 6:00 PM',    '', 'Confirmed'],
-    ['', 'Cheryn Cho',                                  'Private Session', '', 'Recurring - Friday at 7:00 PM',    '', 'Confirmed'],
-    ['', 'Matthew Chon',                                'Private Session', '', 'Recurring - Friday at 8:00 PM',    '', 'Confirmed'],
-    ['', 'Charlie Lee\nAanya\nIDDO',                    'Group Session',   '', 'Recurring - Saturday at 12:00 PM', '', 'Confirmed'],
-    ['', 'Ivan Yeryn\nKyle Lee\nRyker\nSebastian',      'Group Session',   '', 'Recurring - Saturday at 1:30 PM',  '', 'Confirmed'],
-    ['', 'Connor\nJoshua\nJeremiah\nSienna',            'Group Session',   '', 'Recurring - Saturday at 3:00 PM',  '', 'Confirmed'],
-    ['', '',                                            '',                '', 'Recurring - Saturday at 4:30 PM',  '', 'Open'     ],
-    ['', 'Stephanie Kim',                               'Private Session', '', 'Recurring - Sunday at 12:30 PM',   '', 'Confirmed'],
-    ['', 'Connor Hong',                                 'Private Session', '', 'Recurring - Sunday at 1:30 PM',    '', 'Confirmed'],
-    ['', 'Collin Lee',                                  'Private Session', '', 'Recurring - Sunday at 2:30 PM',    '', 'Confirmed'],
-    ['', 'Mady Raguindin',                              'Private Session', '', 'Recurring - Sunday at 3:30 PM',    '', 'Confirmed'],
-    ['', 'Josh Reines',                                 'Private Session', '', 'Recurring - Sunday at 4:30 PM',    '', 'Confirmed'],
-    ['', 'Milo Pfiefer',                                'Private Session', '', 'Recurring - Sunday at 5:30 PM',    '', 'Confirmed'],
-    ['', 'Michael Kim\nJeremiah Rhee\nJay Kim\nWilliam Mulder\nJoshua Yu\nRyker Levi\nTheo Souh', 'Group Session', '', 'Recurring - Sunday at 6:30 PM', '', 'Confirmed'],
+    ['Recurring - Monday at 2:30 PM',    'Private Session', 'ZAK',                                        '', 'Confirmed', '', ''],
+    ['Recurring - Monday at 3:30 PM',    'Private Session', 'Aanya Jain',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Monday at 4:30 PM',    'Private Session', 'Daisy Lee',                                   '', 'Confirmed', '', ''],
+    ['Recurring - Monday at 5:30 PM',    'Private Session', 'Melanie Ilan',                                '', 'Confirmed', '', ''],
+    ['Recurring - Monday at 6:30 PM',    'Private Session', 'Sienna Plutzer',                              '', 'Confirmed', '', ''],
+    ['Recurring - Monday at 7:30 PM',    'Private Session', 'Emily Kalna',                                 '', 'Confirmed', '', ''],
+    ['Recurring - Monday at 8:30 PM',    '',                '',                                            '', 'Open',      '', ''],
+    ['Recurring - Tuesday at 1:30 PM',   '',                '',                                            '', 'Open',      '', ''],
+    ['Recurring - Tuesday at 2:30 PM',   'Private Session', 'Adam Boned',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Tuesday at 3:30 PM',   'Private Session', 'Gio Lee',                                     '', 'Confirmed', '', ''],
+    ['Recurring - Tuesday at 4:30 PM',   'Private Session', 'Andy Suh',                                    '', 'Confirmed', '', ''],
+    ['Recurring - Tuesday at 5:30 PM',   'Private Session', 'Isabella Kowalski',                           '', 'Confirmed', '', ''],
+    ['Recurring - Tuesday at 6:30 PM',   'Private Session', 'Henry Brannan',                               '', 'Confirmed', '', ''],
+    ['Recurring - Tuesday at 7:30 PM',   'Private Session', 'Yuriel Lee',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Tuesday at 8:30 PM',   'Group Session',   'Sara\nKatheryn\nGardner\nMelanie',            '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 5:50 AM', 'Dryland',         'Harrison\nRyker\nCole',                       '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 7:00 AM', 'Private Session', 'Ela',                                         '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 1:30 PM', 'Private Session', 'Al Kim',                                      '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 2:30 PM', 'Private Session', 'Will Mulder',                                 '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 3:30 PM', 'Semi-Group',      'William Thompson\nDaniel Hong',               '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 4:30 PM', 'Private Session', 'Annika',                                      '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 5:30 PM', 'Semi-Group',      'Edgar\nWyatt Swisher',                        '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 6:30 PM', 'Private Session', 'Aahana',                                      '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 7:30 PM', 'Private Session', 'Ethan Reines',                                '', 'Confirmed', '', ''],
+    ['Recurring - Wednesday at 8:30 PM', 'Group Session',   'Levi\nEla\nBrandon Rho\nAndrew Hinkle\nSanti Sanchez', '', 'Confirmed', '', ''],
+    ['Recurring - Thursday at 1:30 PM',  'Private Session', 'Adam Boned',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Thursday at 2:30 PM',  'Private Session', 'Jay Kim',                                     '', 'Confirmed', '', ''],
+    ['Recurring - Thursday at 3:30 PM',  'Private Session', 'Daniel Lim',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Thursday at 4:30 PM',  'Private Session', 'Alex Jeon',                                   '', 'Confirmed', '', ''],
+    ['Recurring - Thursday at 5:30 PM',  'Private Session', 'Cole Wilson',                                 '', 'Confirmed', '', ''],
+    ['Recurring - Thursday at 6:30 PM',  'Private Session', 'Aaron Hong',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Thursday at 7:30 PM',  'Private Session', 'Chase Kim',                                   '', 'Confirmed', '', ''],
+    ['Recurring - Thursday at 8:30 PM',  'Semi-Group',      'Ela\nSalma',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 5:50 AM',    'Dryland',         'Josh\nEthan\nChase',                          '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 7:00 AM',    'Private Session', 'Ela',                                         '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 1:00 PM',    'Private Session', 'ZAK',                                         '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 2:00 PM',    'Private Session', 'Jonas',                                       '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 3:00 PM',    'Private Session', 'Sean Darder',                                 '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 4:00 PM',    'Semi-Group',      'Lucas Kichukov\nMichael',                     '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 5:00 PM',    'Private Session', 'Max Kim',                                     '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 6:00 PM',    'Private Session', 'Eric Shin',                                   '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 7:00 PM',    'Private Session', 'Cheryn Cho',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Friday at 8:00 PM',    'Private Session', 'Matthew Chon',                                '', 'Confirmed', '', ''],
+    ['Recurring - Saturday at 12:00 PM', 'Group Session',   'Charlie Lee\nAanya\nIDDO',                    '', 'Confirmed', '', ''],
+    ['Recurring - Saturday at 1:30 PM',  'Group Session',   'Ivan Yeryn\nKyle Lee\nRyker\nSebastian',      '', 'Confirmed', '', ''],
+    ['Recurring - Saturday at 3:00 PM',  'Group Session',   'Connor\nJoshua\nJeremiah\nSienna',            '', 'Confirmed', '', ''],
+    ['Recurring - Saturday at 4:30 PM',  '',                '',                                            '', 'Open',      '', ''],
+    ['Recurring - Sunday at 12:30 PM',   'Private Session', 'Stephanie Kim',                               '', 'Confirmed', '', ''],
+    ['Recurring - Sunday at 1:30 PM',    'Private Session', 'Connor Hong',                                 '', 'Confirmed', '', ''],
+    ['Recurring - Sunday at 2:30 PM',    'Private Session', 'Collin Lee',                                  '', 'Confirmed', '', ''],
+    ['Recurring - Sunday at 3:30 PM',    'Private Session', 'Mady Raguindin',                              '', 'Confirmed', '', ''],
+    ['Recurring - Sunday at 4:30 PM',    'Private Session', 'Josh Reines',                                 '', 'Confirmed', '', ''],
+    ['Recurring - Sunday at 5:30 PM',    'Private Session', 'Milo Pfiefer',                                '', 'Confirmed', '', ''],
+    ['Recurring - Sunday at 6:30 PM',    'Group Session',   'Michael Kim\nJeremiah Rhee\nJay Kim\nWilliam Mulder\nJoshua Yu\nRyker Levi\nTheo Souh', '', 'Confirmed', '', ''],
   ]
 
-  // Assign booking IDs to confirmed rows (col index 0 = Booking ID, col index 6 = Status)
+  // Assign booking IDs to confirmed rows
   for (var i = 0; i < schedule.length; i++) {
-    if (schedule[i][6] === 'Confirmed') {
-      schedule[i][0] = generateId()
+    if (schedule[i][4] === 'Confirmed') {
+      schedule[i][5] = generateId()
     }
   }
 
