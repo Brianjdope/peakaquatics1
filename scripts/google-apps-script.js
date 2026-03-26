@@ -124,8 +124,8 @@ function handleBooking(data) {
           sheet.getRange(i + 1, COL.NAME       + 1).setValue(existingNames ? existingNames + '\n' + name : name)
           sheet.getRange(i + 1, COL.BOOKING_ID + 1).setValue(existingIds   ? existingIds   + '\n' + bookingId  : bookingId)
         }
-        sendConfirmationEmail(data, bookingId, dateTime)
-        notifyCoach(data, bookingId, dateTime)
+        try { sendConfirmationEmail(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
+        try { notifyCoach(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
         return { success: true, bookingId: bookingId }
       }
     }
@@ -146,8 +146,8 @@ function handleBooking(data) {
   colorRow(sheet, lastRow, data.session, 'Confirmed')
   sheet.getRange(lastRow, COL.BOOKING_ID + 1).setFontWeight('bold')
 
-  sendConfirmationEmail(data, bookingId, dateTime)
-  notifyCoach(data, bookingId, dateTime)
+  try { sendConfirmationEmail(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
+  try { notifyCoach(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
   return { success: true, bookingId: bookingId }
 }
 
@@ -191,8 +191,8 @@ function handleCancellation(data) {
       colorRow(sheet, i + 1, rows[i][COL.SESSION], 'Cancelled')
     }
 
-    notifyCoachCancellation(rows[i])
-    sendCancellationEmail(rows[i][COL.EMAIL], data.bookingId, rows[i][COL.DATETIME], rows[i][COL.SESSION])
+    try { notifyCoachCancellation(rows[i]) } catch(e) { Logger.log('Email quota: ' + e.message) }
+    try { sendCancellationEmail(rows[i][COL.EMAIL], data.bookingId, rows[i][COL.DATETIME], rows[i][COL.SESSION]) } catch(e) { Logger.log('Email quota: ' + e.message) }
     return { success: true, message: 'Booking cancelled.' }
   }
 
