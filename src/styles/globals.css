@@ -59,6 +59,64 @@ body {
   transition: width 0.1s linear;
 }
 
+.install-banner {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(94vw, 520px);
+  z-index: 180;
+  background: rgba(12, 12, 12, 0.94);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  padding: 0.8rem 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+.install-banner-text {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.install-banner-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+.install-btn {
+  border: 1px solid rgba(255,255,255,0.35);
+  color: var(--text);
+  background: transparent;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+.install-btn-primary {
+  background: var(--text);
+  color: #030303;
+  border-color: var(--text);
+}
+
+.floating-book-btn {
+  position: fixed;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  right: 28px;
+  background: #fcfcfc;
+  color: #030303;
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  z-index: 90;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
 /* ── TYPOGRAPHY ── */
 h1, h2, h3, h4 {
   font-family: var(--display);
@@ -351,6 +409,8 @@ section { padding: 8rem 0; }
   display: flex;
   flex-direction: column;
   gap: 0;
+  position: relative;
+  z-index: 2;
 }
 .nav-drawer-link {
   font-family: var(--display);
@@ -367,6 +427,8 @@ section { padding: 8rem 0; }
   letter-spacing: -0.02em;
   font-style: normal;
   font-weight: 900;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .nav-drawer-link:hover,
 .nav-drawer-link.active { color: #fcfcfc; }
@@ -1324,6 +1386,10 @@ section { padding: 8rem 0; }
   background: rgba(252,252,252,0.85);
   border-color: rgba(252,252,252,0.85);
 }
+.form-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
 .form-success {
   text-align: center;
   padding: 2.5rem;
@@ -1332,6 +1398,37 @@ section { padding: 8rem 0; }
   color: #fcfcfc;
   font-size: 0.9rem;
   background: rgba(255,255,255,0.04);
+}
+
+.claude-panel {
+  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--surface);
+  padding: 1.5rem;
+}
+.claude-title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  line-height: 1;
+  margin-bottom: 0.7rem;
+}
+.claude-subtitle {
+  margin-bottom: 1.2rem;
+  color: var(--muted);
+}
+.claude-error {
+  margin-top: 0.85rem;
+  font-size: 0.8rem;
+  color: #fca5a5;
+}
+.claude-reply {
+  margin-top: 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  padding: 1rem;
+}
+.claude-reply p {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  white-space: pre-wrap;
 }
 
 /* ── FOOTER ── */
@@ -1572,6 +1669,7 @@ section { padding: 8rem 0; }
 .full-slide {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
   width: 100%;
   display: flex;
   align-items: flex-end;
@@ -1580,7 +1678,7 @@ section { padding: 8rem 0; }
   background: #030303;
 }
 .full-slide--hero {
-  align-items: center;
+  align-items: center !important;
   justify-content: center;
   cursor: default;
 }
@@ -1662,8 +1760,9 @@ section { padding: 8rem 0; }
   .container { padding: 0 1.5rem; }
   .nav { padding: 1.2rem 1.5rem; }
   .nav.scrolled { padding: 0.9rem 1.5rem; }
-  .nav-drawer { padding: 5rem 2rem 3rem; }
-  .nav-drawer-footer { left: 2rem; bottom: 2rem; }
+  .nav-drawer { padding: 5rem 2rem 8rem; }
+  .nav-drawer-footer { left: 2rem; bottom: 2rem; right: auto; }
+  .nav-drawer-link { font-size: clamp(1.7rem, 8vw, 3rem); }
   .hero { padding: 0 0 12rem 1.5rem; }
   .hero-content { padding: 0 1.5rem 0 0; }
   .about-grid { grid-template-columns: 1fr; }
@@ -1684,9 +1783,24 @@ section { padding: 8rem 0; }
   .records-tabs { flex-wrap: wrap; width: 100%; }
   .hero h1, .hero-display { font-size: clamp(3rem, 10vw, 5rem); }
   .full-slide-text { padding: 2rem 1.5rem; }
+  .full-slide-text--center { padding: 2rem 1.5rem; }
   .full-slide-title { font-size: clamp(2.2rem, 8vw, 5rem); }
   .booking-time-grid { grid-template-columns: repeat(3, 1fr) !important; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .install-banner {
+    width: calc(100vw - 1rem);
+    left: 0.5rem;
+    transform: none;
+    bottom: calc(0.5rem + env(safe-area-inset-bottom));
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .floating-book-btn {
+    right: 12px;
+    left: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    padding: 0.85rem 1rem;
+  }
 }
 
 /* ── IMAGE SPLIT SECTION ── */
