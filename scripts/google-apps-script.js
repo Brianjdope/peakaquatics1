@@ -76,7 +76,7 @@ function handleAvailability(date, day) {
   for (var i = 1; i < rows.length; i++) {
     var cellDateTime = rows[i][COL.DATETIME].toString()
     var cellStatus   = rows[i][COL.STATUS].toString()
-    if (cellStatus === 'Cancelled') continue
+    if (cellStatus === 'Cancelled' || cellStatus === 'Open') continue
 
     // Match specific date (e.g. "March 25, 2026 at 2:00 PM")
     if (cellDateTime.indexOf(date) > -1) {
