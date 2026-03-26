@@ -1613,6 +1613,7 @@ section { padding: 8rem 0; }
 .full-slide-text--center {
   text-align: center;
   padding: 3rem;
+  padding-bottom: 12rem;
 }
 .full-slide-label {
   font-family: var(--sans);
