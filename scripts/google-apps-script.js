@@ -103,6 +103,9 @@ function handleBooking(data) {
   if (!data.email || !data.session || !data.date || !data.time) {
     return { success: false, error: 'Missing required fields (email, session, date, time).' }
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    return { success: false, error: 'Invalid email address.' }
+  }
 
   var sheet = getSheet()
   var bookingId = generateId()
@@ -407,6 +410,7 @@ function setupSheet() {
       .setAllowInvalid(false).build()
   )
 
+  sheet.getRange('C2:C500').clearDataValidations()
   sheet.getRange('C2:C500').setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP)
   sheet.getRange('F2:F500').setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP)
   sheet.setFrozenRows(1)

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const SHEETS_API = 'https://script.google.com/macros/s/AKfycbyYCnYUhBKOK4PJPrJWFY8eJpHPj-ROgHKmJ3JulNgkvjOxPVTLtYPUs64WUX5HXDqC/exec'
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbz59KpZKKDHQ_eS3_lO_EEtlX2wGjNA-qx-ZOccKHCVuNLpXLOMIs5BPJ9-MkjYI1XT/exec'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -219,6 +219,9 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const handleConfirm = async () => {
     setSubmitting(true)
     setError('')
+
+    if (!clientName.trim()) { setError('Please enter your name.'); setSubmitting(false); return }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) { setError('Please enter a valid email address.'); setSubmitting(false); return }
 
     if (SHEETS_API) {
       try {
@@ -742,7 +745,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             const weekend = isWeekend(day)
             const todayDay = isToday(day)
             const selected = selectedDate === day
-            const disabled = past || weekend
+            const disabled = past
 
             return (
               <button
