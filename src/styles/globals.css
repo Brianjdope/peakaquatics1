@@ -1805,6 +1805,15 @@ section { padding: 8rem 0; }
   }
 }
 
+@media (max-width: 400px) {
+  .booking-session-grid { grid-template-columns: 1fr !important; }
+  .booking-time-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 600px) {
+  .instagram-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
 /* ── IMAGE SPLIT SECTION ── */
 .img-split {
   display: grid;

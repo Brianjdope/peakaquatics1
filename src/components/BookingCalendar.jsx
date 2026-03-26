@@ -123,6 +123,8 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const [error, setError] = useState('')
   const [bookedTimes, setBookedTimes] = useState([])
   const fileRef = useRef()
+  const timeSlotRef = useRef()
+  const formRef = useRef()
 
   // Cancellation state
   const [mode, setMode] = useState('book') // 'book' or 'cancel'
@@ -633,7 +635,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
       </div>
 
       {/* Session type selector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
+      <div className="booking-session-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
         {SESSION_TYPES.map((s, i) => {
           const isSelected = selectedSession === s.id
           return (
@@ -762,6 +764,9 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                   fetchAvailability(selectedDateStr, dayName)
                     .then(d => { if (d.success) setBookedTimes(d.booked || []) })
                     .catch(() => {})
+                  if (window.innerWidth <= 768) {
+                    setTimeout(() => timeSlotRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+                  }
                 }}
                 style={{
                   aspectRatio: '1',
@@ -819,7 +824,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             }}>
               Available times — {MONTHS[currentMonth]} {selectedDate}
             </p>
-            <div className="booking-time-grid" style={{
+            <div ref={timeSlotRef} className="booking-time-grid" style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(4, 1fr)',
               gap: '0.4rem',
@@ -827,7 +832,12 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
               {TIME_SLOTS.filter(t => !bookedTimes.includes(t)).map(t => (
                 <button
                   key={t}
-                  onClick={() => setSelectedTime(t)}
+                  onClick={() => {
+                    setSelectedTime(t)
+                    if (window.innerWidth <= 768) {
+                      setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+                    }
+                  }}
                   style={{
                     background: selectedTime === t ? (sessionObj?.color || 'var(--text)') : 'var(--surface2)',
                     color: selectedTime === t ? '#000' : 'var(--text)',
@@ -858,6 +868,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
       <AnimatePresence>
         {selectedDate && selectedSession && selectedTime && (
           <motion.div
+            ref={formRef}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}

@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import Ticker from '../components/Ticker'
 import SchoolLogo from '../components/SchoolLogo'
 import Testimonials from '../components/Testimonials'
+import InstagramFeed from '../components/InstagramFeed'
 import Preloader from '../components/Preloader'
 import { ABOUT, STATS } from '../data'
 
@@ -318,6 +319,9 @@ export default function HomePage({ setPage, goToBooking }) {
           </div>
         </div>
       </section>
+
+      {/* ── INSTAGRAM FEED ── */}
+      <InstagramFeed />
 
       {/* ── TESTIMONIALS ── */}
       <Testimonials />
