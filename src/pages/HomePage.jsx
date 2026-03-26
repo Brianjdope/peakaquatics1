@@ -219,32 +219,30 @@ export default function HomePage({ setPage, goToBooking }) {
         </div>
       </section>
 
-      {/* ── VIDEO ── */}
-      <section style={{ background: '#030303', padding: 0, lineHeight: 0, fontSize: 0 }}>
-        <video
-          style={{ width: '100%', display: 'block' }}
-          autoPlay
-          muted
-          loop
-          playsInline
-          src="/peakaquatics1/hero-video.mp4"
-        />
-      </section>
-
-      {/* ── COACHING CTA ── */}
-      <section style={{ background: 'var(--bg)', padding: '7rem 0', borderTop: '1px solid var(--border)' }}>
-        <div className="container">
+      {/* ── VIDEO + COACHING SPLIT ── */}
+      <div className="img-split" style={{ minHeight: '70vh' }}>
+        <div className="img-split-photo" style={{ overflow: 'hidden' }}>
+          <video
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            autoPlay
+            muted
+            loop
+            playsInline
+            src="/peakaquatics1/hero-video.mp4"
+          />
+        </div>
+        <div className="img-split-content">
           <RevealSection delay={0.1}>
             <p className="section-label">Our Approach</p>
             <h2 style={{ marginBottom:'1.2rem', marginTop:'0.5rem' }}>Coaching That<br />Gets Results</h2>
-            <p style={{ color: 'var(--muted)', marginBottom:'2rem', maxWidth: '520px', lineHeight: 1.7 }}>
+            <p style={{ color: 'var(--muted)', marginBottom:'2rem', maxWidth: '420px', lineHeight: 1.7 }}>
               We combine elite stroke technique, race strategy, and direct college coach connections
               to give every swimmer an unfair advantage in the pool and in recruiting.
             </p>
             <button className="btn btn-solid" onClick={goToBooking}>Book a Session</button>
           </RevealSection>
         </div>
-      </section>
+      </div>
 
       {/* ── ATHLETE SLIDES ── */}
       {ATHLETE_SLIDES.map((slide, i) => (
