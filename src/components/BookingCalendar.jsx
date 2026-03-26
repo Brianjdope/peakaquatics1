@@ -43,6 +43,11 @@ const SessionIcon = ({ id, color, size = 18 }) => {
         <path d="M23 19v-1a2 2 0 0 0-2-2h-1"/>
       </svg>
     ),
+    dryland: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+    ),
   }
   return icons[id] || null
 }
@@ -53,6 +58,7 @@ const SESSION_TYPES = [
   { id: 'private', label: 'Private Session', duration: '1 hr', color: '#34d399' },
   { id: 'semi', label: 'Semi-Group', duration: '1.5 hr', color: '#fbbf24' },
   { id: 'group', label: 'Group Session', duration: '1.5 hr', color: '#f97316' },
+  { id: 'dryland', label: 'Dryland', duration: '1 hr', color: '#94a3b8' },
 ]
 
 const TIME_SLOTS = ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM']
