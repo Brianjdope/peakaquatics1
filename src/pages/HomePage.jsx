@@ -174,7 +174,7 @@ export default function HomePage({ setPage, goToBooking }) {
       <FullSlide
         isHero
         title="PEAK AQUATIC SPORTS"
-        subtitle="Go Above & Beyond"
+        subtitle="Rise Higher"
       />
 
       {/* ── TICKER ── */}
