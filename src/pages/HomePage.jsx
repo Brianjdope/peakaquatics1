@@ -19,7 +19,7 @@ const ATHLETE_SLIDES = [
     img: '/peakaquatics1/photos/richard-action.jpg',
     label: 'USA NATIONAL TEAM',
     title: 'RICHARD POPLAWSKI',
-    subtitle: 'Junior National Champion',
+    subtitle: 'Top 50 at Olympic Trials',
     bgPosition: 'center center',
   },
   {
