@@ -16,12 +16,13 @@ const ATHLETE_SLIDES = [
     subtitle: '4th Place, World Junior Championships 2025',
   },
   {
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1730135596929-CT3TH0EQRII0VQI725SB/Timothy+Harvard.jpg',
-    label: 'HARVARD UNIVERSITY',
-    title: 'TIMOTHY LEE',
+    img: '/peakaquatics1/athletes/richard-poplawski.webp',
+    label: 'USA NATIONAL TEAM',
+    title: 'RICHARD POPLAWSKI',
+    subtitle: 'Junior National Champion',
   },
   {
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1731428215434-9FS9VU8Z5XPAH034V7OE/Kate+Hurst+Budapest.jpg',
+    img: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/texassports_com/images/2024/9/4/__0014_Hurst_Kate-2024.jpg',
     label: 'UNIVERSITY OF TEXAS',
     title: 'KATE HURST',
     subtitle: 'USA National Team 2024-2025',
