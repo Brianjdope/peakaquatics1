@@ -20,16 +20,14 @@ const ATHLETE_SLIDES = [
     label: 'USA NATIONAL TEAM',
     title: 'RICHARD POPLAWSKI',
     subtitle: 'Junior National Champion',
-    bgSize: '65%',
-    bgPosition: 'center 10%',
+    contain: true,
   },
   {
     img: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/texassports_com/images/2024/9/4/__0014_Hurst_Kate-2024.jpg',
     label: 'UNIVERSITY OF TEXAS',
     title: 'KATE HURST',
     subtitle: 'USA National Team 2024-2025',
-    bgSize: '75%',
-    bgPosition: 'center 20%',
+    contain: true,
   },
   {
     img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/bd5ba723-bf99-4d78-afee-529b7e7cc2ed/Private+Swimming+Lessons+%26+Swimming+Consultancy%7C+Paramus+%26+Tenafly%2C+New+Jersey',
@@ -99,7 +97,7 @@ function RevealSection({ children, delay = 0, className = '', style = {} }) {
   )
 }
 
-function FullSlide({ img, video, label, title, subtitle, onClick, isHero, bgSize, bgPosition }) {
+function FullSlide({ img, video, label, title, subtitle, onClick, isHero, bgSize, bgPosition, contain }) {
   return (
     <section
       className={`full-slide${isHero ? ' full-slide--hero' : ''}`}
@@ -111,10 +109,16 @@ function FullSlide({ img, video, label, title, subtitle, onClick, isHero, bgSize
           <div className="full-slide-overlay" />
         </>
       )}
-      {img && (
+      {img && !contain && (
         <>
           <div className="full-slide-bg" style={{ backgroundImage: `url(${img})`, backgroundSize: bgSize || 'cover', backgroundPosition: bgPosition || 'center' }} />
           <div className="full-slide-overlay" />
+        </>
+      )}
+      {img && contain && (
+        <>
+          <img src={img} alt={title} style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain', objectPosition:'center top' }} />
+          <div className="full-slide-overlay" style={{ background:'linear-gradient(to top, rgba(3,3,3,0.9) 0%, rgba(3,3,3,0.1) 40%, rgba(3,3,3,0.0) 100%)' }} />
         </>
       )}
       <div className={`full-slide-text${isHero ? ' full-slide-text--center' : ''}`}>
@@ -259,6 +263,7 @@ export default function HomePage({ setPage, goToBooking }) {
           subtitle={slide.subtitle}
           bgSize={slide.bgSize}
           bgPosition={slide.bgPosition}
+          contain={slide.contain}
           onClick={() => setPage('placements')}
         />
       ))}
