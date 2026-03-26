@@ -20,6 +20,8 @@ const ATHLETE_SLIDES = [
     label: 'USA NATIONAL TEAM',
     title: 'RICHARD POPLAWSKI',
     subtitle: 'Junior National Champion',
+    bgSize: '65%',
+    bgPosition: 'center 10%',
   },
   {
     img: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/texassports_com/images/2024/9/4/__0014_Hurst_Kate-2024.jpg',
