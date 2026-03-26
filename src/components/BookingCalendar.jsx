@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwHsyLmVhtoHqSf0H7AUC1xKDurWrbJZWDwSq87azhcHSjAPp6cc8XPQQ-nGgF3JQCs/exec'
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwYUyXYhuqUXE0LgiBD5Il-Yn_EcyeVkDA9e5OUaLJMB-D9vPV5OiIbEjSWqz-gKDDh/exec'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -940,24 +940,25 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
               <p style={{ color: 'var(--muted)', fontSize: '0.72rem', marginBottom: '0.4rem' }}>Skill Level (optional)</p>
               <div style={{ display: 'flex', gap: '0.4rem' }}>
                 {[
-                  { label: 'Novice',       color: '#34d399' },
-                  { label: 'Intermediate', color: '#fbbf24' },
-                  { label: 'Advanced',     color: '#ef4444' },
-                ].map(({ label, color }) => (
+                  { label: 'Novice',       color: '#34d399', dimBg: 'rgba(52,211,153,0.12)',  dimText: '#34d399' },
+                  { label: 'Intermediate', color: '#fbbf24', dimBg: 'rgba(251,191,36,0.12)',  dimText: '#fbbf24' },
+                  { label: 'Advanced',     color: '#ef4444', dimBg: 'rgba(239,68,68,0.12)',   dimText: '#ef4444' },
+                ].map(({ label, color, dimBg, dimText }) => (
                   <button
                     key={label}
                     onClick={() => setSkillLevel(skillLevel === label ? '' : label)}
                     style={{
                       flex: 1,
-                      background: skillLevel === label ? color : 'var(--surface2)',
-                      color: skillLevel === label ? '#000' : 'var(--muted)',
-                      border: `1px solid ${skillLevel === label ? color : 'var(--border)'}`,
+                      background: skillLevel === label ? color : dimBg,
+                      color: skillLevel === label ? '#000' : dimText,
+                      border: `1px solid ${color}`,
                       borderRadius: 6,
                       padding: '0.45rem 0.25rem',
                       fontSize: '0.72rem',
-                      fontWeight: 500,
+                      fontWeight: skillLevel === label ? 700 : 500,
                       cursor: 'pointer',
                       transition: 'all 0.15s',
+                      opacity: skillLevel && skillLevel !== label ? 0.5 : 1,
                     }}
                   >
                     {label}
