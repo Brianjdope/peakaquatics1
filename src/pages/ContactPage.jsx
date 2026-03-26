@@ -1,6 +1,8 @@
 import React, { useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { CONTACT_INFO } from '../data'
+import { lazy, Suspense } from 'react'
+const BusinessCard3D = lazy(() => import('../components/BusinessCard3D'))
 
 const LOGO = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
 
@@ -239,7 +241,9 @@ export default function ContactPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               style={{ display: 'flex', alignItems: 'center' }}
             >
-              <BusinessCard />
+              <Suspense fallback={<div style={{ height: 320 }} />}>
+                <BusinessCard3D />
+              </Suspense>
             </motion.div>
           </div>
         </div>
