@@ -1,9 +1,30 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { RECORDS_HERO, RECORDS_TABLES } from '../data'
 import { useInView } from '../hooks/useInView'
 
 const TAB_KEYS = ['scy-men', 'scy-women', 'lcm-men', 'lcm-women']
+
+const Medal = ({ place }) => {
+  const colors = { 1: '#FFD700', 2: '#C0C0C0', 3: '#CD7F32' }
+  return (
+    <span style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 20,
+      height: 20,
+      borderRadius: '50%',
+      background: colors[place] || '#666',
+      color: '#1a1a2e',
+      fontSize: '0.65rem',
+      fontWeight: 800,
+      flexShrink: 0,
+    }}>
+      {place}
+    </span>
+  )
+}
 
 export default function Records() {
   const [ref, inView] = useInView(0.1)
@@ -60,38 +81,62 @@ export default function Records() {
             ))}
           </div>
 
-          <table className="records-table">
-            <thead>
-              <tr>
-                <th>Event</th>
-                <th>1st Place</th>
-                <th>Time</th>
-                <th>Year</th>
-                <th>2nd Place</th>
-                <th>Time</th>
-                <th>Year</th>
-                <th>3rd Place</th>
-                <th>Time</th>
-                <th>Year</th>
-              </tr>
-            </thead>
-            <tbody>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginTop: '1rem' }}
+            >
               {table.rows.map(([event, n1, t1, y1, n2, t2, y2, n3, t3, y3], i) => (
-                <tr key={i}>
-                  <td>{event}</td>
-                  <td className="rank-1">{n1}</td>
-                  <td className="rank-1">{t1}</td>
-                  <td>{y1}</td>
-                  <td className="rank-2">{n2}</td>
-                  <td>{t2}</td>
-                  <td>{y2}</td>
-                  <td className="rank-3">{n3}</td>
-                  <td>{t3}</td>
-                  <td>{y3}</td>
-                </tr>
+                <div
+                  key={i}
+                  style={{
+                    background: 'var(--surface2)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    padding: '0.75rem 1rem',
+                  }}
+                >
+                  <div style={{
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    color: 'var(--text)',
+                    marginBottom: '0.5rem',
+                    letterSpacing: '0.5px',
+                    textTransform: 'uppercase',
+                  }}>
+                    {event}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                    {[
+                      { medal: 1, name: n1, time: t1, year: y1 },
+                      { medal: 2, name: n2, time: t2, year: y2 },
+                      { medal: 3, name: n3, time: t3, year: y3 },
+                    ].filter(p => p.name).map(p => (
+                      <div key={p.medal} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                        <Medal place={p.medal} />
+                        <span style={{ flex: 1, fontSize: '0.8rem', color: 'var(--text2)', fontWeight: 500 }}>
+                          {p.name}
+                        </span>
+                        <span style={{
+                          fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)',
+                          fontFamily: 'monospace', minWidth: 65, textAlign: 'right',
+                        }}>
+                          {p.time}
+                        </span>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--muted)', minWidth: 30, textAlign: 'right' }}>
+                          {p.year}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
       </div>
     </section>
