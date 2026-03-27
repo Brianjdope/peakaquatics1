@@ -302,7 +302,7 @@ function sendConfirmationEmail(data, bookingId, dateTime) {
     ],
     'Save your Booking ID to manage your appointment.'
   )
-  MailApp.sendEmail({
+  GmailApp.sendEmail({
     to: data.email,
     subject: 'Booking Confirmed — Peak Aquatic Sports',
     htmlBody: html,
@@ -327,7 +327,7 @@ function sendCancellationEmail(email, bookingId, dateTime, session) {
     [{ url: SITE_URL, label: 'Rebook Now', color: '#1a1a2e' }],
     'Questions? Call 201-359-5688 or reply to this email.'
   )
-  MailApp.sendEmail({
+  GmailApp.sendEmail({
     to: email,
     subject: 'Booking Cancelled — Peak Aquatic Sports',
     htmlBody: html,
@@ -457,7 +457,7 @@ function notifyCoach(data, bookingId, dateTime, videoUrl) {
     lines.push('')
     lines.push('📹 Video uploaded: ' + videoUrl)
   }
-  MailApp.sendEmail(
+  GmailApp.sendEmail(
     COACH_EMAIL,
     '📅 New Booking: ' + data.session + ' — ' + dateTime,
     lines.join('\n')
@@ -469,7 +469,7 @@ function notifyCoach(data, bookingId, dateTime, videoUrl) {
 // =============================================================
 
 function notifyCoachCancellation(row) {
-  MailApp.sendEmail(
+  GmailApp.sendEmail(
     COACH_EMAIL,
     '🚫 Booking Cancelled: ' + row[COL.SESSION] + ' — ' + row[COL.DATETIME],
     [
@@ -677,7 +677,7 @@ function weeklyReset() {
   // Summary email
   var confirmed = data.filter(function(r, i) { return i > 0 && r[COL.STATUS] === 'Confirmed'  }).length
   var cancelled = data.filter(function(r, i) { return i > 0 && r[COL.STATUS] === 'Cancelled'  }).length
-  MailApp.sendEmail(
+  GmailApp.sendEmail(
     COACH_EMAIL,
     'Weekly Summary — Peak Aquatic Sports',
     'Week ending ' + archiveName + '\n\nConfirmed: ' + confirmed + '\nCancelled: ' + cancelled + '\n\nArchived to sheet: ' + archiveName
