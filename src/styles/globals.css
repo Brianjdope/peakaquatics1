@@ -1865,7 +1865,7 @@ section { padding: 8rem 0; }
   .records-tabs { flex-wrap: wrap; width: 100%; }
   .hero h1, .hero-display { font-size: clamp(3rem, 10vw, 5rem); }
   .full-slide-text { padding: 2rem 1.5rem; }
-  .full-slide-text--center { padding: 2rem 1.5rem; padding-bottom: 6rem; text-align: center; }
+  .full-slide-text--center { padding: 2rem 1.5rem; padding-bottom: 4rem; margin-top: -18vh; text-align: center; }
   .full-slide--hero { min-height: 100vh; min-height: 100svh; }
   .full-slide:not(.full-slide--hero) { min-height: 70vh; min-height: 70svh; max-height: 85vh; max-height: 85svh; height: 70vh; height: 70svh; }
   .full-slide-title { font-size: clamp(2.2rem, 8vw, 5rem); }

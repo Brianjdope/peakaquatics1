@@ -1,4 +1,4 @@
-const SHEETS_API = 'https://script.google.com/macros/s/AKfycbyQT-PCm-QhYnUyHu-kLCipqJf6jNnrmQhHRs1JxIj95HK80-seuFy1b6j416myH1j7/exec'
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbxjnbYWd8wj5ZGBy8FvYMP00JxGfeZEkeceggWuKe88qGNwNwFO4r0NhHY0VZ1Mh7PN/exec'
 
 const FALLBACK_MSG = 'Booking server is unavailable. Please email peakaquaticsports@gmail.com or call 201-359-5688.'
 
@@ -64,6 +64,7 @@ export async function getUploadUrl(fileName, fileSize, contentType) {
       fileName,
       fileSize,
       contentType,
+      origin: window.location.origin,
     }),
   })
   return readJson(res)

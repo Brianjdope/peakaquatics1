@@ -351,8 +351,10 @@ function handleUploadUrl(data) {
     parents: [DRIVE_FOLDER_ID]
   }
 
+  // origin param is required so Google adds CORS headers to the upload URL
+  var origin = data.origin || 'https://brianjdope.github.io'
   var res = UrlFetchApp.fetch(
-    'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable',
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,name&origin=' + encodeURIComponent(origin),
     {
       method: 'POST',
       contentType: 'application/json',
