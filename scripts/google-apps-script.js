@@ -43,8 +43,7 @@ function doPost(e) {
     var data = JSON.parse(e.postData.contents)
     if (data.action === 'book')      return jsonResponse(handleBooking(data))
     if (data.action === 'cancel')    return jsonResponse(handleCancellation(data))
-    if (data.action === 'uploadUrl')   return jsonResponse(handleUploadUrl(data))
-    if (data.action === 'linkVideo')  return jsonResponse(handleLinkVideo(data))
+    if (data.action === 'uploadVideo')  return jsonResponse(handleVideoUpload(data))
     return jsonResponse({ success: false, error: 'Invalid action' })
   } catch (err) {
     return jsonResponse({ success: false, error: 'doPost error: ' + err.message })
@@ -336,83 +335,29 @@ function sendCancellationEmail(email, bookingId, dateTime, session) {
 }
 
 // =============================================================
-// VIDEO UPLOAD — Direct-to-Drive via resumable upload
-// Step 1: handleUploadUrl — creates upload session, returns URL
-// Step 2: Browser uploads directly to Drive (no Apps Script involved)
-// Step 3: handleLinkVideo — sets sharing + notifies coach
+// VIDEO UPLOAD — Save to Google Drive via Apps Script
+// Frontend sends base64, Apps Script decodes and saves to Drive folder
 // =============================================================
 
 var DRIVE_FOLDER_ID = '1c1qGAl8bpEuTMhZQZfi1o4czcB-d4b2H'
 
-function handleUploadUrl(data) {
-  if (!data.fileName || !data.fileSize) {
-    return { success: false, error: 'Missing fileName or fileSize.' }
+function handleVideoUpload(data) {
+  if (!data.videoBase64 || !data.fileName) {
+    return { success: false, error: 'Missing video data or file name.' }
   }
-
-  var metadata = {
-    name: data.fileName,
-    parents: [DRIVE_FOLDER_ID]
-  }
-
-  var origin = data.origin || 'https://brianjdope.github.io'
 
   try {
-    var res = UrlFetchApp.fetch(
-      'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,name&origin=' + encodeURIComponent(origin),
-      {
-        method: 'POST',
-        contentType: 'application/json',
-        headers: {
-          'Authorization': 'Bearer ' + ScriptApp.getOAuthToken(),
-          'X-Upload-Content-Type': data.contentType || 'video/mp4',
-          'X-Upload-Content-Length': String(data.fileSize),
-        },
-        payload: JSON.stringify(metadata),
-        muteHttpExceptions: true,
-      }
+    var folder = DriveApp.getFolderById(DRIVE_FOLDER_ID)
+    var blob = Utilities.newBlob(
+      Utilities.base64Decode(data.videoBase64),
+      data.contentType || 'video/mp4',
+      data.fileName
     )
-
-    var code = res.getResponseCode()
-    if (code !== 200) {
-      Logger.log('Drive API error (' + code + '): ' + res.getContentText())
-      return { success: false, error: 'Drive API error (' + code + '): ' + res.getContentText() }
-    }
-
-    var headers = res.getAllHeaders()
-    var uploadUrl = headers['Location'] || headers['location']
-    if (!uploadUrl) {
-      // Try lowercase keys
-      for (var key in headers) {
-        if (key.toLowerCase() === 'location') {
-          uploadUrl = headers[key]
-          break
-        }
-      }
-    }
-
-    if (!uploadUrl) {
-      Logger.log('No Location header. Response headers: ' + JSON.stringify(headers))
-      Logger.log('Response body: ' + res.getContentText())
-      return { success: false, error: 'No upload URL returned. Check Apps Script logs.' }
-    }
-
-    return { success: true, uploadUrl: uploadUrl }
-  } catch(e) {
-    Logger.log('handleUploadUrl error: ' + e.message)
-    return { success: false, error: 'Upload setup failed: ' + e.message }
-  }
-}
-
-function handleLinkVideo(data) {
-  if (!data.fileId) {
-    return { success: false, error: 'Missing fileId.' }
-  }
-
-  try {
-    var file = DriveApp.getFileById(data.fileId)
+    var file = folder.createFile(blob)
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
     var videoUrl = file.getUrl()
 
+    // Notify coach with video link
     if (data.bookingId) {
       var sheet = getSheet()
       var rows  = sheet.getDataRange().getValues()
@@ -433,8 +378,8 @@ function handleLinkVideo(data) {
 
     return { success: true, videoUrl: videoUrl }
   } catch(e) {
-    Logger.log('Link video error: ' + e.message)
-    return { success: false, error: 'Could not link video: ' + e.message }
+    Logger.log('Video upload error: ' + e.message)
+    return { success: false, error: 'Upload failed: ' + e.message }
   }
 }
 
