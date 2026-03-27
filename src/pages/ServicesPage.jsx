@@ -44,8 +44,8 @@ export default function ServicesPage({ setPage, cancelParams, onCancelParamsUsed
         <div className="page-header-bg" style={{ backgroundImage: `url(${SERVICES_HERO})` }} />
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <p className="section-label">What We Offer</p>
-            <h1 className="page-title">Services</h1>
+            <p className="section-label">Services</p>
+            <h1 className="page-title">What We Offer</h1>
           </motion.div>
         </div>
       </div>

@@ -37,12 +37,15 @@ function BusinessCard() {
   }, [])
 
   return (
-    <div style={{ perspective: '1000px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <div style={{ perspective: '1000px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <p style={{ textAlign: 'center', fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.12em', marginBottom: '1.2rem' }}>
+        HOVER TO TILT · TAP TO FLIP
+      </p>
       <motion.div
         initial={{ opacity: 0, y: 40, rotateY: -15 }}
         animate={{ opacity: 1, y: 0, rotateY: 0 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        style={{ width: '100%', maxWidth: 480, cursor: 'pointer' }}
+        style={{ width: '100%', maxWidth: 620, cursor: 'pointer' }}
       >
         {/* Card wrapper — handles 3D tilt */}
         <div
@@ -175,9 +178,6 @@ function BusinessCard() {
           </div>
         </div>
 
-        <p style={{ textAlign: 'center', fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.12em', marginTop: '1.2rem' }}>
-          HOVER TO TILT · TAP TO FLIP
-        </p>
       </motion.div>
     </div>
   )
@@ -186,18 +186,9 @@ function BusinessCard() {
 export default function ContactPage() {
   return (
     <div className="page-wrapper">
-      <div className="page-header">
-        <div className="container">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <p className="section-label">Get In Touch</p>
-            <h1 className="page-title">Contact</h1>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Card section — full width, centered */}
-      <section style={{ background: 'var(--surface)', padding: '5rem 0 4rem' }}>
-        <div className="container" style={{ maxWidth: 640 }}>
+      {/* Card section — centered, full dark width */}
+      <section style={{ background: 'var(--surface)', paddingTop: '5.5rem', paddingBottom: '1rem' }}>
+        <div className="container" style={{ maxWidth: 780 }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -210,8 +201,8 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Contact details */}
-      <section className="page-section" style={{ background: 'var(--bg)' }}>
+      {/* Contact details — info left, map right */}
+      <section style={{ background: 'var(--bg)', padding: '2rem 0 5rem' }}>
         <div className="container">
           <div className="contact-grid">
             <motion.div
@@ -220,10 +211,8 @@ export default function ContactPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2>get in touch</h2>
-              <p style={{ marginTop: '1rem', marginBottom: '2.5rem', color: 'var(--muted)' }}>
-                Contact us and we will be in touch with you shortly.
-              </p>
+              <p className="section-label">Get In Touch</p>
+              <h2 style={{ marginTop: '0.5rem', marginBottom: '2.5rem' }}>Contact</h2>
 
               {CONTACT_INFO.hours.map((h, i) => (
                 <div key={i} style={{ marginBottom: '1.8rem' }}>
@@ -253,7 +242,19 @@ export default function ContactPage() {
               initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-            />
+              style={{ borderRadius: 12, overflow: 'hidden', minHeight: 400 }}
+            >
+              <iframe
+                title="Peak Aquatic Sports Location"
+                src="https://maps.google.com/maps?q=24+Hour+Fitness+Ramsey+150+Triangle+Blvd+Ramsey+NJ+07446&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0, minHeight: 400, filter: 'invert(0.9) hue-rotate(180deg) saturate(0.3) brightness(0.8)' }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </motion.div>
           </div>
         </div>
       </section>

@@ -33,7 +33,7 @@ export default defineConfig({
         short_name: 'Peak Aquatics',
         description: 'Elite swimming coaching & collegiate recruitment consulting.',
         theme_color: '#030303',
-        background_color: '#030303',
+        background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait-primary',
         start_url: base,

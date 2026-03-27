@@ -7,20 +7,22 @@ import Preloader from '../components/Preloader'
 import { ABOUT, STATS } from '../data'
 
 const SPLIT_IMG = '/peakaquatics1/photos/richard-action.jpg'
+const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
 
 const ATHLETE_SLIDES = [
   {
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/d3b952ce-2c1f-45b3-9b55-e89f16d79cbc/Chloe+World+Junior+picture.jpg',
+    img: '/peakaquatics1/photos/chloe-kim-v3.jpg',
     label: 'PRINCETON UNIVERSITY',
     title: 'CHLOE KIM',
     subtitle: '4th Place, World Junior Championships 2025',
+    bgPosition: 'center 30%',
   },
   {
-    img: '/peakaquatics1/photos/richard-hometown-hero.jpg',
+    img: '/peakaquatics1/photos/eric-lee.jpg',
     label: 'HARVARD UNIVERSITY',
-    title: 'RICHARD POPLAWSKI',
-    subtitle: 'Top 50 at Olympic Trials',
-    bgPosition: 'center 40%',
+    title: 'ERIC LEE',
+    subtitle: 'Olympic Trials Qualifier',
+    bgPosition: 'center 30%',
   },
   {
     img: '/peakaquatics1/photos/kate-diving.jpg',
@@ -30,9 +32,10 @@ const ATHLETE_SLIDES = [
     bgPosition: 'center center',
   },
   {
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/bd5ba723-bf99-4d78-afee-529b7e7cc2ed/Private+Swimming+Lessons+%26+Swimming+Consultancy%7C+Paramus+%26+Tenafly%2C+New+Jersey',
-    label: 'OUR APPROACH',
-    title: 'COACHING THAT GETS RESULTS',
+    img: '/peakaquatics1/photos/team-trials.jfif',
+    label: 'THE BIGGEST STAGE',
+    title: 'BEFORE TAKING ON THE WORLD',
+    bgPosition: 'center 35%',
   },
 ]
 
@@ -97,7 +100,7 @@ function RevealSection({ children, delay = 0, className = '', style = {} }) {
   )
 }
 
-function FullSlide({ img, video, label, title, subtitle, onClick, isHero, bgSize, bgPosition, contain }) {
+function FullSlide({ img, video, label, title, subtitle, onClick, isHero, bgSize, bgPosition, contain, titleStyle }) {
   return (
     <section
       className={`full-slide${isHero ? ' full-slide--hero' : ''}`}
@@ -135,6 +138,7 @@ function FullSlide({ img, video, label, title, subtitle, onClick, isHero, bgSize
         )}
         <motion.h2
           className="full-slide-title"
+          style={titleStyle}
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
@@ -179,12 +183,31 @@ export default function HomePage({ setPage, goToBooking }) {
       {/* ── PRELOADER ── */}
       {!preloaderDone && <Preloader onComplete={handlePreloaderComplete} />}
 
-      {/* ── SLIDE 1: HERO ── */}
-      <FullSlide
-        isHero
-        title="PEAK AQUATIC SPORTS"
-        subtitle="Rise Higher"
-      />
+      {/* ── SLIDE 1: HERO — matches preloader layout exactly ── */}
+      <section className="full-slide full-slide--hero">
+        <div className="full-slide-text full-slide-text--center">
+          <div style={{
+            height: 'clamp(70px, 14vw, 150px)',
+            overflow: 'hidden',
+            marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)',
+          }}>
+            <img
+              src={LOGO_URL}
+              alt="Peak Aquatic Sports"
+              style={{
+                height: 'clamp(130px, 26vw, 280px)',
+                width: 'auto',
+                filter: 'brightness(0) invert(1) contrast(10)',
+                objectPosition: 'top',
+                display: 'block',
+                margin: '0 auto',
+              }}
+            />
+          </div>
+          <h2 className="full-slide-title">PEAK AQUATIC SPORTS</h2>
+          <div className="full-slide-subtitle" style={{ opacity: 1 }}>Rise Higher</div>
+        </div>
+      </section>
 
       {/* ── TICKER ── */}
       <Ticker />
@@ -253,20 +276,67 @@ export default function HomePage({ setPage, goToBooking }) {
         </div>
       </div>
 
-      {/* ── ATHLETE SLIDES ── */}
-      {ATHLETE_SLIDES.map((slide, i) => (
-        <FullSlide
-          key={i}
-          img={slide.img}
-          label={slide.label}
-          title={slide.title}
-          subtitle={slide.subtitle}
-          bgSize={slide.bgSize}
-          bgPosition={slide.bgPosition}
-          contain={slide.contain}
-          onClick={() => setPage('placements')}
-        />
-      ))}
+      {/* ── RICHARD SLIDE ── */}
+      <FullSlide
+        img={ATHLETE_SLIDES[1].img}
+        label={ATHLETE_SLIDES[1].label}
+        title={ATHLETE_SLIDES[1].title}
+        subtitle={ATHLETE_SLIDES[1].subtitle}
+        bgPosition={ATHLETE_SLIDES[1].bgPosition}
+        onClick={() => setPage('placements')}
+      />
+
+      {/* ── CHLOE & KATE SIDE BY SIDE ── */}
+      <section className="dual-athlete-section" onClick={() => setPage('placements')} style={{ cursor: 'pointer' }}>
+        {[ATHLETE_SLIDES[0], ATHLETE_SLIDES[2]].map((slide, i) => (
+          <div className="dual-athlete-card" key={i}>
+            <div className="dual-athlete-bg" style={{ backgroundImage: `url(${slide.img})`, backgroundPosition: slide.bgPosition || 'center' }} />
+            <div className="dual-athlete-overlay" />
+            <div className="dual-athlete-text">
+              <motion.div
+                className="full-slide-label"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.7, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {slide.label}
+              </motion.div>
+              <motion.h2
+                className="full-slide-title"
+                style={{ fontSize: 'clamp(1.6rem, 3vw, 2.8rem)' }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, delay: 0.1 + i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {slide.title}
+              </motion.h2>
+              {slide.subtitle && (
+                <motion.div
+                  className="full-slide-subtitle"
+                  style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.95rem)' }}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.7, delay: 0.2 + i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {slide.subtitle}
+                </motion.div>
+              )}
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* ── COACHING SLIDE ── */}
+      <FullSlide
+        img={ATHLETE_SLIDES[3].img}
+        label={ATHLETE_SLIDES[3].label}
+        title={ATHLETE_SLIDES[3].title}
+        titleStyle={{ fontSize: 'clamp(1.8rem, 5vw, 5rem)' }}
+        onClick={() => setPage('placements')}
+      />
 
       {/* ── STATS ── */}
       <section style={{ background:'var(--bg)', padding:'5rem 0 0', borderTop:'1px solid var(--border)' }}>

@@ -21,8 +21,8 @@ export default function NewsPage() {
         <div className="page-header">
           <div className="container">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-              <p className="section-label">Latest Updates</p>
-              <h1 className="page-title">News &amp; Events</h1>
+              <p className="section-label">News &amp; Events</p>
+              <h1 className="page-title">Latest Updates</h1>
             </motion.div>
           </div>
         </div>

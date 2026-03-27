@@ -296,19 +296,19 @@ export default function BusinessCard3D() {
 
   return (
     <div style={{ width: '100%', maxWidth: 520, margin: '0 auto' }}>
-      <div ref={mountRef} style={{ width: '100%', height: 320, cursor: 'pointer' }} />
       <p style={{
         textAlign: 'center',
         fontFamily: '"EB Garamond", Georgia, serif',
         fontSize: '0.65rem',
         color: 'rgba(255,255,255,0.15)',
         letterSpacing: '0.18em',
-        marginTop: '0.75rem',
+        marginBottom: '0.75rem',
         textTransform: 'uppercase',
         userSelect: 'none',
       }}>
         {hint}
       </p>
+      <div ref={mountRef} style={{ width: '100%', height: 320, cursor: 'pointer' }} />
     </div>
   )
 }

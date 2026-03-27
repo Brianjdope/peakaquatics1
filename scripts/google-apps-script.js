@@ -41,8 +41,10 @@ var COL = {
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents)
-    if (data.action === 'book')   return jsonResponse(handleBooking(data))
-    if (data.action === 'cancel') return jsonResponse(handleCancellation(data))
+    if (data.action === 'book')      return jsonResponse(handleBooking(data))
+    if (data.action === 'cancel')    return jsonResponse(handleCancellation(data))
+    if (data.action === 'uploadUrl') return jsonResponse(handleUploadUrl(data))
+    if (data.action === 'linkVideo') return jsonResponse(handleLinkVideo(data))
     return jsonResponse({ success: false, error: 'Invalid action' })
   } catch (err) {
     return jsonResponse({ success: false, error: 'doPost error: ' + err.message })
@@ -71,26 +73,54 @@ function handleAvailability(date, day) {
 
   var sheet = getSheet()
   var rows  = sheet.getDataRange().getValues()
-  var booked = []
+  var bookedSet = {}
+
+  // All possible 30-min slots for duration expansion
+  var allSlots = [
+    '5:00 AM','5:30 AM','5:50 AM','6:00 AM','6:30 AM','7:00 AM','7:30 AM',
+    '8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM',
+    '11:00 AM','11:30 AM','12:00 PM','12:30 PM','1:00 PM','1:30 PM',
+    '2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM',
+    '5:00 PM','5:30 PM','6:00 PM','6:30 PM','7:00 PM','7:30 PM',
+    '8:00 PM','8:30 PM','9:00 PM','9:30 PM'
+  ]
 
   for (var i = 1; i < rows.length; i++) {
     var cellDateTime = rows[i][COL.DATETIME].toString()
     var cellStatus   = rows[i][COL.STATUS].toString()
+    var cellSession  = rows[i][COL.SESSION].toString()
     if (cellStatus === 'Cancelled' || cellStatus === 'Open') continue
+
+    var time = null
 
     // Match specific date (e.g. "March 25, 2026 at 2:00 PM")
     if (cellDateTime.indexOf(date) > -1) {
       var timeMatch = cellDateTime.match(/at (.+)$/)
-      if (timeMatch) booked.push(timeMatch[1].trim())
+      if (timeMatch) time = timeMatch[1].trim()
     }
 
     // Match recurring day (e.g. "Recurring - Wednesday at 2:00 PM")
-    if (day && cellDateTime.indexOf('Recurring - ' + day) > -1) {
+    if (!time && day && cellDateTime.indexOf('Recurring - ' + day) > -1) {
       var recurMatch = cellDateTime.match(/at (.+)$/)
-      if (recurMatch) booked.push(recurMatch[1].trim())
+      if (recurMatch) time = recurMatch[1].trim()
+    }
+
+    if (time) {
+      bookedSet[time] = true
+      // Expand based on session duration (30-min slot increments)
+      // Group/Semi-Group = 1.5 hr (block 2 extra slots)
+      // Everything else  = 1 hr   (block 1 extra slot)
+      var extraSlots = (cellSession === 'Group Session' || cellSession === 'Semi-Group') ? 2 : 1
+      var idx = allSlots.indexOf(time)
+      if (idx > -1) {
+        for (var j = 1; j <= extraSlots; j++) {
+          if (idx + j < allSlots.length) bookedSet[allSlots[idx + j]] = true
+        }
+      }
     }
   }
 
+  var booked = Object.keys(bookedSet)
   return { success: true, booked: booked }
 }
 
@@ -113,20 +143,17 @@ function handleBooking(data) {
   var name      = data.name  || ''
   var skill     = data.skillLevel || ''
 
-  // Server-side conflict check for 1-on-1 sessions
-  var oneOnOne = ['Intro Call', 'Video Review', 'Private Session']
-  if (oneOnOne.indexOf(data.session) > -1) {
-    var allRows = sheet.getDataRange().getValues()
-    var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
-    var dateObj = new Date(data.date)
-    var recurringKey = !isNaN(dateObj) ? 'Recurring - ' + dayNames[dateObj.getDay()] + ' at ' + data.time : ''
-    for (var k = 1; k < allRows.length; k++) {
-      var s = allRows[k][COL.STATUS].toString()
-      if (s === 'Cancelled' || s === 'Open') continue
-      var dt = allRows[k][COL.DATETIME].toString()
-      if (dt === dateTime || (recurringKey && dt === recurringKey)) {
-        return { success: false, error: 'This time slot was just booked. Please choose another time.' }
-      }
+  // Server-side conflict check — block any session at an already-booked time
+  var allRows = sheet.getDataRange().getValues()
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+  var dateObj = new Date(data.date)
+  var recurringKey = !isNaN(dateObj) ? 'Recurring - ' + dayNames[dateObj.getDay()] + ' at ' + data.time : ''
+  for (var k = 1; k < allRows.length; k++) {
+    var s = allRows[k][COL.STATUS].toString()
+    if (s === 'Cancelled' || s === 'Open') continue
+    var dt = allRows[k][COL.DATETIME].toString()
+    if (dt === dateTime || (recurringKey && dt === recurringKey)) {
+      return { success: false, error: 'This time slot is already taken. Please choose another time.' }
     }
   }
 
@@ -142,7 +169,7 @@ function handleBooking(data) {
           sheet.getRange(i + 1, COL.BOOKING_ID + 1).setValue(existingIds   ? existingIds   + '\n' + bookingId  : bookingId)
         }
         try { sendConfirmationEmail(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
-        try { notifyCoach(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
+        try { notifyCoach(data, bookingId, dateTime, '') } catch(e) { Logger.log('Email quota: ' + e.message) }
         return { success: true, bookingId: bookingId }
       }
     }
@@ -164,7 +191,7 @@ function handleBooking(data) {
   sheet.getRange(lastRow, COL.BOOKING_ID + 1).setFontWeight('bold')
 
   try { sendConfirmationEmail(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
-  try { notifyCoach(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
+  try { notifyCoach(data, bookingId, dateTime, '') } catch(e) { Logger.log('Email quota: ' + e.message) }
   return { success: true, bookingId: bookingId }
 }
 
@@ -309,24 +336,104 @@ function sendCancellationEmail(email, bookingId, dateTime, session) {
 }
 
 // =============================================================
-// EMAIL — Notify coach of new booking
-// FIX: use data.name instead of out-of-scope `name` variable
+// DIRECT VIDEO UPLOAD — Resumable upload via Google Drive API
 // =============================================================
 
-function notifyCoach(data, bookingId, dateTime) {
+var DRIVE_FOLDER_ID = '1c1qGAl8bpEuTMhZQZfi1o4czcB-d4b2H'
+
+function handleUploadUrl(data) {
+  if (!data.fileName || !data.fileSize) {
+    return { success: false, error: 'Missing fileName or fileSize.' }
+  }
+
+  var metadata = {
+    name: data.fileName,
+    parents: [DRIVE_FOLDER_ID]
+  }
+
+  var res = UrlFetchApp.fetch(
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable',
+    {
+      method: 'POST',
+      contentType: 'application/json',
+      headers: {
+        'Authorization': 'Bearer ' + ScriptApp.getOAuthToken(),
+        'X-Upload-Content-Type': data.contentType || 'video/mp4',
+        'X-Upload-Content-Length': String(data.fileSize),
+      },
+      payload: JSON.stringify(metadata),
+      muteHttpExceptions: true,
+    }
+  )
+
+  var headers = res.getHeaders()
+  var uploadUrl = headers['Location'] || headers['location']
+  if (!uploadUrl) {
+    Logger.log('Upload session failed: ' + res.getContentText())
+    return { success: false, error: 'Failed to create upload session.' }
+  }
+
+  return { success: true, uploadUrl: uploadUrl }
+}
+
+function handleLinkVideo(data) {
+  if (!data.fileId) {
+    return { success: false, error: 'Missing fileId.' }
+  }
+
+  try {
+    var file = DriveApp.getFileById(data.fileId)
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
+    var videoUrl = file.getUrl()
+
+    if (data.bookingId) {
+      var sheet = getSheet()
+      var rows  = sheet.getDataRange().getValues()
+      for (var i = 1; i < rows.length; i++) {
+        if (rows[i][COL.BOOKING_ID].toString().indexOf(data.bookingId) !== -1) {
+          try {
+            notifyCoach({
+              name: rows[i][COL.NAME],
+              email: rows[i][COL.EMAIL],
+              session: rows[i][COL.SESSION],
+              skillLevel: rows[i][COL.SKILL],
+            }, data.bookingId, rows[i][COL.DATETIME], videoUrl)
+          } catch(e) { Logger.log('Coach notify error: ' + e.message) }
+          break
+        }
+      }
+    }
+
+    return { success: true, videoUrl: videoUrl }
+  } catch(e) {
+    Logger.log('Link video error: ' + e.message)
+    return { success: false, error: 'Could not link video: ' + e.message }
+  }
+}
+
+// =============================================================
+// EMAIL — Notify coach of new booking
+// =============================================================
+
+function notifyCoach(data, bookingId, dateTime, videoUrl) {
+  var lines = [
+    'New booking received.',
+    '',
+    'Members:     ' + (data.name || '(not provided)'),
+    'Email:       ' + data.email,
+    'Session:     ' + data.session,
+    'Skill Level: ' + (data.skillLevel || ''),
+    'Date/Time:   ' + dateTime,
+    'Booking ID:  ' + bookingId,
+  ]
+  if (videoUrl) {
+    lines.push('')
+    lines.push('📹 Video uploaded: ' + videoUrl)
+  }
   MailApp.sendEmail(
     COACH_EMAIL,
     '📅 New Booking: ' + data.session + ' — ' + dateTime,
-    [
-      'New booking received.',
-      '',
-      'Members:     ' + (data.name || '(not provided)'),
-      'Email:       ' + data.email,
-      'Session:     ' + data.session,
-      'Skill Level: ' + (data.skillLevel || ''),
-      'Date/Time:   ' + dateTime,
-      'Booking ID:  ' + bookingId,
-    ].join('\n')
+    lines.join('\n')
   )
 }
 

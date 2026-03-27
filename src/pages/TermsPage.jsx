@@ -4,16 +4,7 @@ import { motion } from 'framer-motion'
 export default function TermsPage() {
   return (
     <div className="page-wrapper">
-      <div className="page-header" style={{ minHeight: 220 }}>
-        <div className="container">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <p className="section-label">Legal</p>
-            <h1 className="page-title">Terms & Conditions</h1>
-          </motion.div>
-        </div>
-      </div>
-
-      <section className="page-section" style={{ background: 'var(--surface)' }}>
+      <section style={{ background: 'var(--surface)', paddingTop: '6rem', paddingBottom: '5rem' }}>
         <div className="container" style={{ maxWidth: 760 }}>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -21,6 +12,8 @@ export default function TermsPage() {
             transition={{ duration: 0.8 }}
             style={{ color: 'var(--muted)', lineHeight: 1.8, fontSize: '0.92rem' }}
           >
+            <p className="section-label">Legal</p>
+            <h1 className="page-title" style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>Terms & Conditions</h1>
             <p style={{ color: 'var(--text)', fontSize: '0.85rem', marginBottom: '2rem' }}>
               Last updated: January 1, 2025
             </p>

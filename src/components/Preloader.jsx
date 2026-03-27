@@ -3,37 +3,36 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
 
-const LETTERS = 'PEAK AQUATICS'.split('')
+const TITLE_LETTERS = 'PEAK AQUATIC SPORTS'.split('')
 
 export default function Preloader({ onComplete }) {
-  // Phases: logo → logoOut → text → tagline → exit → done
+  // Phases: logo → title → tagline → reveal → done
   const [phase, setPhase] = useState('logo')
   const timeouts = useRef([])
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase('logoOut'), 1200)
-    const t2 = setTimeout(() => setPhase('text'), 1700)
-    const t3 = setTimeout(() => setPhase('tagline'), 2800)
-    const t4 = setTimeout(() => setPhase('exit'), 3800)
-    const t5 = setTimeout(() => { setPhase('done'); onComplete?.() }, 4400)
-    timeouts.current = [t1, t2, t3, t4, t5]
+    const t1 = setTimeout(() => setPhase('title'), 1200)
+    const t2 = setTimeout(() => setPhase('tagline'), 2300)
+    const t3 = setTimeout(() => setPhase('reveal'), 3300)
+    const t4 = setTimeout(() => { setPhase('done'); onComplete?.() }, 3900)
+    timeouts.current = [t1, t2, t3, t4]
     return () => timeouts.current.forEach(clearTimeout)
   }, [onComplete])
 
   if (phase === 'done') return null
 
-  const showLogo = phase === 'logo' || phase === 'logoOut'
-  const showText = phase === 'text' || phase === 'tagline' || phase === 'exit'
-  const showTagline = phase === 'tagline' || phase === 'exit'
-  const isExit = phase === 'exit'
+  const showTitle = phase === 'title' || phase === 'tagline' || phase === 'reveal'
+  const showTagline = phase === 'tagline' || phase === 'reveal'
+  const isReveal = phase === 'reveal'
+  const isLogoOnly = phase === 'logo'
 
   return (
     <AnimatePresence>
       {phase !== 'done' && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          animate={{ opacity: isReveal ? 0 : 1 }}
+          transition={{ duration: isReveal ? 0.8 : 0.3, ease: [0.16, 1, 0.3, 1] }}
           style={{
             position: 'fixed',
             inset: 0,
@@ -46,16 +45,29 @@ export default function Preloader({ onComplete }) {
             overflow: 'hidden',
           }}
         >
-          {/* Phase 1: Logo emblem only (cropped), centered */}
-          {showLogo && (
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            padding: '0 2vw',
+          }}>
+            {/* Logo — starts centered, slides up when title appears */}
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 0, scale: 0.8 }}
               animate={{
-                opacity: phase === 'logoOut' ? 0 : 1,
+                opacity: 1,
+                scale: 1,
+                marginBottom: isLogoOnly ? 0 : 'clamp(1.5rem, 3vw, 2.5rem)',
               }}
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              transition={{
+                opacity: { duration: 0.8, ease: 'easeOut' },
+                scale: { duration: 1, ease: [0.16, 1, 0.3, 1] },
+                marginBottom: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+              }}
               style={{
-                height: 'clamp(90px, 18vw, 200px)',
+                height: 'clamp(70px, 14vw, 150px)',
                 overflow: 'hidden',
                 userSelect: 'none',
               }}
@@ -64,7 +76,7 @@ export default function Preloader({ onComplete }) {
                 src={LOGO_URL}
                 alt="Peak Aquatic Sports"
                 style={{
-                  height: 'clamp(160px, 32vw, 360px)',
+                  height: 'clamp(130px, 26vw, 280px)',
                   width: 'auto',
                   filter: 'brightness(0) invert(1) contrast(10)',
                   objectPosition: 'top',
@@ -72,71 +84,58 @@ export default function Preloader({ onComplete }) {
                 }}
               />
             </motion.div>
-          )}
 
-          {/* Phase 2: PEAK AQUATICS in massive letters, McCann-style */}
-          {showText && (
+            {/* PEAK AQUATIC SPORTS — letter by letter */}
             <div style={{
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0 2vw',
+              flexWrap: 'nowrap',
+              height: showTitle ? 'auto' : 0,
+              overflow: 'hidden',
             }}>
-              {/* Big name */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexWrap: 'nowrap',
-              }}>
-                {LETTERS.map((char, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{
-                      opacity: isExit ? 0 : 1,
-                      y: isExit ? -20 : 0,
-                    }}
-                    transition={{
-                      duration: isExit ? 0.3 : 0.4,
-                      delay: isExit ? 0 : 0.05 * i,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    style={{
-                      display: 'inline-block',
-                      fontFamily: "'Anton', Arial, sans-serif",
-                      fontSize: 'clamp(3rem, 12vw, 10rem)',
-                      color: '#fcfcfc',
-                      letterSpacing: char === ' ' ? '0.15em' : '0.02em',
-                      fontWeight: 400,
-                      lineHeight: 1,
-                      userSelect: 'none',
-                      width: char === ' ' ? 'clamp(0.8rem, 2.5vw, 2rem)' : 'auto',
-                    }}
-                  >
-                    {char === ' ' ? '\u00A0' : char}
-                  </motion.span>
-                ))}
-              </div>
+              {showTitle && TITLE_LETTERS.map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.04 * i,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  style={{
+                    display: 'inline-block',
+                    fontFamily: "'Anton', Arial, sans-serif",
+                    fontSize: 'clamp(3rem, 9vw, 9rem)',
+                    color: '#fcfcfc',
+                    letterSpacing: '-0.02em',
+                    fontWeight: 400,
+                    lineHeight: 0.9,
+                    userSelect: 'none',
+                    marginRight: char === ' ' ? 'clamp(0.5rem, 1.5vw, 1.2rem)' : 0,
+                  }}
+                >
+                  {char === ' ' ? '' : char}
+                </motion.span>
+              ))}
+            </div>
 
-              {/* Tagline: RISE ABOVE ALL */}
+            {/* Rise Higher */}
+            {showTagline && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{
-                  opacity: isExit ? 0 : showTagline ? 1 : 0,
-                  y: isExit ? -10 : showTagline ? 0 : 20,
-                }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: 0.6,
+                  duration: 0.8,
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 style={{
-                  marginTop: 'clamp(1rem, 3vw, 2.5rem)',
+                  marginTop: 'clamp(0.8rem, 1.5vw, 1.5rem)',
                   fontFamily: "'Anton', Arial, sans-serif",
-                  fontSize: 'clamp(1rem, 3vw, 2.2rem)',
-                  color: '#fcfcfc',
-                  letterSpacing: '0.15em',
+                  fontSize: 'clamp(0.9rem, 1.5vw, 1.3rem)',
+                  color: 'rgba(252,252,252,0.6)',
+                  letterSpacing: '0.12em',
                   fontWeight: 400,
                   userSelect: 'none',
                   textTransform: 'uppercase',
@@ -144,8 +143,8 @@ export default function Preloader({ onComplete }) {
               >
                 Rise Higher
               </motion.div>
-            </div>
-          )}
+            )}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { cancelBooking, createBooking, fetchAvailability, lookupBookings } from '../lib/bookingClient'
+import { cancelBooking, createBooking, fetchAvailability, lookupBookings, getUploadUrl, uploadToDrive, linkVideo } from '../lib/bookingClient'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -67,6 +67,33 @@ const TIME_SLOTS = [
   '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM', '8:00 PM', '8:30 PM',
 ]
 
+// All slots including early morning (for matching booked times from sheet)
+const ALL_SLOTS = [
+  '5:00 AM','5:30 AM','5:50 AM','6:00 AM','6:30 AM','7:00 AM','7:30 AM',
+  '8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM',
+  '11:00 AM','11:30 AM','12:00 PM','12:30 PM','1:00 PM','1:30 PM',
+  '2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM',
+  '5:00 PM','5:30 PM','6:00 PM','6:30 PM','7:00 PM','7:30 PM',
+  '8:00 PM','8:30 PM','9:00 PM','9:30 PM',
+]
+
+// Expand booked times to block the full session duration
+// Each booked slot blocks the next slot too (minimum 1 hr session)
+function expandBookedTimes(booked) {
+  const blocked = new Set(booked)
+  for (const time of booked) {
+    const idx = ALL_SLOTS.indexOf(time)
+    if (idx > -1 && idx + 1 < ALL_SLOTS.length) {
+      blocked.add(ALL_SLOTS[idx + 1])
+    }
+    // Also block the slot before (a 1hr session starting there would overlap)
+    if (idx > 0) {
+      blocked.add(ALL_SLOTS[idx - 1])
+    }
+  }
+  return [...blocked]
+}
+
 function isWithin24Hours(dateStr) {
   // Parses "March 25, 2026 at 10:00 AM" or just "March 25, 2026"
   const parts = (dateStr || '').split(' at ')
@@ -122,6 +149,9 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [bookedTimes, setBookedTimes] = useState([])
+  const [loadingTimes, setLoadingTimes] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(-1) // -1 = not started, 0-100 = uploading, 101 = done, -2 = error
+  const [uploadError, setUploadError] = useState('')
   const fileRef = useRef()
   const timeSlotRef = useRef()
   const formRef = useRef()
@@ -216,7 +246,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) { setError('Please enter a valid email address.'); setSubmitting(false); return }
 
     try {
-      const data = await createBooking({
+      const bookingPayload = {
         name: clientName,
         email: clientEmail,
         phone: clientPhone,
@@ -224,7 +254,9 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
         skillLevel,
         date: dateStr,
         time: selectedTime,
-      })
+      }
+
+      const data = await createBooking(bookingPayload)
       if (data.success) {
         setBookingId(data.bookingId)
         if (data.checkoutUrl) {
@@ -285,6 +317,27 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     setCancellingId('')
   }
 
+  const handleVideoUpload = async (file) => {
+    if (!file || !bookingId) return
+    setUploadProgress(0)
+    setUploadError('')
+    try {
+      const fileName = `${clientName} - ${dateStr} - ${file.name}`
+      const urlData = await getUploadUrl(fileName, file.size, file.type || 'video/mp4')
+      if (!urlData.success) throw new Error(urlData.error || 'Could not start upload.')
+
+      const driveRes = await uploadToDrive(urlData.uploadUrl, file, setUploadProgress)
+      setUploadProgress(101)
+
+      if (driveRes?.id) {
+        await linkVideo(driveRes.id, bookingId)
+      }
+    } catch (e) {
+      setUploadProgress(-2)
+      setUploadError(e.message || 'Upload failed. Please email your video to peakaquaticsports@gmail.com.')
+    }
+  }
+
   const sessionObj = SESSION_TYPES.find(s => s.id === selectedSession)
   const dateStr = selectedDate ? `${MONTHS[currentMonth]} ${selectedDate}, ${currentYear}` : ''
 
@@ -341,34 +394,83 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             <p style={{ color: 'var(--muted)', fontSize: '0.78rem', lineHeight: 1.6, marginBottom: '1rem' }}>
               Attach your stroke or race video so Coach Phil can annotate it before your review call.
             </p>
-            <div
-              onClick={() => fileRef.current?.click()}
-              style={{
-                border: '2px dashed var(--border2)',
-                borderRadius: 8,
-                padding: '1.5rem 1rem',
-                cursor: 'pointer',
-                transition: 'border-color 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = '#a78bfa'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border2)'}
-            >
-              <input
-                ref={fileRef}
-                type="file"
-                accept="video/*"
-                onChange={(e) => setVideoFile(e.target.files[0])}
-                style={{ display: 'none' }}
-              />
-              <p style={{ color: videoFile ? 'var(--text)' : 'var(--muted)', fontSize: '0.82rem' }}>
-                {videoFile ? videoFile.name : 'Click to upload video (MP4, MOV)'}
+
+            {uploadProgress === 101 ? (
+              <p style={{ color: '#34d399', fontSize: '0.85rem', fontWeight: 600 }}>
+                Video uploaded successfully!
               </p>
-              <p style={{ color: 'var(--muted)', fontSize: '0.7rem', marginTop: '0.4rem' }}>Max 200MB · 30–60 seconds ideal</p>
-            </div>
-            {videoFile && (
-              <p style={{ color: '#a78bfa', fontSize: '0.78rem', marginTop: '0.75rem' }}>
-                Video attached — we'll review it before your call.
-              </p>
+            ) : uploadProgress === -2 ? (
+              <div>
+                <p style={{ color: '#f87171', fontSize: '0.8rem', marginBottom: '0.75rem' }}>
+                  {uploadError}
+                </p>
+                <button
+                  onClick={() => { setUploadProgress(-1); setUploadError('') }}
+                  style={{
+                    background: 'none',
+                    border: '1px solid var(--border)',
+                    color: 'var(--muted)',
+                    padding: '0.4rem 1rem',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    fontSize: '0.78rem',
+                  }}
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : uploadProgress >= 0 ? (
+              <div>
+                <div style={{
+                  background: 'var(--surface2)',
+                  borderRadius: 6,
+                  height: 8,
+                  overflow: 'hidden',
+                  marginBottom: '0.5rem',
+                }}>
+                  <div style={{
+                    background: '#a78bfa',
+                    height: '100%',
+                    width: `${uploadProgress}%`,
+                    borderRadius: 6,
+                    transition: 'width 0.3s ease',
+                  }} />
+                </div>
+                <p style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>
+                  Uploading... {uploadProgress}%
+                </p>
+              </div>
+            ) : (
+              <div
+                onClick={() => fileRef.current?.click()}
+                style={{
+                  border: '2px dashed var(--border2)',
+                  borderRadius: 8,
+                  padding: '1.5rem 1rem',
+                  cursor: 'pointer',
+                  transition: 'border-color 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = '#a78bfa'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border2)'}
+              >
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="video/*"
+                  onChange={(e) => {
+                    const f = e.target.files[0]
+                    if (f) {
+                      setVideoFile(f)
+                      handleVideoUpload(f)
+                    }
+                  }}
+                  style={{ display: 'none' }}
+                />
+                <p style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>
+                  Click to upload video (MP4, MOV)
+                </p>
+                <p style={{ color: 'var(--muted)', fontSize: '0.7rem', marginTop: '0.4rem' }}>Max 500MB</p>
+              </div>
             )}
           </div>
         )}
@@ -383,7 +485,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
         </p>
 
         <button
-          onClick={() => { setConfirmed(false); setBookingId(''); setSelectedDate(null); setSelectedTime(null); setSelectedSession(null); setVideoFile(null); setClientName(''); setClientEmail(''); setClientPhone(''); setError('') }}
+          onClick={() => { setConfirmed(false); setBookingId(''); setSelectedDate(null); setSelectedTime(null); setSelectedSession(null); setVideoFile(null); setUploadProgress(-1); setUploadError(''); setClientName(''); setClientEmail(''); setClientPhone(''); setError('') }}
           style={{
             background: 'none',
             border: '1px solid var(--border)',
@@ -759,11 +861,13 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                   setSelectedDate(day)
                   setSelectedTime(null)
                   setBookedTimes([])
+                  setLoadingTimes(true)
                   const selectedDateStr = `${MONTHS[currentMonth]} ${day}, ${currentYear}`
                   const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(currentYear, currentMonth, day).getDay()]
                   fetchAvailability(selectedDateStr, dayName)
-                    .then(d => { if (d.success) setBookedTimes(d.booked || []) })
+                    .then(d => { if (d.success) setBookedTimes(expandBookedTimes(d.booked || [])) })
                     .catch(() => {})
+                    .finally(() => setLoadingTimes(false))
                   if (window.innerWidth <= 768) {
                     setTimeout(() => timeSlotRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
                   }
@@ -824,6 +928,11 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             }}>
               Available times — {MONTHS[currentMonth]} {selectedDate}
             </p>
+            {loadingTimes ? (
+              <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>Loading availability…</p>
+            ) : TIME_SLOTS.filter(t => !bookedTimes.includes(t)).length === 0 ? (
+              <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>No available times on this date. Please select another day.</p>
+            ) : (
             <div ref={timeSlotRef} className="booking-time-grid" style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(4, 1fr)',
@@ -860,6 +969,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                 </button>
               ))}
             </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

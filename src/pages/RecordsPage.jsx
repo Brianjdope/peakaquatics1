@@ -15,8 +15,8 @@ export default function RecordsPage() {
         <div className="page-header-bg" style={{ backgroundImage: `url(${RECORDS_HERO_IMG})` }} />
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <p className="section-label">Program Records</p>
-            <h1 className="page-title">Records</h1>
+            <p className="section-label">Records</p>
+            <h1 className="page-title">Program Records</h1>
             <p style={{ color: 'var(--muted)', marginTop: '0.75rem', fontSize: '0.9rem' }}>
               All records were set under individual club teams and with Peak Aquatic Sports.
             </p>

@@ -1,4 +1,4 @@
-const SHEETS_API = 'https://script.google.com/macros/s/AKfycbxBoKfdZks4JK_Gm8N8JG2dVgroi1QTzfC1eYlp6bC0pGKg-SPS7td1-rN8U_LNa20m/exec'
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbyQT-PCm-QhYnUyHu-kLCipqJf6jNnrmQhHRs1JxIj95HK80-seuFy1b6j416myH1j7/exec'
 
 const FALLBACK_MSG = 'Booking server is unavailable. Please email peakaquaticsports@gmail.com or call 201-359-5688.'
 
@@ -36,18 +36,76 @@ export async function cancelBooking(bookingId, email) {
 }
 
 export async function createBooking(payload) {
+  const body = {
+    action: 'book',
+    name: payload.name,
+    email: payload.email,
+    phone: payload.phone,
+    session: payload.session,
+    skillLevel: payload.skillLevel,
+    date: payload.date,
+    time: payload.time,
+  }
+
+  const res = await fetch(SHEETS_API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(body),
+  })
+  return readJson(res)
+}
+
+export async function getUploadUrl(fileName, fileSize, contentType) {
   const res = await fetch(SHEETS_API, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify({
-      action: 'book',
-      name: payload.name,
-      email: payload.email,
-      phone: payload.phone,
-      session: payload.session,
-      skillLevel: payload.skillLevel,
-      date: payload.date,
-      time: payload.time,
+      action: 'uploadUrl',
+      fileName,
+      fileSize,
+      contentType,
+    }),
+  })
+  return readJson(res)
+}
+
+export function uploadToDrive(uploadUrl, file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('PUT', uploadUrl)
+    xhr.setRequestHeader('Content-Type', file.type || 'video/mp4')
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && onProgress) {
+        onProgress(Math.round((e.loaded / e.total) * 100))
+      }
+    }
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          resolve(JSON.parse(xhr.responseText))
+        } catch {
+          resolve({ id: null })
+        }
+      } else {
+        reject(new Error('Upload failed with status ' + xhr.status))
+      }
+    }
+
+    xhr.onerror = () => reject(new Error('Upload network error'))
+    xhr.send(file)
+  })
+}
+
+export async function linkVideo(fileId, bookingId) {
+  const res = await fetch(SHEETS_API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      action: 'linkVideo',
+      fileId,
+      bookingId,
     }),
   })
   return readJson(res)

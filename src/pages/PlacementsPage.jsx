@@ -16,8 +16,8 @@ export default function PlacementsPage() {
       <div className="page-header">
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <p className="section-label">College Placements</p>
-            <h1 className="page-title">Academic Excellence</h1>
+            <p className="section-label">Academic Excellence</p>
+            <h1 className="page-title">College Placements</h1>
           </motion.div>
         </div>
       </div>

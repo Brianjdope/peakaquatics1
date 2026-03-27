@@ -3,13 +3,13 @@ import { CONTACT_INFO } from '../data'
 
 const COL1 = [
   { label: 'Home',       page: 'home' },
-  { label: 'About',      page: 'about' },
+  { label: 'Our Mission', page: 'about' },
   { label: 'News & Events', page: 'news' },
   { label: 'Records',    page: 'records' },
 ]
 const COL2 = [
   { label: 'Services',   page: 'services' },
-  { label: 'Placements', page: 'placements' },
+  { label: 'Academic Excellence', page: 'placements' },
   { label: 'Contact',    page: 'contact' },
 ]
 

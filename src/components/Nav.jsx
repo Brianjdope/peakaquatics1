@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const LINKS = [
-  { label: 'Work',       page: 'placements' },
-  { label: 'About',      page: 'about' },
+  { label: 'Academic Excellence', page: 'placements' },
+  { label: 'Our Mission', page: 'about' },
   { label: 'Records',    page: 'records' },
   { label: 'Services',   page: 'services' },
   { label: 'News & Events', page: 'news' },
@@ -27,6 +27,19 @@ const PhoneIcon = () => (
 export default function Nav({ page, setPage, goToBooking }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [phoneAvailable, setPhoneAvailable] = useState(() => {
+    const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })).getHours()
+    return h >= 9 && h < 21
+  })
+
+  useEffect(() => {
+    const checkPhone = () => {
+      const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })).getHours()
+      setPhoneAvailable(h >= 9 && h < 21)
+    }
+    const id = setInterval(checkPhone, 60000)
+    return () => clearInterval(id)
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -70,7 +83,11 @@ export default function Nav({ page, setPage, goToBooking }) {
         <div className="nav-social">
           <a href="https://www.instagram.com/philkangg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
           <a href="mailto:Philip.jkang@gmail.com" aria-label="Email"><EmailIcon /></a>
-          <a href="tel:+12013595688" aria-label="Phone"><PhoneIcon /></a>
+          {phoneAvailable ? (
+            <a href="tel:+12013595688" aria-label="Phone"><PhoneIcon /></a>
+          ) : (
+            <span style={{ opacity: 0.3, cursor: 'default' }} title="Available 9 AM – 9 PM ET"><PhoneIcon /></span>
+          )}
         </div>
       </nav>
 
@@ -118,7 +135,7 @@ export default function Nav({ page, setPage, goToBooking }) {
                 onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.7)'}
                 onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}
               >
-                Terms & Conditions
+                Legal
               </button>
               <span>Peak Aquatic Sports</span>
               <span>Ramsey, NJ</span>
