@@ -450,7 +450,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                 <input
                   ref={fileRef}
                   type="file"
-                  accept="video/mp4,video/quicktime,video/mov,.mp4,.mov,.m4v"
+                  accept="video/*"
                   onChange={(e) => {
                     const f = e.target.files[0]
                     if (f) {
@@ -461,7 +461,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                   style={{ display: 'none' }}
                 />
                 <p style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>
-                  Choose a pre-recorded video from your camera roll
+                  Tap to select a video from your library or record one
                 </p>
                 <p style={{ color: 'var(--muted)', fontSize: '0.7rem', marginTop: '0.4rem' }}>Max 500MB</p>
               </div>
