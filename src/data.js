@@ -841,6 +841,7 @@ export const TESTIMONIALS = [
     name: 'Grace Lee',
     school: 'Cornell University',
     image: '/peakaquatics1/athletes/grace-lee.webp',
+    imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "The opportunity to swim for Coach Phil has been a privilege. With coach Phil's expertise in swimming, technical precision, and his dedication, I was able to develop not only as a swimmer but also as a person. Coach Phil has been a mentor for me throughout my swimming career helping me to prepare for competitions physically and even outside the pool mentally.",
@@ -854,36 +855,42 @@ export const TESTIMONIALS = [
     name: 'Michael Granin',
     school: 'Colgate University',
     image: '/peakaquatics1/athletes/michael-granin.webp',
+    imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "Coach Phil is the real deal! Since working with him, I have become stronger and quicker both in and out of the water. His program has shaped me into the elite athlete I am today, and has prepared me well for my collegiate athletic career.",
     name: 'Christopher Chang',
     school: 'Brown University',
     image: '/peakaquatics1/athletes/chris-chang.webp',
+    imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "I had the pleasure of swimming for coach Phil for 3 years. Phil is a great mentor, creating a competitive atmosphere for swimmers to learn and excel. He is a great person to talk to about anything and it's been a blessing to swim for him.",
     name: 'Steven Bendoraitis',
     school: 'TCNJ',
     image: '/peakaquatics1/athletes/steven-bendoraitis.webp',
+    imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "Coach Phil has helped me with not only swimming, but with life. He always leaves a positive impact on all of his swimmers. Helping me become a better person in and out of the pool. Phil is the man!",
     name: 'Doyee Kim',
     school: 'West Point',
     image: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/goarmywestpoint.com/images/2024/9/4/KIM_DOYEE.jpg',
+    imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "Swimming with coach Phil has truly been an incredible experience and blessing. His passion and knowledge for the sport has helped me improve my technique and confidence in the water, while also preparing me both mentally and physically for peak performance.",
     name: 'Matt Bendoraitis',
     school: 'University of Maine',
     image: '/peakaquatics1/athletes/matt-bendoraitis.webp',
+    imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "Phil is a passionate coach that cares about all his swimmers' progress. I was fortunate enough to train with Phil and learn many different skills and techniques. We have worked together for some time, and he helped me improve as a swimmer and character, in and out of the water.",
     name: 'Kathleen Bendoraitis',
     school: 'University of Maine',
     image: '/peakaquatics1/athletes/kathleen-bendoraitis.webp',
+    imageStyle: { objectPosition: 'top' },
   },
 ]
 
