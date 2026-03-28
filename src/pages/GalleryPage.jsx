@@ -92,8 +92,8 @@ export default function GalleryPage() {
       <div className="page-header">
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <p className="section-label">Follow Along</p>
-            <h1 className="page-title">Gallery</h1>
+            <p className="section-label">Gallery</p>
+            <h1 className="page-title">Follow Along</h1>
           </motion.div>
         </div>
       </div>
