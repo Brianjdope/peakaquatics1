@@ -192,6 +192,8 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth)
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth)
+  const isMonday = selectedDate && new Date(currentYear, currentMonth, selectedDate).getDay() === 1
+  const availableSlots = TIME_SLOTS.filter(t => !bookedTimes.includes(t) && !(isMonday && t === '1:00 PM'))
 
   const prevMonth = () => {
     if (currentMonth === 0) {
@@ -924,7 +926,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             </p>
             {loadingTimes ? (
               <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>Loading availability…</p>
-            ) : TIME_SLOTS.filter(t => !bookedTimes.includes(t)).length === 0 ? (
+            ) : availableSlots.length === 0 ? (
               <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>No available times on this date. Please select another day.</p>
             ) : (
             <div ref={timeSlotRef} className="booking-time-grid" style={{
@@ -932,7 +934,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
               gridTemplateColumns: 'repeat(4, 1fr)',
               gap: '0.4rem',
             }}>
-              {TIME_SLOTS.filter(t => !bookedTimes.includes(t)).map(t => (
+              {availableSlots.map(t => (
                 <button
                   key={t}
                   onClick={() => {
