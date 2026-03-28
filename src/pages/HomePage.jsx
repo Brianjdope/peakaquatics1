@@ -18,17 +18,17 @@ const ATHLETE_SLIDES = [
     bgPosition: 'center 30%',
   },
   {
-    img: '/peakaquatics1/photos/eric-lee.jpg',
-    label: 'HARVARD UNIVERSITY',
-    title: 'ERIC LEE',
-    subtitle: 'Olympic Trials Qualifier',
-    bgPosition: 'center 30%',
-  },
-  {
     img: '/peakaquatics1/photos/kate-diving.jpg',
     label: 'UNIVERSITY OF TEXAS',
     title: 'KATE HURST',
     subtitle: 'World Junior Champion 2023 · USA National Team 2024–2026',
+    bgPosition: 'center 30%',
+  },
+  {
+    img: '/peakaquatics1/photos/richard-hometown-hero.jpg',
+    label: 'HARVARD UNIVERSITY',
+    title: 'RICHARD POPLAWSKI',
+    subtitle: 'Top 50 at Olympic Trials',
     bgPosition: 'center center',
   },
   {
@@ -268,8 +268,7 @@ export default function HomePage({ setPage, goToBooking }) {
             <p className="section-label">Our Approach</p>
             <h2 style={{ marginBottom:'1.2rem', marginTop:'0.5rem' }}>Coaching That<br />Gets Results</h2>
             <p style={{ color: 'var(--muted)', marginBottom:'2rem', maxWidth: '420px', lineHeight: 1.7 }}>
-              We combine elite stroke technique, race strategy, and direct college coach connections
-              to give every swimmer an unfair advantage in the pool and in recruiting.
+              Race strategy, and video analysis to give every swimmer an advantage in the pool and the recruiting process.
             </p>
             <button className="btn btn-solid" onClick={goToBooking}>Book a Session</button>
           </RevealSection>
