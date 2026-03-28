@@ -435,7 +435,7 @@ section { padding: 8rem 0; }
 }
 .nav-drawer-link {
   font-family: var(--display);
-  font-size: clamp(2rem, 5.5vw, 4.5rem);
+  font-size: clamp(1.6rem, 4.5vw, 3.5rem);
   line-height: 1.0;
   color: rgba(255,255,255,0.22);
   background: none;
@@ -1840,7 +1840,7 @@ section { padding: 8rem 0; }
   .nav.scrolled { padding: 0.9rem 1.5rem; }
   .nav-drawer { padding: 5rem 2rem 8rem; }
   .nav-drawer-footer { left: 2rem; bottom: 2rem; right: auto; }
-  .nav-drawer-link { font-size: clamp(1.7rem, 8vw, 3rem); }
+  .nav-drawer-link { font-size: clamp(1.4rem, 7vw, 2.5rem); }
   .hero { padding: 0 0 12rem 1.5rem; }
   .hero-content { padding: 0 1.5rem 0 0; }
   .about-grid { grid-template-columns: 1fr; }
