@@ -862,7 +862,7 @@ export const TESTIMONIALS = [
     name: 'Christopher Chang',
     school: 'Brown University',
     image: '/peakaquatics1/athletes/chris-chang.webp',
-    imageStyle: { objectPosition: 'top' },
+    imageStyle: { objectPosition: 'center' },
   },
   {
     quote: "I had the pleasure of swimming for coach Phil for 3 years. Phil is a great mentor, creating a competitive atmosphere for swimmers to learn and excel. He is a great person to talk to about anything and it's been a blessing to swim for him.",
