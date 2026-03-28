@@ -29,7 +29,8 @@ const ATHLETE_SLIDES = [
     label: 'HARVARD UNIVERSITY',
     title: 'RICHARD POPLAWSKI',
     subtitle: 'Top 50 at Olympic Trials',
-    bgPosition: 'center center',
+    bgPosition: 'center 15%',
+    bgSize: '105%',
   },
   {
     img: '/peakaquatics1/photos/team-trials.jfif',
@@ -289,7 +290,7 @@ export default function HomePage({ setPage, goToBooking }) {
       <section className="dual-athlete-section" onClick={() => setPage('placements')} style={{ cursor: 'pointer' }}>
         {[ATHLETE_SLIDES[0], ATHLETE_SLIDES[2]].map((slide, i) => (
           <div className="dual-athlete-card" key={i}>
-            <div className="dual-athlete-bg" style={{ backgroundImage: `url(${slide.img})`, backgroundPosition: slide.bgPosition || 'center' }} />
+            <div className="dual-athlete-bg" style={{ backgroundImage: `url(${slide.img})`, backgroundSize: slide.bgSize || 'cover', backgroundPosition: slide.bgPosition || 'center' }} />
             <div className="dual-athlete-overlay" />
             <div className="dual-athlete-text">
               <motion.div
