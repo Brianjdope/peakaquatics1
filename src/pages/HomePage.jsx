@@ -16,6 +16,7 @@ const ATHLETE_SLIDES = [
     title: 'CHLOE KIM',
     subtitle: '4th Place, World Junior Aquatics Championships 2025',
     bgPosition: 'center 30%',
+    credit: 'Photo by Jack Spitser',
   },
   {
     img: '/peakaquatics1/photos/kate-diving.jpg',
@@ -23,6 +24,7 @@ const ATHLETE_SLIDES = [
     title: 'KATE HURST',
     subtitle: 'World Junior Aquatics Champion 2023 · USA National Team 2024–2026',
     bgPosition: 'center 30%',
+    credit: 'Photo by Jack Spitser',
   },
   {
     img: '/peakaquatics1/photos/richard-hometown-hero.jpg',
@@ -31,6 +33,7 @@ const ATHLETE_SLIDES = [
     subtitle: 'Top 50 at Olympic Trials',
     bgPosition: 'center 15%',
     bgSize: '105%',
+    credit: 'Photo by USA Swimming',
   },
   {
     img: '/peakaquatics1/photos/team-trials.jfif',
@@ -101,7 +104,7 @@ function RevealSection({ children, delay = 0, className = '', style = {} }) {
   )
 }
 
-function FullSlide({ img, video, label, title, subtitle, onClick, isHero, bgSize, bgPosition, contain, titleStyle }) {
+function FullSlide({ img, video, label, title, subtitle, credit, onClick, isHero, bgSize, bgPosition, contain, titleStyle }) {
   return (
     <section
       className={`full-slide${isHero ? ' full-slide--hero' : ''}`}
@@ -159,6 +162,20 @@ function FullSlide({ img, video, label, title, subtitle, onClick, isHero, bgSize
           </motion.div>
         )}
       </div>
+      {credit && (
+        <div style={{
+          position: 'absolute',
+          bottom: '1rem',
+          right: '1.5rem',
+          fontFamily: 'var(--mono)',
+          fontSize: '0.55rem',
+          color: 'rgba(255,255,255,0.35)',
+          letterSpacing: '0.05em',
+          zIndex: 2,
+        }}>
+          {credit}
+        </div>
+      )}
     </section>
   )
 }
@@ -283,6 +300,7 @@ export default function HomePage({ setPage, goToBooking }) {
         title={ATHLETE_SLIDES[1].title}
         subtitle={ATHLETE_SLIDES[1].subtitle}
         bgPosition={ATHLETE_SLIDES[1].bgPosition}
+        credit={ATHLETE_SLIDES[1].credit}
         onClick={() => setPage('placements')}
       />
 
@@ -325,6 +343,20 @@ export default function HomePage({ setPage, goToBooking }) {
                 </motion.div>
               )}
             </div>
+            {slide.credit && (
+              <div style={{
+                position: 'absolute',
+                bottom: '0.75rem',
+                right: '1rem',
+                fontFamily: 'var(--mono)',
+                fontSize: '0.5rem',
+                color: 'rgba(255,255,255,0.35)',
+                letterSpacing: '0.05em',
+                zIndex: 2,
+              }}>
+                {slide.credit}
+              </div>
+            )}
           </div>
         ))}
       </section>
