@@ -40,6 +40,7 @@ const ATHLETE_SLIDES = [
     label: 'THE BIGGEST STAGE',
     title: 'BEFORE TAKING ON THE WORLD',
     bgPosition: 'center 35%',
+    credit: 'Photo by Michael Conroy / Associated Press (AP)',
   },
 ]
 
@@ -366,6 +367,7 @@ export default function HomePage({ setPage, goToBooking }) {
         img={ATHLETE_SLIDES[3].img}
         label={ATHLETE_SLIDES[3].label}
         title={ATHLETE_SLIDES[3].title}
+        credit={ATHLETE_SLIDES[3].credit}
         titleStyle={{ fontSize: 'clamp(1.8rem, 5vw, 5rem)' }}
         onClick={() => setPage('placements')}
       />
