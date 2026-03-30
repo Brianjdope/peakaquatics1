@@ -225,15 +225,15 @@ export default function ContactPage() {
               <div className="contact-detail" style={{ marginTop: '1.5rem' }}>
                 <div className="contact-detail-item">
                   <span className="contact-detail-label">Location</span>
-                  <span className="contact-detail-value" style={{ whiteSpace: 'pre-line' }}>{CONTACT_INFO.location}</span>
+                  <a href="https://maps.google.com/maps?q=24+Hour+Fitness+Ramsey+150+Triangle+Blvd+Ramsey+NJ+07446" target="_blank" rel="noopener noreferrer" className="contact-detail-value" style={{ whiteSpace: 'pre-line', textDecoration: 'none', color: 'inherit' }}>{CONTACT_INFO.location}</a>
                 </div>
                 <div className="contact-detail-item" style={{ marginTop: '1rem' }}>
                   <span className="contact-detail-label">Email</span>
-                  <span className="contact-detail-value">{CONTACT_INFO.email}</span>
+                  <a href={`mailto:${CONTACT_INFO.email}`} className="contact-detail-value" style={{ textDecoration: 'none', color: 'inherit' }}>{CONTACT_INFO.email}</a>
                 </div>
                 <div className="contact-detail-item" style={{ marginTop: '1rem' }}>
                   <span className="contact-detail-label">Instagram</span>
-                  <span className="contact-detail-value">{CONTACT_INFO.instagram}</span>
+                  <a href="https://instagram.com/philkangg" target="_blank" rel="noopener noreferrer" className="contact-detail-value" style={{ textDecoration: 'none', color: 'inherit' }}>{CONTACT_INFO.instagram}</a>
                 </div>
               </div>
             </motion.div>
