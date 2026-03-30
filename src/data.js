@@ -20,6 +20,29 @@ export const STATS = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'speedo-sectionals-2026': {
+    tag: 'Competition',
+    date: 'March 29, 2026',
+    title: '2026 Speedo Sectional Championships Recap',
+    img: '/peakaquatics1/photos/joshua-reines-sectionals.jpg',
+    imgPos: 'center 30%',
+    excerpt: 'Multiple national qualifying times and personal bests across Indianapolis and Ithaca Sectionals. Joshua Reines qualifies for Junior Nationals in the 200M Breast, Ryker Levi adds a brand new 50M Fly event, and Ethan Reines punches his ticket to Winter Junior Nationals.',
+    body: [
+      'March 26-29, 2026 — Indiana University Natatorium (Indianapolis) / Ithaca College',
+      'Our athletes delivered an outstanding series of performances across two Speedo Sectional sites, earning national qualifying standards, Futures cuts, and a wave of personal bests.',
+      'Day 1 — March 26 (Indianapolis):',
+      'Ethan Reines (14) opened the meet with a Winter Junior National qualifying time in the 1500M Freestyle (16:12.64). Ryker Levi (15) posted a personal best of 23.89 in the 50M Freestyle. Ava Lan (15) earned a Junior National qualifying time and personal best in the 800M Freestyle (9:03.22).',
+      'Day 2 — March 27:',
+      'Joshua Reines (16) qualified for Junior Nationals in the 200M Breaststroke with a time of 2:20.91. Ryker Levi swam a 24.78 in the 50M Butterfly — a brand new event. Ethan Reines posted a personal best of 2:10.03 in the 200M Backstroke. Ava Lan went a personal best of 5:03.49 in the 400M IM.',
+      'Day 3 — March 28:',
+      'Ethan Reines punched his ticket to Winter Junior Nationals in the 400M Freestyle with a 4:03.05. Ava Lan went a personal best of 4:24.74 in the 400M Freestyle. Stephanie Kim swam 1:14.52 in the 100M Breaststroke. Joshua Reines posted a personal best of 1:06.08 in the 100M Breaststroke. Ryker Levi swam 2:03.32 in the 200M Butterfly. Emily Kalna achieved a personal best of 1:10.54 in the 100M Backstroke.',
+      'At the Ithaca Sectional, Sienna Cho earned a Futures cut in the 500Y Freestyle with a time of 5:00.62.',
+      'Day 4 — March 29:',
+      'Ryker Levi earned a Winter Junior National qualifying time in the 100M Freestyle with a personal best of 52.31. Ava Lan added another Summer Junior National cut in the 1500M Freestyle (17:14.56). Ethan Reines went a personal best of 8:30.27 in the 800M Freestyle. Milo Pfeifer posted a personal best of 8:50.25 in the 800M Freestyle.',
+      'Sienna Cho closed out the Ithaca Sectional with a personal best of 2:02.01 in the 200Y Backstroke and a Futures cut and personal best of 2:06.31 in the 200Y Individual Medley.',
+      'Congratulations to all of our athletes on an incredible week of racing!',
+    ],
+  },
   'ethan-state-record': {
     tag: 'Competition',
     date: 'March 27, 2026',
@@ -574,7 +597,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'ethan-state-record', featured: true },
+  { id: 'speedo-sectionals-2026', featured: true },
+  { id: 'ethan-state-record' },
   { id: 'tyr-2026' },
   { id: 'chloe-worlds' },
   { id: 'jonas-wesleyan' },
