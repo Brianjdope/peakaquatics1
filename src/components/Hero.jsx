@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-const HERO_IMG = '/peakaquatics1/photos/kate-usa.jpg'
+const HERO_IMG = '/photos/kate-usa.jpg'
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 30 },

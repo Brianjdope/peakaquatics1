@@ -6,12 +6,12 @@ import Testimonials from '../components/Testimonials'
 import Preloader from '../components/Preloader'
 import { ABOUT, STATS } from '../data'
 
-const SPLIT_IMG = '/peakaquatics1/photos/richard-action.jpg'
+const SPLIT_IMG = '/photos/richard-action.jpg'
 const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
 
 const ATHLETE_SLIDES = [
   {
-    img: '/peakaquatics1/photos/chloe-kim-v3.jpg',
+    img: '/photos/chloe-kim-v3.jpg',
     label: 'PRINCETON UNIVERSITY',
     title: 'CHLOE KIM',
     subtitle: '4th Place, World Junior Aquatics Championships 2025',
@@ -19,7 +19,7 @@ const ATHLETE_SLIDES = [
     credit: 'Photo by Jack Spitser',
   },
   {
-    img: '/peakaquatics1/photos/kate-diving.jpg',
+    img: '/photos/kate-diving.jpg',
     label: 'UNIVERSITY OF TEXAS',
     title: 'KATE HURST',
     subtitle: 'World Junior Aquatics Champion 2023 · USA National Team 2024–2026',
@@ -27,7 +27,7 @@ const ATHLETE_SLIDES = [
     credit: 'Photo by Jack Spitser',
   },
   {
-    img: '/peakaquatics1/photos/richard-hometown-hero.jpg',
+    img: '/photos/richard-hometown-hero.jpg',
     label: 'HARVARD UNIVERSITY',
     title: 'RICHARD POPLAWSKI',
     subtitle: 'Top 50 at Olympic Trials',
@@ -36,7 +36,7 @@ const ATHLETE_SLIDES = [
     credit: 'Photo by USA Swimming',
   },
   {
-    img: '/peakaquatics1/photos/team-trials.jfif',
+    img: '/photos/team-trials.jfif',
     label: 'THE BIGGEST STAGE',
     title: 'BEFORE TAKING ON THE WORLD',
     bgPosition: 'center 35%',
@@ -279,7 +279,7 @@ export default function HomePage({ setPage, goToBooking }) {
             muted
             loop
             playsInline
-            src="/peakaquatics1/hero-video.mp4"
+            src="/hero-video.mp4"
           />
         </div>
         <div className="img-split-content">

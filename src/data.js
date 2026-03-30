@@ -24,7 +24,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'March 29, 2026',
     title: '2026 Speedo Sectional Championships Recap',
-    img: '/peakaquatics1/photos/joshua-reines-sectionals.jpg',
+    img: '/photos/joshua-reines-sectionals.jpg',
     imgPos: 'center 30%',
     excerpt: 'Multiple national qualifying times and personal bests across Indianapolis and Ithaca Sectionals. Joshua Reines qualifies for Junior Nationals in the 200M Breast, Ryker Levi adds a brand new 50M Fly event, and Ethan Reines punches his ticket to Winter Junior Nationals.',
     body: [
@@ -423,7 +423,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'June 21, 2024',
     title: '2024 U.S. Olympic Team Trials',
-    img: '/peakaquatics1/photos/kate-olympic-trials.jpg',
+    img: '/photos/kate-olympic-trials.jpg',
     imgPos: 'center top',
     excerpt: 'Kate Hurst places 4th at finals in the 1500M Freestyle and 6th in the 800M Freestyle at the U.S. Olympic Team Trials!',
     body: [
@@ -439,7 +439,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'June 12, 2024',
     title: 'Good Luck to Our Olympic Trials Qualifers!',
-    img: '/peakaquatics1/photos/kate-diving.jpg',
+    img: '/photos/kate-diving.jpg',
     imgPos: 'center 40%',
     excerpt: 'Congratulations to Kate Hurst, Chloe Kim, Richard Poplawski and Eric Lee! Go USA!',
     body: [
@@ -635,9 +635,9 @@ export const NEWS_LIST = [
 ]
 
 export const RECORDS_HERO = [
-  { time: '1:45.33', event: '200 Yard Backstroke',          swimmer: 'Eric Lee',          badge: 'Boys All-Time SCY',  photo: '/peakaquatics1/athletes/eric-lee.webp', photoStyle: { objectPosition: 'center 15%' } },
-  { time: '4:07.11', event: '400 Yard Individual Medley',   swimmer: 'Chloe Kim',         badge: 'Girls All-Time SCY', photo: '/peakaquatics1/athletes/chloe-kim.webp', photoStyle: { objectPosition: 'center 2%' } },
-  { time: '2:03.26', event: '200 Meter Individual Medley',  swimmer: 'Richard Poplawski', badge: 'Boys All-Time LCM · Harvard University · Top 50 at Olympic Trials',  photo: '/peakaquatics1/athletes/richard-poplawski.webp', photoStyle: { objectPosition: 'center 12%' } },
+  { time: '1:45.33', event: '200 Yard Backstroke',          swimmer: 'Eric Lee',          badge: 'Boys All-Time SCY',  photo: '/athletes/eric-lee.webp', photoStyle: { objectPosition: 'center 15%' } },
+  { time: '4:07.11', event: '400 Yard Individual Medley',   swimmer: 'Chloe Kim',         badge: 'Girls All-Time SCY', photo: '/athletes/chloe-kim.webp', photoStyle: { objectPosition: 'center 2%' } },
+  { time: '2:03.26', event: '200 Meter Individual Medley',  swimmer: 'Richard Poplawski', badge: 'Boys All-Time LCM · Harvard University · Top 50 at Olympic Trials',  photo: '/athletes/richard-poplawski.webp', photoStyle: { objectPosition: 'center 12%' } },
   { time: '16:09.37',event: '1500 Meter Freestyle',         swimmer: 'Kate Hurst',        badge: 'Girls All-Time LCM · 12th in US History', photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/texassports_com/images/2024/9/4/__0014_Hurst_Kate-2024.jpg', photoStyle: { objectPosition: 'center 15%' } },
 ]
 
@@ -837,21 +837,21 @@ export const RECORDS_TABLES = {
 
 const CDN = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const PLACEMENTS = [
-  { name: 'Chloe Kim',            school: 'Princeton University',        photo: '/peakaquatics1/athletes/chloe-kim.webp', photoStyle: { objectPosition: 'center 5%' } },
-  { name: 'Eric Lee',             school: 'Harvard University',          photo: '/peakaquatics1/athletes/eric-lee.webp', photoStyle: { objectPosition: 'center 8%' } },
+  { name: 'Chloe Kim',            school: 'Princeton University',        photo: '/athletes/chloe-kim.webp', photoStyle: { objectPosition: 'center 5%' } },
+  { name: 'Eric Lee',             school: 'Harvard University',          photo: '/athletes/eric-lee.webp', photoStyle: { objectPosition: 'center 8%' } },
   { name: 'Timothy Lee',          school: 'Harvard University',          year: '2024', photo: CDN + '1730135596929-CT3TH0EQRII0VQI725SB/Timothy+Harvard.jpg', photoStyle: { objectPosition: 'center 15%' } },
-  { name: 'Michael Granin',       school: 'Colgate University',          photo: '/peakaquatics1/athletes/michael-granin.webp' },
+  { name: 'Michael Granin',       school: 'Colgate University',          photo: '/athletes/michael-granin.webp' },
   { name: 'Jessica Wolf',         school: 'Colgate University',          year: '2025', photo: CDN + '1762189818941-1RC3X9NYU3MKFS7ZVMO6/Jessie+Wolf+commits+to+Colgate+University.jpg', photoStyle: { objectPosition: 'center 20%' } },
-  { name: 'Christopher Chang',    school: 'Brown University',            photo: '/peakaquatics1/athletes/chris-chang.webp' },
-  { name: 'Grace Lee',            school: 'Cornell University',          photo: '/peakaquatics1/athletes/grace-lee.webp', photoStyle: { objectPosition: 'center 5%' } },
+  { name: 'Christopher Chang',    school: 'Brown University',            photo: '/athletes/chris-chang.webp' },
+  { name: 'Grace Lee',            school: 'Cornell University',          photo: '/athletes/grace-lee.webp', photoStyle: { objectPosition: 'center 5%' } },
   { name: 'Jacob Kim',            school: 'Carnegie Mellon University',  year: '2025', photo: CDN + '1762190250415-C90XUZ0KXTC5KVENSJJR/Jacob+Commits+to+Carnegie+Mellon.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Kayla Rodriguez',      school: 'Northwestern University',     photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/nusports.com/images/2025/10/7/Rodriguez_Kayla.jpg', photoStyle: { objectPosition: 'center 10%' } },
-  { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/peakaquatics1/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
-  { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/peakaquatics1/athletes/matt-bendoraitis.webp' },
-  { name: 'Kathleen Bendoraitis', school: 'University of Maine',         photo: '/peakaquatics1/athletes/kathleen-bendoraitis.webp' },
+  { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
+  { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/athletes/matt-bendoraitis.webp' },
+  { name: 'Kathleen Bendoraitis', school: 'University of Maine',         photo: '/athletes/kathleen-bendoraitis.webp' },
   { name: 'Doyee Kim',            school: 'West Point',                  photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/goarmywestpoint.com/images/2024/9/4/KIM_DOYEE.jpg', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Kate Hurst',           school: 'University of Texas',         photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/texassports_com/images/2024/9/4/__0014_Hurst_Kate-2024.jpg', photoStyle: { objectPosition: 'center 10%' } },
-  { name: 'Richard Poplawski',    school: 'Harvard University',          photo: '/peakaquatics1/athletes/richard-poplawski.webp', photoStyle: { objectPosition: 'center 8%' } },
+  { name: 'Richard Poplawski',    school: 'Harvard University',          photo: '/athletes/richard-poplawski.webp', photoStyle: { objectPosition: 'center 8%' } },
   { name: 'Rebekah Jung',         school: 'University of Rochester',     year: '2025', photo: CDN + '1763303017571-59SHN1ZWRQIT4OREL4FV/Rebekah+Jung.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Jonas Emerson',        school: 'Wesleyan University',         year: '2025', photo: CDN + '61339be2-39e3-418c-862f-47cbd238837c/Wesleyan.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Roy Dafinoiu',         school: 'Lafayette College',           year: '2024', photo: CDN + '1730218140435-VXX4ILSW54SKK2N09EEM/Roy+LAF.jpg', photoStyle: { objectPosition: 'center 20%' } },
@@ -864,35 +864,35 @@ export const TESTIMONIALS = [
     quote: "I had the honor of swimming with Coach Phil for a little over two years. He has helped me exceed my expectations as a swimmer and grow as an individual. It's not often that you come across a coach as dedicated and passionate as Coach Phil is. I would not have become the swimmer I am today without him.",
     name: 'Grace Lee',
     school: 'Cornell University',
-    image: '/peakaquatics1/athletes/grace-lee.webp',
+    image: '/athletes/grace-lee.webp',
     imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "The opportunity to swim for Coach Phil has been a privilege. With coach Phil's expertise in swimming, technical precision, and his dedication, I was able to develop not only as a swimmer but also as a person. Coach Phil has been a mentor for me throughout my swimming career helping me to prepare for competitions physically and even outside the pool mentally.",
     name: 'Eric Lee',
     school: 'Harvard University',
-    image: '/peakaquatics1/athletes/eric-lee.webp',
+    image: '/athletes/eric-lee.webp',
     imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "Working with Coach Phil over the past five years has been a unique experience. I started as a scrawny eighth grader with poor technique. Coach Phil developed my strokes to allow me to swim at a higher level. His elite coaching style and attention to detail transformed me as an athlete. I am now committed to swim at Colgate University at the division 1 level. Coach Phil's support impacted me tremendously and I hope he can continue to inspire and motivate future swimmers for years to come.",
     name: 'Michael Granin',
     school: 'Colgate University',
-    image: '/peakaquatics1/athletes/michael-granin.webp',
+    image: '/athletes/michael-granin.webp',
     imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "Coach Phil is the real deal! Since working with him, I have become stronger and quicker both in and out of the water. His program has shaped me into the elite athlete I am today, and has prepared me well for my collegiate athletic career.",
     name: 'Christopher Chang',
     school: 'Brown University',
-    image: '/peakaquatics1/athletes/chris-chang.webp',
+    image: '/athletes/chris-chang.webp',
     imageStyle: { objectPosition: 'center' },
   },
   {
     quote: "I had the pleasure of swimming for coach Phil for 3 years. Phil is a great mentor, creating a competitive atmosphere for swimmers to learn and excel. He is a great person to talk to about anything and it's been a blessing to swim for him.",
     name: 'Steven Bendoraitis',
     school: 'TCNJ',
-    image: '/peakaquatics1/athletes/steven-bendoraitis.webp',
+    image: '/athletes/steven-bendoraitis.webp',
     imageStyle: { objectPosition: 'top' },
   },
   {
@@ -906,14 +906,14 @@ export const TESTIMONIALS = [
     quote: "Swimming with coach Phil has truly been an incredible experience and blessing. His passion and knowledge for the sport has helped me improve my technique and confidence in the water, while also preparing me both mentally and physically for peak performance.",
     name: 'Matt Bendoraitis',
     school: 'University of Maine',
-    image: '/peakaquatics1/athletes/matt-bendoraitis.webp',
+    image: '/athletes/matt-bendoraitis.webp',
     imageStyle: { objectPosition: 'top' },
   },
   {
     quote: "Phil is a passionate coach that cares about all his swimmers' progress. I was fortunate enough to train with Phil and learn many different skills and techniques. We have worked together for some time, and he helped me improve as a swimmer and character, in and out of the water.",
     name: 'Kathleen Bendoraitis',
     school: 'University of Maine',
-    image: '/peakaquatics1/athletes/kathleen-bendoraitis.webp',
+    image: '/athletes/kathleen-bendoraitis.webp',
     imageStyle: { objectPosition: 'top' },
   },
 ]
