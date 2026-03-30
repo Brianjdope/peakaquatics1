@@ -60,38 +60,18 @@ const SESSION_TYPES = [
   { id: 'dryland', label: 'Dryland', duration: '1 hr', color: '#ef4444' },
 ]
 
-const TIME_SLOTS = [
-  '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
-  '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM',
-  '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM', '5:00 PM', '5:30 PM',
-  '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM', '8:00 PM', '8:30 PM',
-]
-
-// All slots including early morning (for matching booked times from sheet)
-const ALL_SLOTS = [
-  '5:00 AM','5:30 AM','5:50 AM','6:00 AM','6:30 AM','7:00 AM','7:30 AM',
-  '8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM',
-  '11:00 AM','11:30 AM','12:00 PM','12:30 PM','1:00 PM','1:30 PM',
-  '2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM',
-  '5:00 PM','5:30 PM','6:00 PM','6:30 PM','7:00 PM','7:30 PM',
-  '8:00 PM','8:30 PM','9:00 PM','9:30 PM',
-]
-
-// Expand booked times to block the full session duration
-// Each booked slot blocks the next slot too (minimum 1 hr session)
-function expandBookedTimes(booked) {
-  const blocked = new Set(booked)
-  for (const time of booked) {
-    const idx = ALL_SLOTS.indexOf(time)
-    if (idx > -1 && idx + 1 < ALL_SLOTS.length) {
-      blocked.add(ALL_SLOTS[idx + 1])
-    }
-    // Also block the slot before (a 1hr session starting there would overlap)
-    if (idx > 0) {
-      blocked.add(ALL_SLOTS[idx - 1])
-    }
-  }
-  return [...blocked]
+// Recurring weekly schedule — only these time slots are bookable
+// day-of-week: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+// allowedSessions: which session types can be booked at this slot
+const ALL_SESSION_IDS = ['intro', 'video', 'private', 'semi', 'group', 'dryland']
+const RECURRING_SCHEDULE = {
+  0: [{ time: '6:30 AM', allowedSessions: ['group'], note: 'Advanced' }],
+  1: [{ time: '1:30 PM', allowedSessions: ALL_SESSION_IDS }],
+  2: [{ time: '1:30 PM', allowedSessions: ALL_SESSION_IDS }],
+  3: [{ time: '12:30 PM', allowedSessions: ALL_SESSION_IDS }, { time: '5:05 PM', allowedSessions: ['dryland'] }],
+  4: [{ time: '12:30 PM', allowedSessions: ALL_SESSION_IDS }],
+  5: [{ time: '5:05 PM', allowedSessions: ['dryland'] }],
+  6: [{ time: '12:00 PM', allowedSessions: ['group'], note: 'Advanced' }],
 }
 
 function isWithin24Hours(dateStr) {
@@ -148,7 +128,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const [skillLevel, setSkillLevel] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const [bookedTimes, setBookedTimes] = useState([])
+  const [rawBooked, setRawBooked] = useState([])
   const [loadingTimes, setLoadingTimes] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(-1) // -1 = not started, 0-100 = uploading, 101 = done, -2 = error
   const [uploadError, setUploadError] = useState('')
@@ -192,9 +172,15 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth)
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth)
-  const isMonday = selectedDate && new Date(currentYear, currentMonth, selectedDate).getDay() === 1
-  const MONDAY_HIDDEN = ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '1:00 PM']
-  const availableSlots = TIME_SLOTS.filter(t => !bookedTimes.includes(t) && !(isMonday && MONDAY_HIDDEN.includes(t)))
+  // Get recurring sessions for the selected day, filtered against existing bookings
+  const selectedDayOfWeek = selectedDate != null ? new Date(currentYear, currentMonth, selectedDate).getDay() : null
+  const daySchedule = selectedDayOfWeek != null ? (RECURRING_SCHEDULE[selectedDayOfWeek] || []) : []
+  // Filter recurring slots: must allow the selected session type, and not already booked
+  const bookedTimeSet = new Set((rawBooked || []).map(e => typeof e === 'string' ? e : e.time))
+  const availableSlots = daySchedule.filter(slot =>
+    !bookedTimeSet.has(slot.time) &&
+    (!selectedSession || slot.allowedSessions.includes(selectedSession))
+  )
 
   const prevMonth = () => {
     if (currentMonth === 0) {
@@ -745,7 +731,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
               transition={{ delay: i * 0.06, duration: 0.3 }}
               whileHover={{ scale: 1.03, borderColor: s.color }}
               whileTap={{ scale: 0.97 }}
-              onClick={() => setSelectedSession(s.id)}
+              onClick={() => { setSelectedSession(s.id); setSelectedTime(null) }}
               style={{
                 background: isSelected ? `${s.color}12` : 'transparent',
                 border: `1px solid ${isSelected ? s.color : 'var(--border)'}`,
@@ -857,12 +843,12 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                 onClick={() => {
                   setSelectedDate(day)
                   setSelectedTime(null)
-                  setBookedTimes([])
+                  setRawBooked([])
                   setLoadingTimes(true)
                   const selectedDateStr = `${MONTHS[currentMonth]} ${day}, ${currentYear}`
                   const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(currentYear, currentMonth, day).getDay()]
                   fetchAvailability(selectedDateStr, dayName)
-                    .then(d => { if (d.success) setBookedTimes(expandBookedTimes(d.booked || [])) })
+                    .then(d => { if (d.success) setRawBooked(d.booked || []) })
                     .catch(() => {})
                     .finally(() => setLoadingTimes(false))
                   if (window.innerWidth <= 768) {
@@ -906,7 +892,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
         </div>
       </div>
 
-      {/* Time slots */}
+      {/* Available time slots for selected date + session */}
       <AnimatePresence>
         {selectedDate && selectedSession && (
           <motion.div
@@ -926,45 +912,65 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
               Available times — {MONTHS[currentMonth]} {selectedDate}
             </p>
             {loadingTimes ? (
-              <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>Loading availability…</p>
+              <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>Loading availability...</p>
             ) : availableSlots.length === 0 ? (
-              <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>No available times on this date. Please select another day.</p>
+              <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>No available times for this session on this date. Please select another day.</p>
             ) : (
-            <div ref={timeSlotRef} className="booking-time-grid" style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '0.4rem',
-            }}>
-              {availableSlots.map(t => (
-                <button
-                  key={t}
-                  onClick={() => {
-                    setSelectedTime(t)
-                    if (window.innerWidth <= 768) {
-                      setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
-                    }
-                  }}
-                  style={{
-                    background: selectedTime === t ? (sessionObj?.color || 'var(--text)') : 'var(--surface2)',
-                    color: selectedTime === t ? '#000' : 'var(--text)',
-                    border: `1px solid ${selectedTime === t ? 'transparent' : 'var(--border)'}`,
-                    borderRadius: 6,
-                    padding: '0.5rem 0.25rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.15s',
-                  }}
-                  onMouseEnter={e => {
-                    if (selectedTime !== t) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'
-                  }}
-                  onMouseLeave={e => {
-                    if (selectedTime !== t) e.currentTarget.style.borderColor = 'var(--border)'
-                  }}
-                >
-                  {t}
-                </button>
-              ))}
+            <div ref={timeSlotRef} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {availableSlots.map(slot => {
+                const isSelected = selectedTime === slot.time
+                return (
+                  <motion.button
+                    key={slot.time}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setSelectedTime(slot.time)
+                      if (window.innerWidth <= 768) {
+                        setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+                      }
+                    }}
+                    style={{
+                      background: isSelected ? `${sessionObj?.color}18` : 'var(--surface2)',
+                      border: `1px solid ${isSelected ? sessionObj?.color : 'var(--border)'}`,
+                      borderRadius: 10,
+                      padding: '0.85rem 1rem',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'all 0.2s',
+                      boxShadow: isSelected ? `0 0 12px ${sessionObj?.color}20` : 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                    }}
+                  >
+                    <span style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                      <SessionIcon id={selectedSession} color={isSelected ? sessionObj?.color : 'var(--muted)'} size={18} />
+                    </span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{ color: 'var(--text)', fontSize: '0.85rem', fontWeight: 600 }}>
+                        {slot.time}
+                      </span>
+                      {slot.note && (
+                        <span style={{
+                          fontSize: '0.65rem',
+                          fontWeight: 600,
+                          color: sessionObj?.color,
+                          background: `${sessionObj?.color}18`,
+                          padding: '0.1rem 0.4rem',
+                          borderRadius: 4,
+                          marginLeft: '0.5rem',
+                        }}>
+                          {slot.note}
+                        </span>
+                      )}
+                    </div>
+                    {isSelected && (
+                      <span style={{ color: sessionObj?.color, fontSize: '1rem', flexShrink: 0 }}>&#10003;</span>
+                    )}
+                  </motion.button>
+                )
+              })}
             </div>
             )}
           </motion.div>

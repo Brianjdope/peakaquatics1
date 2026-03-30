@@ -109,7 +109,7 @@ export default function ServicesPage({ setPage, cancelParams, onCancelParamsUsed
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 {[
-                  { step: '01', title: 'Choose Your Session', desc: 'Select from intro calls, video reviews, private or group sessions.' },
+                  { step: '01', title: 'Choose Your Session', desc: 'Select from private, semi-group, group sessions, dryland, and more.' },
                   { step: '02', title: 'Pick a Date & Time', desc: 'Browse available slots on the calendar and choose what works for you.' },
                   { step: '03', title: 'Get Confirmation', desc: 'We\'ll confirm your booking via email within 24 hours.' },
                 ].map((s, i) => (

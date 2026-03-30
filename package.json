@@ -9,8 +9,8 @@
     "build:vercel": "VITE_BASE_PATH=/ vite build",
     "build:ghpages": "VITE_BASE_PATH=/peakaquatics1/ vite build",
     "preview": "vite preview",
-    "deploy": "npm run build:ghpages && npx gh-pages -d dist",
-    "deploy:ghpages": "npm run build:ghpages && npx gh-pages -d dist"
+    "deploy": "VITE_BASE_PATH=/ vite build && npx gh-pages -d dist",
+    "deploy:ghpages": "VITE_BASE_PATH=/ vite build && npx gh-pages -d dist"
   },
   "dependencies": {
     "firebase-admin": "^13.0.0",
