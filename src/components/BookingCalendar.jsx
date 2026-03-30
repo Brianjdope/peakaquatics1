@@ -64,12 +64,13 @@ const SESSION_TYPES = [
 // day-of-week: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
 // allowedSessions: which session types can be booked at this slot
 const ALL_SESSION_IDS = ['intro', 'video', 'private', 'semi', 'group', 'dryland']
+const NON_GROUP_IDS = ['intro', 'video', 'private', 'semi', 'dryland']
 const RECURRING_SCHEDULE = {
   0: [{ time: '6:30 AM', allowedSessions: ['group'], note: 'Advanced' }],
   1: [{ time: '1:30 PM', allowedSessions: ALL_SESSION_IDS }],
   2: [{ time: '1:30 PM', allowedSessions: ALL_SESSION_IDS }],
-  3: [{ time: '12:30 PM', allowedSessions: ALL_SESSION_IDS }, { time: '5:05 PM', allowedSessions: ['dryland'] }],
-  4: [{ time: '12:30 PM', allowedSessions: ALL_SESSION_IDS }],
+  3: [{ time: '12:30 PM', allowedSessions: NON_GROUP_IDS }, { time: '5:05 PM', allowedSessions: ['dryland'] }],
+  4: [{ time: '12:30 PM', allowedSessions: NON_GROUP_IDS }],
   5: [{ time: '5:05 PM', allowedSessions: ['dryland'] }],
   6: [{ time: '12:00 PM', allowedSessions: ['group'], note: 'Advanced' }],
 }
