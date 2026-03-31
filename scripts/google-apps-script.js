@@ -497,7 +497,7 @@ function setupSheet() {
   )
   sheet.getRange('D2:D500').setDataValidation(
     SpreadsheetApp.newDataValidation()
-      .requireValueInList(['Novice', 'Intermediate', 'Advanced', ''])
+      .requireValueInList(['Novice', 'Intermediate', 'Sectionals+', ''])
       .setAllowInvalid(true).build()
   )
   sheet.getRange('E2:E500').setDataValidation(
