@@ -57,12 +57,13 @@ const SESSION_TYPES = [
   { id: 'private', label: 'Private Session', duration: '1 hr', color: '#34d399' },
   { id: 'semi', label: 'Semi-Group', duration: '1.5 hr', color: '#fbbf24' },
   { id: 'dryland', label: 'Dryland', duration: '1 hr', color: '#ef4444' },
+  { id: 'group', label: 'Group Lessons', duration: '1.5 hr', color: '#f97316' },
 ]
 
 // Recurring weekly schedule — only these time slots are bookable
 // day-of-week: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
 // allowedSessions: which session types can be booked at this slot
-const POOL_SESSION_IDS = ['intro', 'video', 'private', 'semi']
+const POOL_SESSION_IDS = ['intro', 'video', 'private', 'semi', 'group']
 const RECURRING_SCHEDULE = {
   1: [{ time: '1:30 PM', allowedSessions: POOL_SESSION_IDS }],
   2: [{ time: '1:30 PM', allowedSessions: POOL_SESSION_IDS }],
