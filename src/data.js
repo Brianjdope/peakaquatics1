@@ -798,7 +798,7 @@ export const RECORDS_TABLES = {
   // ═══════════════════════════════════════════════════════════
   'lcm-men': buildTable("LCM Men's Open", [
     r('50 Free',    p('Richard Poplawski',   '23.53',    2024), p('Timothy Lee',         '23.82',    2024), p('Ryker Levi',           '23.89',    2026)),
-    r('100 Free',   p('Timothy Lee',         '51.75',    2024), p('Richard Poplawski',   '51.81',    2024), p('Michael Granin',       '52.46',    2024)),
+    r('100 Free',   p('Timothy Lee',         '51.75',    2024), p('Richard Poplawski',   '51.81',    2024), p('Ryker Levi',           '52.31',    2026)),
     r('200 Free',   p('Richard Poplawski',   '1:51.74',  2024), p('Jacob Kim',           '1:55.07',  2024), p('Timothy Lee',          '1:55.28',  2025)),
     r('400 Free',   p('Steven Bendoraitis',  '4:01.27',  2022), p('Richard Poplawski',   '4:01.30',  2024), p('Raymond Stelmark',     '4:02.33',  2024)),
     r('800 Free',   p('Steven Bendoraitis',  '8:15.39',  2022), p('Christopher Chang',   '8:20.10',  2022), p('Richard Poplawski',    '8:26.94',  2023)),
