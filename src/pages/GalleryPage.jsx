@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 // ─── Behold.io widget ────────────────────────────────────────────────────────
 // To activate the live feed:
 //   1. Go to behold.io and create a free account
-//   2. Connect your Instagram account (@scarletaquatics)
+//   2. Connect your Instagram account (@peakaquatic_sports)
 //   3. Create a widget and copy your Widget ID
 //   4. Replace null below with your Widget ID string, e.g. 'abc123XYZ'
 const BEHOLD_WIDGET_ID = null
@@ -51,13 +51,13 @@ function InstagramFeed() {
         </svg>
       </div>
       <p style={{ color: 'var(--text)', fontSize: '1rem', fontWeight: 600, marginBottom: '0.5rem' }}>
-        @scarletaquatics
+        @peakaquatic_sports
       </p>
       <p style={{ color: 'var(--muted)', fontSize: '0.82rem', lineHeight: 1.7, maxWidth: 380, margin: '0 auto 1.75rem' }}>
         Follow us on Instagram for race day photos, training highlights, and athlete milestones.
       </p>
       <a
-        href="https://www.instagram.com/scarletaquatics/"
+        href="https://www.instagram.com/peakaquatic_sports/"
         target="_blank"
         rel="noopener noreferrer"
         style={{
@@ -79,7 +79,7 @@ function InstagramFeed() {
       <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
         <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.7rem', lineHeight: 1.8 }}>
           To embed your live feed here, create a free account at behold.io,<br />
-          connect @scarletaquatics, and add your Widget ID to GalleryPage.jsx.
+          connect @peakaquatic_sports, and add your Widget ID to GalleryPage.jsx.
         </p>
       </div>
     </div>
