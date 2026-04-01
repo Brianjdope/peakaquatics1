@@ -24,7 +24,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'March 29, 2026',
     title: '2026 Speedo Sectional Championships Recap',
-    img: '/photos/joshua-reines-sectionals.jpg',
+    img: '/photos/harrison-lee-sectionals.jpg',
     imgPos: 'center 30%',
     excerpt: 'Multiple national qualifying times and personal bests across Indianapolis and Ithaca Sectionals. Joshua Reines qualifies for Junior Nationals in the 200M Breast, Ryker Levi adds a brand new 50M Fly event, and Ethan Reines punches his ticket to Winter Junior Nationals.',
     body: [
