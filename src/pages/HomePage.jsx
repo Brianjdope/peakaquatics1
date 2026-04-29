@@ -1,54 +1,45 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { motion, useScroll, useTransform, useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import Ticker from '../components/Ticker'
 import SchoolLogo from '../components/SchoolLogo'
 import Testimonials from '../components/Testimonials'
 import Preloader from '../components/Preloader'
 import { ABOUT, STATS } from '../data'
 
-const SPLIT_IMG = '/photos/richard-action.jpg'
 const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
 
 const ATHLETE_SLIDES = [
   {
-    img: '/photos/chloe-kim-v3.jpg',
-    label: 'PRINCETON UNIVERSITY',
-    title: 'CHLOE KIM',
-    subtitle: '4th Place, World Junior Aquatics Championships 2025',
+    img: '/photos/kate-diving.jpg',
+    univ: 'University of Texas',
+    name: 'Kate Hurst',
+    achievement: 'World Junior Aquatics Champion 2023 · USA National Team 2024–2026',
     bgPosition: 'center 30%',
     credit: 'Photo by Jack Spitser',
   },
   {
-    img: '/photos/kate-diving.jpg',
-    label: 'UNIVERSITY OF TEXAS',
-    title: 'KATE HURST',
-    subtitle: 'World Junior Aquatics Champion 2023 · USA National Team 2024–2026',
-    bgPosition: 'center 30%',
+    img: '/photos/chloe-kim-v3.jpg',
+    univ: 'Princeton University',
+    name: 'Chloe Kim',
+    achievement: '4th Place · World Junior Aquatics Championships 2025',
+    bgPosition: 'center 25%',
     credit: 'Photo by Jack Spitser',
   },
   {
     img: '/photos/richard-hometown-hero.jpg',
-    label: 'HARVARD UNIVERSITY',
-    title: 'RICHARD POPLAWSKI',
-    subtitle: 'Top 50 at Olympic Trials',
+    univ: 'Harvard University',
+    name: 'Richard Poplawski',
+    achievement: 'Top 50 at Olympic Trials · 12th All-Time US 200M IM',
     bgPosition: 'center 15%',
-    bgSize: '105%',
     credit: 'Photo by USA Swimming',
-  },
-  {
-    img: '/photos/team-trials.jfif',
-    label: 'THE BIGGEST STAGE',
-    title: 'BEFORE TAKING ON THE WORLD',
-    bgPosition: 'center 35%',
-    credit: 'Photo by Michael Conroy / Associated Press (AP)',
   },
 ]
 
 const FEATURED_SCHOOLS = [
-  'Princeton University','University of Texas','Harvard University',
-  'Brown University','West Point','Wesleyan University',
-  'Tufts University','Cornell University','Northwestern University',
-  'Purdue University','Colgate University','University of Maine',
+  'Princeton University', 'University of Texas', 'Harvard University',
+  'Brown University', 'West Point', 'Wesleyan University',
+  'Tufts University', 'Cornell University', 'Northwestern University',
+  'Purdue University', 'Colgate University', 'University of Maine',
 ]
 
 const FEATURES = [
@@ -58,6 +49,7 @@ const FEATURES = [
   'Year-round structured training programs',
 ]
 
+// ── COUNT-UP HOOK ──
 function useCountUp(target, duration = 1800, start = false) {
   const [count, setCount] = useState(0)
   useEffect(() => {
@@ -89,14 +81,15 @@ function StatItem({ s, inView }) {
   )
 }
 
-function RevealSection({ children, delay = 0, className = '', style = {} }) {
+// ── REVEAL WRAPPER ──
+function Reveal({ children, delay = 0, className = '', style = {} }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const inView = useInView(ref, { once: true, margin: '-60px' })
   return (
     <motion.div
       ref={ref}
-      animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 40 }}
-      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+      animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 36 }}
+      transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
       style={style}
     >
@@ -105,84 +98,61 @@ function RevealSection({ children, delay = 0, className = '', style = {} }) {
   )
 }
 
-function FullSlide({ img, video, label, title, subtitle, credit, onClick, isHero, bgSize, bgPosition, contain, titleStyle }) {
+// ── FULL-VIEWPORT ATHLETE SLIDE ──
+function AthleteSlide({ slide, onClick }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-10%' })
+
   return (
     <section
-      className={`full-slide${isHero ? ' full-slide--hero' : ''}`}
+      ref={ref}
+      className="pas-athlete-slide"
       onClick={onClick}
+      style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
-      {video && (
-        <>
-          <video className="hero-video-bg" autoPlay muted loop playsInline src={video} />
-          <div className="full-slide-overlay" />
-        </>
-      )}
-      {img && !contain && (
-        <>
-          <div className="full-slide-bg" style={{ backgroundImage: `url(${img})`, backgroundSize: bgSize || 'cover', backgroundPosition: bgPosition || 'center' }} />
-          <div className="full-slide-overlay" />
-        </>
-      )}
-      {img && contain && (
-        <>
-          <img src={img} alt={title} style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'contain', objectPosition:'center top' }} />
-          <div className="full-slide-overlay" style={{ background:'linear-gradient(to top, rgba(3,3,3,0.9) 0%, rgba(3,3,3,0.1) 40%, rgba(3,3,3,0.0) 100%)' }} />
-        </>
-      )}
-      <div className={`full-slide-text${isHero ? ' full-slide-text--center' : ''}`}>
-        {label && (
-          <motion.div
-            className="full-slide-label"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {label}
-          </motion.div>
-        )}
-        <motion.h2
-          className="full-slide-title"
-          style={titleStyle}
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+      <motion.div
+        className="pas-athlete-bg"
+        style={{ backgroundImage: `url(${slide.img})`, backgroundPosition: slide.bgPosition || 'center' }}
+        animate={{ scale: inView ? 1 : 1.06 }}
+        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+      />
+      <div className="pas-athlete-overlay" />
+      <div className="pas-athlete-text">
+        <motion.div
+          className="pas-athlete-univ"
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          {title}
+          {slide.univ}
+        </motion.div>
+        <motion.h2
+          className="pas-athlete-name"
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.95, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {slide.name}
         </motion.h2>
-        {subtitle && (
-          <motion.div
-            className="full-slide-subtitle"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {subtitle}
-          </motion.div>
-        )}
+        <motion.div
+          className="pas-athlete-achievement"
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {slide.achievement}
+        </motion.div>
       </div>
-      {credit && (
-        <div style={{
-          position: 'absolute',
-          bottom: '1rem',
-          right: '1.5rem',
-          fontFamily: 'var(--mono)',
-          fontSize: '0.55rem',
-          color: 'rgba(255,255,255,0.35)',
-          letterSpacing: '0.05em',
-          zIndex: 2,
-        }}>
-          {credit}
-        </div>
+      {slide.credit && (
+        <div className="pas-athlete-credit">{slide.credit}</div>
       )}
     </section>
   )
 }
 
+// ── MAIN HOMEPAGE ──
 export default function HomePage({ setPage, goToBooking }) {
-  const statsRef     = useRef(null)
+  const statsRef = useRef(null)
   const [statsInView, setStatsInView] = useState(false)
   const [preloaderDone, setPreloaderDone] = useState(false)
   const handlePreloaderComplete = useCallback(() => setPreloaderDone(true), [])
@@ -198,54 +168,60 @@ export default function HomePage({ setPage, goToBooking }) {
 
   return (
     <div>
-
-      {/* ── PRELOADER ── */}
+      {/* PRELOADER */}
       {!preloaderDone && <Preloader onComplete={handlePreloaderComplete} />}
 
-      {/* ── SLIDE 1: HERO — matches preloader layout exactly ── */}
-      <section className="full-slide full-slide--hero">
-        <div className="full-slide-text full-slide-text--center">
-          <div style={{
-            height: 'clamp(70px, 14vw, 150px)',
-            overflow: 'hidden',
-            marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)',
-          }}>
+      {/* ── HERO ── */}
+      <section className="pas-hero">
+        <motion.div
+          className="pas-hero-content"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="pas-hero-logo-wrap">
             <img
+              className="pas-hero-logo"
               src={LOGO_URL}
               alt="Peak Aquatic Sports"
-              style={{
-                height: 'clamp(130px, 26vw, 280px)',
-                width: 'auto',
-                filter: 'brightness(0) invert(1) contrast(10)',
-                objectPosition: 'top',
-                display: 'block',
-                margin: '0 auto',
-              }}
             />
           </div>
-          <h2 className="full-slide-title">PEAK AQUATIC SPORTS</h2>
-          <div className="full-slide-subtitle" style={{ opacity: 1 }}>Rise Higher</div>
-        </div>
+          <h1 className="pas-hero-h1">Peak Aquatic<br />Sports</h1>
+          <p className="pas-hero-tagline">Rise Higher</p>
+          <div className="pas-hero-cta">
+            <button className="btn btn-solid" onClick={goToBooking}>Book a Session</button>
+            <button className="btn" onClick={() => setPage('about')}>Our Mission</button>
+          </div>
+        </motion.div>
+        <motion.div
+          className="pas-hero-scroll"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6, duration: 1 }}
+        >
+          <div className="pas-hero-scroll-line" />
+          <span>Scroll</span>
+        </motion.div>
       </section>
 
-      {/* ── TICKER ── */}
+      {/* TICKER */}
       <Ticker />
 
       {/* ── WHAT WE DO ── */}
-      <section style={{ background:'var(--bg)', padding:'9rem 0', borderTop:'1px solid rgba(255,255,255,0.08)' }}>
+      <section style={{ background: 'var(--bg)', padding: '9rem 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="container">
           <div className="what-we-do-grid">
-            <RevealSection delay={0}>
+            <Reveal delay={0}>
               <p className="section-label">What We Do</p>
-              <h2 style={{ lineHeight:1.05, marginTop:'0.5rem' }}>
+              <h2 style={{ lineHeight: 1.0, marginTop: '0.5rem' }}>
                 A Consultancy<br />Built for<br />Excellence
               </h2>
-            </RevealSection>
-            <RevealSection delay={0.15}>
+            </Reveal>
+            <Reveal delay={0.15}>
               <div className="what-we-do-content">
                 <p>{ABOUT.homeIntro}</p>
                 <p>{ABOUT.homeBody}</p>
-                <div style={{ display:'flex', gap:'0.75rem', flexWrap:'wrap', marginBottom:'2.5rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
                   <button className="btn btn-solid" onClick={() => setPage('about')}>Learn More</button>
                   <button className="btn" onClick={goToBooking}>Book a Session</button>
                 </div>
@@ -254,10 +230,10 @@ export default function HomePage({ setPage, goToBooking }) {
                     <motion.div
                       className="feature-item"
                       key={i}
-                      initial={{ opacity:0, x:-16 }}
-                      whileInView={{ opacity:1, x:0 }}
-                      viewport={{ once:true }}
-                      transition={{ duration:0.5, delay: i * 0.07, ease:[0.16,1,0.3,1] }}
+                      initial={{ opacity: 0, x: -16 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
                     >
                       <span className="feature-dot" />
                       {f}
@@ -265,115 +241,39 @@ export default function HomePage({ setPage, goToBooking }) {
                   ))}
                 </div>
               </div>
-            </RevealSection>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ── VIDEO + COACHING SPLIT ── */}
-      <div className="img-split" style={{ minHeight: '70vh' }}>
+      {/* ── VIDEO SPLIT ── */}
+      <div className="img-split" style={{ minHeight: '60vh' }}>
         <div className="img-split-photo" style={{ overflow: 'hidden' }}>
           <video
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            autoPlay
-            muted
-            loop
-            playsInline
+            autoPlay muted loop playsInline
             src="/hero-video.mp4"
           />
         </div>
         <div className="img-split-content">
-          <RevealSection delay={0.1}>
+          <Reveal delay={0.1}>
             <p className="section-label">Our Approach</p>
-            <h2 style={{ marginBottom:'1.2rem', marginTop:'0.5rem' }}>Coaching That<br />Gets Results</h2>
-            <p style={{ color: 'var(--muted)', marginBottom:'2rem', maxWidth: '420px', lineHeight: 1.7 }}>
+            <h2 style={{ marginBottom: '1.2rem', marginTop: '0.5rem' }}>Coaching That<br />Gets Results</h2>
+            <p style={{ color: 'var(--muted)', marginBottom: '2rem', maxWidth: '420px', lineHeight: 1.7 }}>
               We combine elite stroke technique, race strategy and video analysis to give our swimmers an advantage in the pool and in the recruitment process.
             </p>
             <button className="btn btn-solid" onClick={goToBooking}>Book a Session</button>
-          </RevealSection>
+          </Reveal>
         </div>
       </div>
 
-      {/* ── RICHARD SLIDE ── */}
-      <FullSlide
-        img={ATHLETE_SLIDES[1].img}
-        label={ATHLETE_SLIDES[1].label}
-        title={ATHLETE_SLIDES[1].title}
-        subtitle={ATHLETE_SLIDES[1].subtitle}
-        bgPosition={ATHLETE_SLIDES[1].bgPosition}
-        credit={ATHLETE_SLIDES[1].credit}
-        onClick={() => setPage('placements')}
-      />
+      {/* ── ATHLETE SLIDES ── */}
+      {ATHLETE_SLIDES.map((slide, i) => (
+        <AthleteSlide key={i} slide={slide} onClick={() => setPage('placements')} />
+      ))}
 
-      {/* ── CHLOE & KATE SIDE BY SIDE ── */}
-      <section className="dual-athlete-section" onClick={() => setPage('placements')} style={{ cursor: 'pointer' }}>
-        {[ATHLETE_SLIDES[0], ATHLETE_SLIDES[2]].map((slide, i) => (
-          <div className="dual-athlete-card" key={i}>
-            <div className="dual-athlete-bg" style={{ backgroundImage: `url(${slide.img})`, backgroundSize: slide.bgSize || 'cover', backgroundPosition: slide.bgPosition || 'center' }} />
-            <div className="dual-athlete-overlay" />
-            <div className="dual-athlete-text">
-              <motion.div
-                className="full-slide-label"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.7, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {slide.label}
-              </motion.div>
-              <motion.h2
-                className="full-slide-title"
-                style={{ fontSize: 'clamp(1.6rem, 3vw, 2.8rem)' }}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, delay: 0.1 + i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {slide.title}
-              </motion.h2>
-              {slide.subtitle && (
-                <motion.div
-                  className="full-slide-subtitle"
-                  style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.95rem)' }}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.7, delay: 0.2 + i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  {slide.subtitle}
-                </motion.div>
-              )}
-            </div>
-            {slide.credit && (
-              <div style={{
-                position: 'absolute',
-                bottom: '0.75rem',
-                right: '1rem',
-                fontFamily: 'var(--mono)',
-                fontSize: '0.5rem',
-                color: 'rgba(255,255,255,0.35)',
-                letterSpacing: '0.05em',
-                zIndex: 2,
-              }}>
-                {slide.credit}
-              </div>
-            )}
-          </div>
-        ))}
-      </section>
-
-      {/* ── COACHING SLIDE ── */}
-      <FullSlide
-        img={ATHLETE_SLIDES[3].img}
-        label={ATHLETE_SLIDES[3].label}
-        title={ATHLETE_SLIDES[3].title}
-        credit={ATHLETE_SLIDES[3].credit}
-        titleStyle={{ fontSize: 'clamp(1.8rem, 5vw, 5rem)' }}
-        onClick={() => setPage('placements')}
-      />
-
-      {/* ── STATS ── */}
-      <section style={{ background:'var(--bg)', padding:'5rem 0 0', borderTop:'1px solid var(--border)' }}>
+      {/* ── STATS STRIP ── */}
+      <section style={{ background: 'var(--bg)', padding: '5rem 0 0', borderTop: '1px solid var(--border)' }}>
         <div className="container">
           <div className="hero-stat-strip" ref={statsRef}>
             {STATS.map((s, i) => <StatItem key={i} s={s} inView={statsInView} />)}
@@ -382,19 +282,19 @@ export default function HomePage({ setPage, goToBooking }) {
       </section>
 
       {/* ── WHERE OUR ATHLETES GO ── */}
-      <section style={{ background:'var(--bg)', padding:'5rem 0', borderBottom:'1px solid var(--border)' }}>
+      <section style={{ background: 'var(--bg)', padding: '5rem 0', borderBottom: '1px solid var(--border)' }}>
         <div className="container">
-          <RevealSection>
-            <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', marginBottom:'3.5rem', flexWrap:'wrap', gap:'1.5rem' }}>
+          <Reveal>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '3.5rem', flexWrap: 'wrap', gap: '1.5rem' }}>
               <div>
                 <p className="section-label">Academic Excellence</p>
-                <h2 style={{ marginTop:'0.5rem' }}>Where Our<br />Athletes Go</h2>
+                <h2 style={{ marginTop: '0.5rem' }}>Where Our<br />Athletes Go</h2>
               </div>
-              <p style={{ color:'var(--muted)', maxWidth:'280px', fontSize:'0.88rem', lineHeight:1.8 }}>
+              <p style={{ color: 'var(--muted)', maxWidth: '280px', fontSize: '0.88rem', lineHeight: 1.8 }}>
                 Our athletes compete at the nation's most prestigious universities.
               </p>
             </div>
-          </RevealSection>
+          </Reveal>
 
           <div className="schools-emblem-grid">
             {FEATURED_SCHOOLS.map((school, i) => (
@@ -403,11 +303,11 @@ export default function HomePage({ setPage, goToBooking }) {
                 className="school-emblem-card"
                 onClick={() => setPage('placements')}
                 title={school}
-                initial={{ opacity:0, y:24 }}
-                whileInView={{ opacity:1, y:0 }}
-                viewport={{ once:true }}
-                transition={{ duration:0.5, delay: i * 0.05, ease:[0.16,1,0.3,1] }}
-                whileHover={{ y:-4, transition:{ duration:0.2 } }}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
               >
                 <SchoolLogo school={school} size={64} />
                 <span className="school-emblem-name">{school}</span>
@@ -415,7 +315,7 @@ export default function HomePage({ setPage, goToBooking }) {
             ))}
           </div>
 
-          <div style={{ marginTop:'3rem', display:'flex', justifyContent:'center' }}>
+          <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'center' }}>
             <button className="btn" onClick={() => setPage('placements')}>
               View All Placements →
             </button>

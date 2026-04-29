@@ -2,21 +2,41 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from '../hooks/useInView'
 
+// Custom editorial line marks — replace generic emoji with brand-aligned icons
+const IconLanes = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M2 7h20M2 12h20M2 17h20" />
+    <circle cx="6" cy="12" r="1.4" fill="currentColor" stroke="none" />
+  </svg>
+)
+const IconPennant = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 3v18" />
+    <path d="M5 4l13 2.2-3.5 4 3.5 4L5 12.4" />
+  </svg>
+)
+const IconPeriodization = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 19V13M8 19V9M13 19V5M18 19V11" />
+    <path d="M2 19h20" />
+  </svg>
+)
+
 const SERVICES = [
   {
-    icon: '🏊',
+    Icon: IconLanes,
     title: 'Private Coaching',
     desc: 'One-on-one sessions tailored to your stroke, race strategy, and physical development. Each session is structured around your specific goals — whether that\'s breaking a personal best or earning a national qualifying time.',
     price: 'Hourly & Package Rates Available',
   },
   {
-    icon: '🎓',
+    Icon: IconPennant,
     title: 'Collegiate Consulting',
     desc: 'End-to-end guidance through the college recruitment process — from building your athletic profile and contacting coaches, to evaluating offers and committing to the right program. Division I, II, and III.',
     price: 'Consulting Packages Available',
   },
   {
-    icon: '📋',
+    Icon: IconPeriodization,
     title: 'Custom Training Plans',
     desc: 'Personalized seasonal training programs designed to peak at the right meets. Programs include dryland training, nutrition guidance, and meet preparation strategies for junior and senior national qualifiers.',
     price: 'Monthly Plans Available',
@@ -54,14 +74,18 @@ export default function Services() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.95, delay: 0.15 }}
         >
-          {SERVICES.map((s, i) => (
-            <div className="service-card" key={i}>
-              <div className="service-icon">{s.icon}</div>
-              <h3>{s.title}</h3>
-              <p>{s.desc}</p>
-              <div className="service-price">{s.price}</div>
-            </div>
-          ))}
+          {SERVICES.map((s, i) => {
+            const Icon = s.Icon
+            return (
+              <div className="service-card" key={i}>
+                <span className="service-index">{String(i + 1).padStart(2, '0')}</span>
+                <div className="service-icon"><Icon /></div>
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
+                <div className="service-price">{s.price}</div>
+              </div>
+            )
+          })}
         </motion.div>
 
         <motion.div
