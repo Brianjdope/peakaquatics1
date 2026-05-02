@@ -192,11 +192,7 @@ export default function HomePage({ setPage, goToBooking }) {
               alt="Peak Aquatic Sports"
             />
           </div>
-          <h1 className="pas-hero-h1">Peak Aquatic<br />Sports</h1>
           <p className="pas-hero-tagline">Rise Higher</p>
-          <div className="pas-hero-cta">
-            <button className="btn" onClick={() => setPage('about')}>Our Mission</button>
-          </div>
         </motion.div>
         <motion.div
           className="pas-hero-scroll"
