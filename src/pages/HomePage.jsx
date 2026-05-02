@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { ChevronDown, ArrowRight, Waves } from 'lucide-react'
 import Ticker from '../components/Ticker'
 import SchoolLogo from '../components/SchoolLogo'
 import Testimonials from '../components/Testimonials'
@@ -22,7 +23,8 @@ const ATHLETE_SLIDES = [
     univ: 'Princeton University',
     name: 'Chloe Kim',
     achievement: '4th Place · World Junior Aquatics Championships 2025',
-    bgPosition: 'center 25%',
+    bgPosition: 'center 30%',
+    containOnMobile: true,
     credit: 'Photo by Jack Spitser',
   },
   {
@@ -111,7 +113,7 @@ function AthleteSlide({ slide, onClick }) {
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
       <motion.div
-        className="pas-athlete-bg"
+        className={`pas-athlete-bg${slide.containOnMobile ? ' pas-athlete-bg--contain-mobile' : ''}`}
         style={{ backgroundImage: `url(${slide.img})`, backgroundPosition: slide.bgPosition || 'center' }}
         animate={{ scale: inView ? 1 : 1.06 }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
@@ -189,7 +191,6 @@ export default function HomePage({ setPage, goToBooking }) {
           <h1 className="pas-hero-h1">Peak Aquatic<br />Sports</h1>
           <p className="pas-hero-tagline">Rise Higher</p>
           <div className="pas-hero-cta">
-            <button className="btn btn-solid" onClick={goToBooking}>Book a Session</button>
             <button className="btn" onClick={() => setPage('about')}>Our Mission</button>
           </div>
         </motion.div>
@@ -200,7 +201,9 @@ export default function HomePage({ setPage, goToBooking }) {
           transition={{ delay: 1.6, duration: 1 }}
         >
           <div className="pas-hero-scroll-line" />
-          <span>Scroll</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+            Scroll <ChevronDown size={14} strokeWidth={1.5} />
+          </span>
         </motion.div>
       </section>
 
@@ -223,7 +226,6 @@ export default function HomePage({ setPage, goToBooking }) {
                 <p>{ABOUT.homeBody}</p>
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
                   <button className="btn btn-solid" onClick={() => setPage('about')}>Learn More</button>
-                  <button className="btn" onClick={goToBooking}>Book a Session</button>
                 </div>
                 <div className="feature-list">
                   {FEATURES.map((f, i) => (
@@ -235,7 +237,7 @@ export default function HomePage({ setPage, goToBooking }) {
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      <span className="feature-dot" />
+                      <Waves size={16} strokeWidth={1.75} style={{ flexShrink: 0, color: 'var(--accent, #fff)', opacity: 0.85 }} />
                       {f}
                     </motion.div>
                   ))}
@@ -262,7 +264,6 @@ export default function HomePage({ setPage, goToBooking }) {
             <p style={{ color: 'var(--muted)', marginBottom: '2rem', maxWidth: '420px', lineHeight: 1.7 }}>
               We combine elite stroke technique, race strategy and video analysis to give our swimmers an advantage in the pool and in the recruitment process.
             </p>
-            <button className="btn btn-solid" onClick={goToBooking}>Book a Session</button>
           </Reveal>
         </div>
       </div>
@@ -316,8 +317,12 @@ export default function HomePage({ setPage, goToBooking }) {
           </div>
 
           <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'center' }}>
-            <button className="btn" onClick={() => setPage('placements')}>
-              View All Placements →
+            <button
+              className="btn"
+              onClick={() => setPage('placements')}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+            >
+              View All Placements <ArrowRight size={16} strokeWidth={2} />
             </button>
           </div>
         </div>

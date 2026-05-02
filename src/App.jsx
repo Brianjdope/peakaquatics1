@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Calendar } from 'lucide-react'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
@@ -36,15 +37,11 @@ function parseCancelHash() {
 
 export default function App() {
   const initialCancel = parseCancelHash()
-  const [page, setPage] = useState(initialCancel ? 'services' : 'home')
+  const initialPage = initialCancel ? 'services' : (window.location.hash === '#admin' ? 'admin' : 'home')
+  const [page, setPage] = useState(initialPage)
   const [scrollPct, setScrollPct] = useState(0)
   const [scrollToBooking, setScrollToBooking] = useState(!!initialCancel)
   const [cancelParams, setCancelParams] = useState(initialCancel)
-
-  // Handle #admin hash route
-  useEffect(() => {
-    if (window.location.hash === '#admin') setPage('admin')
-  }, [])
 
   // Clean up hash after reading it, and handle future hash changes
   useEffect(() => {
@@ -103,7 +100,7 @@ export default function App() {
       case 'services':   return <ServicesPage setPage={setPage} cancelParams={cancelParams} onCancelParamsUsed={() => setCancelParams(null)} />
       case 'placements': return <PlacementsPage />
       case 'contact':    return <ContactPage />
-      case 'gallery':    return <GalleryPage />
+      case 'gallery':    return <GalleryPage setPage={setPage} />
       case 'terms':      return <TermsPage />
       case 'admin':      return <AdminPage />
       default:           return <HomePage setPage={setPage} />
@@ -136,7 +133,9 @@ export default function App() {
         onClick={goToBooking}
         onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.5)' }}
         onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)' }}
+        style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
       >
+        <Calendar size={16} strokeWidth={2} />
         Book Now
       </button>
     </>

@@ -2217,18 +2217,17 @@ body::after {
 }
 
 .pas-hero-logo-wrap {
-  height: clamp(60px, 12vw, 110px);
-  overflow: hidden;
-  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .pas-hero-logo {
-  height: clamp(130px, 26vw, 240px);
+  height: clamp(80px, 14vw, 140px);
   width: auto;
-  filter: brightness(0) invert(1) contrast(10);
+  filter: brightness(0) invert(1);
   display: block;
-  margin: 0 auto;
-  object-position: top;
 }
 
 .pas-hero-h1 {
@@ -2300,6 +2299,17 @@ body::after {
   inset: 0;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* On phones, show the full image (no crop) for slides flagged contain-mobile.
+   The dark page background fills any letterbox area cleanly. */
+@media (max-width: 768px) {
+  .pas-athlete-bg--contain-mobile {
+    background-size: contain;
+    background-position: center top;
+    background-color: #030303;
+  }
 }
 
 .pas-athlete-overlay {

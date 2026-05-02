@@ -15,8 +15,10 @@
   "dependencies": {
     "firebase-admin": "^13.0.0",
     "framer-motion": "^11.0.0",
+    "lucide-react": "^0.460.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
+    "react-error-boundary": "^6.1.1",
     "three": "^0.183.2"
   },
   "devDependencies": {
