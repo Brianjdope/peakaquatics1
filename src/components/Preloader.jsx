@@ -67,7 +67,7 @@ export default function Preloader({ onComplete }) {
                 marginBottom: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
               }}
               style={{
-                height: 'clamp(70px, 14vw, 150px)',
+                height: 'clamp(95px, 17vw, 185px)',
                 overflow: 'hidden',
                 userSelect: 'none',
               }}
