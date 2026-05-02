@@ -173,8 +173,8 @@ function handleBooking(data) {
           sheet.getRange(i + 1, COL.NAME       + 1).setValue(existingNames ? existingNames + '\n' + name : name)
           sheet.getRange(i + 1, COL.BOOKING_ID + 1).setValue(existingIds   ? existingIds   + '\n' + bookingId  : bookingId)
         }
-        try { sendConfirmationEmail(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
-        try { notifyCoach(data, bookingId, dateTime, '') } catch(e) { Logger.log('Email quota: ' + e.message) }
+        try { sendConfirmationEmail(data, bookingId, dateTime) } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
+        try { notifyCoach(data, bookingId, dateTime, '') } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
         return { success: true, bookingId: bookingId }
       }
     }
@@ -196,8 +196,8 @@ function handleBooking(data) {
   colorRow(sheet, lastRow, data.session, 'Confirmed')
   sheet.getRange(lastRow, COL.BOOKING_ID + 1).setFontWeight('bold')
 
-  try { sendConfirmationEmail(data, bookingId, dateTime) } catch(e) { Logger.log('Email quota: ' + e.message) }
-  try { notifyCoach(data, bookingId, dateTime, '') } catch(e) { Logger.log('Email quota: ' + e.message) }
+  try { sendConfirmationEmail(data, bookingId, dateTime) } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
+  try { notifyCoach(data, bookingId, dateTime, '') } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
   return { success: true, bookingId: bookingId }
 }
 
@@ -241,8 +241,8 @@ function handleCancellation(data) {
       colorRow(sheet, i + 1, rows[i][COL.SESSION], 'Cancelled')
     }
 
-    try { notifyCoachCancellation(rows[i]) } catch(e) { Logger.log('Email quota: ' + e.message) }
-    try { sendCancellationEmail(rows[i][COL.EMAIL], data.bookingId, rows[i][COL.DATETIME], rows[i][COL.SESSION]) } catch(e) { Logger.log('Email quota: ' + e.message) }
+    try { notifyCoachCancellation(rows[i]) } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
+    try { sendCancellationEmail(rows[i][COL.EMAIL], data.bookingId, rows[i][COL.DATETIME], rows[i][COL.SESSION]) } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
     return { success: true, message: 'Booking cancelled.' }
   }
 
@@ -308,12 +308,18 @@ function sendConfirmationEmail(data, bookingId, dateTime) {
     ],
     'Save your Booking ID to manage your appointment.'
   )
-  GmailApp.sendEmail({
-    to: data.email,
-    subject: 'Booking Confirmed — Peak Aquatic Sports',
-    htmlBody: html,
-    body: 'Confirmed: ' + data.session + ' on ' + dateTime + '. Booking ID: ' + bookingId,
-  })
+  // GmailApp uses positional args: (recipient, subject, body, options).
+  // The single-object form only works on MailApp — calling it on GmailApp throws.
+  GmailApp.sendEmail(
+    data.email,
+    'Booking Confirmed — Peak Aquatic Sports',
+    'Confirmed: ' + data.session + ' on ' + dateTime + '. Booking ID: ' + bookingId,
+    {
+      htmlBody: html,
+      name: 'Peak Aquatic Sports',
+      replyTo: COACH_EMAIL,
+    }
+  )
 }
 
 // =============================================================
@@ -333,12 +339,16 @@ function sendCancellationEmail(email, bookingId, dateTime, session) {
     [{ url: SITE_URL, label: 'Rebook Now', color: '#1a1a2e' }],
     'Questions? Call 201-359-5688 or reply to this email.'
   )
-  GmailApp.sendEmail({
-    to: email,
-    subject: 'Booking Cancelled — Peak Aquatic Sports',
-    htmlBody: html,
-    body: 'Cancelled: ' + session + ' on ' + dateTime + '. Booking ID: ' + bookingId,
-  })
+  GmailApp.sendEmail(
+    email,
+    'Booking Cancelled — Peak Aquatic Sports',
+    'Cancelled: ' + session + ' on ' + dateTime + '. Booking ID: ' + bookingId,
+    {
+      htmlBody: html,
+      name: 'Peak Aquatic Sports',
+      replyTo: COACH_EMAIL,
+    }
+  )
 }
 
 // =============================================================
