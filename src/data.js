@@ -20,6 +20,20 @@ export const STATS = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'scarlet-memorial-2026': {
+    tag: 'Competition',
+    date: 'May 24, 2026',
+    title: 'Ethan Reines Breaks the NJ 13-14 800M Freestyle State Record',
+    img: '/photos/ethan-800-record.jpg',
+    imgPos: 'center 20%',
+    excerpt: 'At the 2026 Scarlet Memorial Day meet, Ethan Reines broke the New Jersey 13-14 State Record in the 800M Freestyle with a time of 8:23.11 — a swim that ranks him 2nd nationally in the 13-14 age group.',
+    body: [
+      'May 23 – May 24, 2026 — Scarlet Memorial Day',
+      'Ethan Reines, age 14, capped off the Scarlet Memorial Day meet with a milestone performance, breaking the New Jersey 13-14 State Record in the 800M Freestyle with a time of 8:23.11.',
+      'The swim ranks Ethan 2nd in the country in the 13-14 age group for the 2025–2026 long course season, earning an AAAA standard and a spot among the nation\'s top weekly performances.',
+      'Congratulations to Ethan on this outstanding achievement — we can\'t wait to see what\'s next!',
+    ],
+  },
   'ymca-nationals-2026': {
     tag: 'Competition',
     date: 'April 3, 2026',
@@ -629,7 +643,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'ymca-nationals-2026', featured: true },
+  { id: 'scarlet-memorial-2026', featured: true },
+  { id: 'ymca-nationals-2026' },
   { id: 'speedo-sectionals-2026' },
   { id: 'ethan-state-record' },
   { id: 'tyr-2026' },
