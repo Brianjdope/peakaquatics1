@@ -895,7 +895,7 @@ export const PLACEMENTS = [
   { name: 'Jessica Wolf',         school: 'Colgate University',          year: '2025', photo: CDN + '1762189818941-1RC3X9NYU3MKFS7ZVMO6/Jessie+Wolf+commits+to+Colgate+University.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Christopher Chang',    school: 'Brown University',            photo: '/athletes/chris-chang.webp' },
   { name: 'Grace Lee',            school: 'Cornell University',          photo: '/athletes/grace-lee.webp', photoStyle: { objectPosition: 'center 5%' } },
-  { name: 'Jacob Kim',            school: 'University of California San Diego',  year: '2025', photo: '/photos/jacob-kim-ucsd.jpg', photoStyle: { objectPosition: 'center 55%', transform: 'scale(1.7)' } },
+  { name: 'Jacob Kim',            school: 'University of California San Diego',  year: '2025', photo: '/photos/jacob-kim-ucsd.jpg', photoStyle: { objectPosition: 'center 75%', transform: 'scale(1.7)' } },
   { name: 'Kayla Rodriguez',      school: 'Northwestern University',     photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/nusports.com/images/2025/10/7/Rodriguez_Kayla.jpg', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/athletes/matt-bendoraitis.webp' },
