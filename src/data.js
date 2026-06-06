@@ -12,10 +12,10 @@ export const TICKER_ITEMS = [
 ]
 
 export const STATS = [
-  { num: '10', label: 'Years coaching elite swimmers' },
-  { num: '30+', label: 'College placements, D1 to D3' },
-  { num: '12th', label: 'All-time US 1500m Freestyle record' },
-  { num: '1st & 4th', label: "World Junior Aquatics Championships ('23 & '25)" },
+  { num: '10+', label: 'Years coaching\nelite swimmers' },
+  { num: '30+', label: 'College placements,\nD1 to D3' },
+  { num: '12th', label: 'All-time\nUS 1500m Freestyle record' },
+  { num: '1st & 4th', label: "World Junior Aquatics\nChampionships ('23 & '25)" },
 ]
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'

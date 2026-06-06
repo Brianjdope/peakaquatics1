@@ -738,6 +738,7 @@ section { padding: 8rem 0; }
   color: var(--muted);
   line-height: 1.5;
   letter-spacing: 0.03em;
+  white-space: pre-line;
 }
 
 /* ── ABOUT ── */
