@@ -903,7 +903,7 @@ export const PLACEMENTS = [
   { name: 'Doyee Kim',            school: 'West Point',                  photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/goarmywestpoint.com/images/2024/9/4/KIM_DOYEE.jpg', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Rebekah Jung',         school: 'University of Rochester',     year: '2025', photo: CDN + '1763303017571-59SHN1ZWRQIT4OREL4FV/Rebekah+Jung.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Jonas Emerson',        school: 'Wesleyan University',         year: '2025', photo: CDN + '61339be2-39e3-418c-862f-47cbd238837c/Wesleyan.jpg', photoStyle: { objectPosition: 'center 20%' } },
-  { name: 'Roy Dafinoiu',         school: 'Lafayette College',           year: '2024', photo: CDN + '1730218140435-VXX4ILSW54SKK2N09EEM/Roy+LAF.jpg', photoStyle: { objectPosition: 'center 20%' } },
+  { name: 'Roy Dafinoiu',         school: 'Lafayette College',           year: '2024', photo: '/photos/roy-dafinoiu.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Harrison Lee',         school: 'Lehigh University',           year: '2025', photo: CDN + '1762189435887-LS6BS9O946JF5B24GILK/Harrison+Lee+commits.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Sienna Plutzer',       school: 'Holy Cross University',       year: '2025', photo: CDN + '1762189559773-A432QAWJ3081AJNK604W/Sienna+Sacred+Heart.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Timothy Lee',          school: 'Harvard University',          year: '2024', photo: CDN + '1730135596929-CT3TH0EQRII0VQI725SB/Timothy+Harvard.jpg', photoStyle: { objectPosition: 'center 15%' } },
