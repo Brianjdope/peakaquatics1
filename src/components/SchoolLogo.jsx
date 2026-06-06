@@ -19,6 +19,8 @@ const SCHOOL_LOGOS = {
   'Lehigh University':                  '/logos/lehigh.png',
   'TCNJ':                               '/logos/tcnj.webp',
   'University of Maine':                '/logos/maine.png',
+  'University of Rochester':            '/logos/rochester.png',
+  'Lafayette College':                  '/logos/lafayette.png',
 }
 
 // Fallback color badges for schools not in the image map
