@@ -13,6 +13,11 @@ const SCHOOL_LOGOS = {
   'Northwestern University':    'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1714063364628-0THWKQ09ZYGDVVILPHAO/Kayla+Northwestern+Logo.png',
   'Purdue University':          'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1687948199984-7CJEID9AA4QURTDHIXNV/purdue-university-logo-vector.png',
   'Colgate University':         'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1722180581424-32CGBJR07XT022TWSFIF/Colgate+Michael+Granin.png',
+  'Columbia University':                '/logos/columbia.jpg',
+  'University of California San Diego': '/logos/ucsd.jpg',
+  'Holy Cross University':              '/logos/holy-cross.png',
+  'Lehigh University':                  '/logos/lehigh.png',
+  'TCNJ':                               '/logos/tcnj.webp',
 }
 
 // Fallback color badges for schools not in the image map

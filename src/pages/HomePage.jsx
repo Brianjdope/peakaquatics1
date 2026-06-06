@@ -41,7 +41,7 @@ const FEATURED_SCHOOLS = [
   'Princeton University', 'University of Texas', 'Harvard University',
   'Brown University', 'Columbia University', 'West Point',
   'Wesleyan University', 'Tufts University', 'Cornell University',
-  'Northwestern University', 'Purdue University', 'Colgate University',
+  'Northwestern University', 'TCNJ', 'Colgate University',
   'University of California San Diego', 'University of Maine',
 ]
 
