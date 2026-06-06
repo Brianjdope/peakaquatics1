@@ -2223,12 +2223,12 @@ body::after {
   justify-content: center;
   align-items: flex-start;
   margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
-  height: clamp(95px, 17vw, 185px);
+  height: clamp(85px, 15vw, 165px);
   overflow: hidden;
 }
 
 .pas-hero-logo {
-  height: clamp(130px, 26vw, 280px);
+  height: clamp(115px, 23vw, 250px);
   width: auto;
   filter: brightness(0) invert(1) contrast(10);
   object-position: top;
@@ -2238,7 +2238,7 @@ body::after {
 .pas-hero-h1 {
   font-family: 'Anton', Arial, sans-serif;
   font-weight: 400;
-  font-size: clamp(3rem, 9vw, 9rem);
+  font-size: clamp(2.7rem, 8.2vw, 8.2rem);
   line-height: 0.9;
   letter-spacing: -0.02em;
   color: #fcfcfc;
