@@ -5,6 +5,7 @@ import Ticker from '../components/Ticker'
 import SchoolLogo from '../components/SchoolLogo'
 import Testimonials from '../components/Testimonials'
 import Preloader from '../components/Preloader'
+import Milestones from '../components/Milestones'
 import { ABOUT, STATS } from '../data'
 
 const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
@@ -54,13 +55,23 @@ const FEATURES = [
 ]
 
 // ── COUNT-UP HOOK ──
+// Animates only when the target is a single leading integer followed by an
+// optional suffix (e.g. "10+", "12th"). For multi-number strings like
+// "1st & 4th" we skip the count animation and show the final value directly,
+// since interpolating between the numbers reads as garbled text mid-animation.
 function useCountUp(target, duration = 1800, start = false) {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(target)
   useEffect(() => {
     if (!start) return
-    const num = parseInt(target.replace(/\D/g, '')) || 0
+    const match = String(target).match(/^(\d+)([^\d]*)$/)
+    if (!match) {
+      setCount(target)
+      return
+    }
+    const num = parseInt(match[1], 10)
+    const suffix = match[2]
     if (num === 0) { setCount(target); return }
-    const suffix = target.replace(/[0-9]/g, '')
+    setCount('0' + suffix)
     let startTime = null
     const step = (ts) => {
       if (!startTime) startTime = ts
@@ -79,7 +90,7 @@ function StatItem({ s, inView }) {
   const val = useCountUp(s.num, 1800, inView)
   return (
     <div className="hero-stat-item">
-      <span className="hero-stat-num">{inView ? val : '0'}</span>
+      <span className="hero-stat-num">{val}</span>
       <span className="hero-stat-label">{s.label}</span>
     </div>
   )
@@ -291,6 +302,9 @@ export default function HomePage({ setPage, goToBooking }) {
           </div>
         </div>
       </section>
+
+      {/* ── RECENT MILESTONES ── */}
+      <Milestones />
 
       {/* ── WHERE OUR ATHLETES GO ── */}
       <section style={{ background: 'var(--bg)', padding: '5rem 0', borderBottom: '1px solid var(--border)' }}>
