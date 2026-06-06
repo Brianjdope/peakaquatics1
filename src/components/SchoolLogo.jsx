@@ -36,6 +36,12 @@ const SCHOOL_FALLBACK = {
   'University of California San Diego': { abbr: 'UCSD', bg: '#182B49', color: '#FFCD00' },
 }
 
+// Schools whose logos should be rendered in white (via CSS filter) for dark backgrounds
+const WHITE_FILTER_SCHOOLS = new Set([
+  'Harvard University',
+  'Princeton University',
+])
+
 export function getSchoolData(school) {
   return SCHOOL_FALLBACK[school] || { abbr: school.split(' ').map(w => w[0]).join('').slice(0, 3), bg: '#2a3550', color: '#4b8fd4' }
 }
@@ -44,13 +50,16 @@ export default function SchoolLogo({ school, size = 60 }) {
   const imgSrc = SCHOOL_LOGOS[school]
 
   if (imgSrc) {
+    const whiteFilter = WHITE_FILTER_SCHOOLS.has(school)
+        ? { filter: 'brightness(0) invert(1)' }
+        : null
     return (
       <img
         src={imgSrc}
         alt={school}
         title={school}
         className="school-logo-img"
-        style={{ width: size, height: size, objectFit: 'contain', flexShrink: 0 }}
+        style={{ width: size, height: size, objectFit: 'contain', flexShrink: 0, ...whiteFilter }}
         onError={(e) => {
           // Fall back to badge if image fails
           e.target.style.display = 'none'
