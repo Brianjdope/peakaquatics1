@@ -11,39 +11,129 @@ const EASE_OUT_QUART = [0.25, 1, 0.5, 1]
 export default function Preloader({ onComplete }) {
   // Phases: line → logo → title → tagline → reveal → done
   const [phase, setPhase] = useState('line')
-  const timeouts = useRef([])
+  const [skipped, setSkipped] = useState(false)
+  const [reducedMotion] = useState(() =>
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  )
+  const timeoutsRef = useRef([])
 
   useEffect(() => {
+    // Pre-warm the homepage hero hand-off image so it doesn't pop in.
+    if (typeof window !== 'undefined') {
+      const img = new Image()
+      img.src = LOGO_URL
+    }
+
+    if (reducedMotion) {
+      // Quick, accessible fade — no theatrics.
+      const t = setTimeout(() => { setPhase('done'); onComplete?.() }, 400)
+      timeoutsRef.current = [t]
+      return () => clearTimeout(t)
+    }
+
     const t1 = setTimeout(() => setPhase('logo'),    600)
     const t2 = setTimeout(() => setPhase('title'),   1700)
     const t3 = setTimeout(() => setPhase('tagline'), 2900)
     const t4 = setTimeout(() => setPhase('reveal'),  4100)
     const t5 = setTimeout(() => { setPhase('done'); onComplete?.() }, 4900)
-    timeouts.current = [t1, t2, t3, t4, t5]
-    return () => timeouts.current.forEach(clearTimeout)
-  }, [onComplete])
+    timeoutsRef.current = [t1, t2, t3, t4, t5]
+
+    const skip = () => {
+      // Cancel pending phase advances, freeze current visible elements,
+      // and quickly fade everything out.
+      timeoutsRef.current.forEach(clearTimeout)
+      setSkipped(true)
+      const fin = setTimeout(() => { setPhase('done'); onComplete?.() }, 400)
+      timeoutsRef.current = [fin]
+    }
+
+    const onKey = (e) => { if (e.key === 'Escape') skip() }
+
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('pointerdown', skip)
+    window.addEventListener('wheel', skip, { passive: true })
+    window.addEventListener('touchmove', skip, { passive: true })
+
+    return () => {
+      timeoutsRef.current.forEach(clearTimeout)
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('pointerdown', skip)
+      window.removeEventListener('wheel', skip)
+      window.removeEventListener('touchmove', skip)
+    }
+  }, [onComplete, reducedMotion])
 
   if (phase === 'done') return null
+
+  // Reduced-motion render: minimal, quick fade.
+  if (reducedMotion) {
+    return (
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            background: '#030303',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0 2vw',
+          }}
+        >
+          <img
+            src={LOGO_URL}
+            alt="Peak Aquatic Sports"
+            style={{
+              height: 'clamp(95px, 17vw, 185px)',
+              width: 'auto',
+              filter: 'brightness(0) invert(1) contrast(10)',
+              objectPosition: 'top',
+            }}
+          />
+          <div
+            style={{
+              marginTop: '1rem',
+              fontFamily: "'Anton', Arial, sans-serif",
+              fontSize: 'clamp(0.9rem, 1.5vw, 1.3rem)',
+              color: 'rgba(252,252,252,0.65)',
+              letterSpacing: '0.32em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Rise Higher
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    )
+  }
 
   const showLine    = phase !== 'line'
   const showLogo    = ['logo', 'title', 'tagline', 'reveal'].includes(phase)
   const showTitle   = ['title', 'tagline', 'reveal'].includes(phase)
   const showTagline = phase === 'tagline' || phase === 'reveal'
+  const showShimmer = showTagline
   const isReveal    = phase === 'reveal'
   const isLogoOnly  = phase === 'logo'
+  const isFading    = isReveal || skipped
 
   return (
     <AnimatePresence>
       {phase !== 'done' && (
         <motion.div
           initial={{ opacity: 1 }}
-          animate={{
-            opacity: isReveal ? 0 : 1,
-            scale: isReveal ? 1.03 : 1,
-          }}
+          animate={{ opacity: isFading ? 0 : 1 }}
           transition={{
-            opacity: { duration: 0.8, ease: EASE_OUT_EXPO },
-            scale: { duration: 0.9, ease: EASE_OUT_EXPO },
+            opacity: {
+              duration: skipped ? 0.4 : 0.7,
+              delay: isReveal && !skipped ? 0.25 : 0,
+              ease: EASE_OUT_EXPO,
+            },
           }}
           style={{
             position: 'fixed',
@@ -60,7 +150,7 @@ export default function Preloader({ onComplete }) {
           {/* Ambient gradient wash — subtle aurora suggesting water depth */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
+            animate={{ opacity: isFading ? 0 : 0.6 }}
             transition={{ duration: 2.2, ease: 'easeOut' }}
             style={{
               position: 'absolute',
@@ -72,10 +162,13 @@ export default function Preloader({ onComplete }) {
             }}
           />
 
-          {/* Top accent line — draws in from center */}
+          {/* Top accent line — draws outward from center */}
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: showLine ? 1 : 0, opacity: showLine ? 1 : 0 }}
+            animate={{
+              scaleX: showLine ? 1 : 0,
+              opacity: showLine && !isFading ? 1 : 0,
+            }}
             transition={{
               scaleX: { duration: 1.1, ease: EASE_OUT_EXPO },
               opacity: { duration: 0.4 },
@@ -96,7 +189,10 @@ export default function Preloader({ onComplete }) {
           {/* Bottom accent line — mirrors top */}
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: showLine ? 1 : 0, opacity: showLine ? 1 : 0 }}
+            animate={{
+              scaleX: showLine ? 1 : 0,
+              opacity: showLine && !isFading ? 1 : 0,
+            }}
             transition={{
               scaleX: { duration: 1.1, ease: EASE_OUT_EXPO, delay: 0.1 },
               opacity: { duration: 0.4, delay: 0.1 },
@@ -114,16 +210,29 @@ export default function Preloader({ onComplete }) {
             }}
           />
 
-          <div style={{
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            padding: '0 2vw',
-          }}>
-            {/* Logo — fades in with float-up and gentle scale */}
+          {/* Hand-off morph wrapper: during reveal, scale down toward hero size
+              and lift slightly so the elements feel like they're settling into
+              the homepage hero position. */}
+          <motion.div
+            animate={{
+              scale: isReveal ? 0.9 : 1,
+              y: isReveal ? '-3vh' : 0,
+            }}
+            transition={{
+              scale: { duration: 0.9, ease: EASE_OUT_EXPO },
+              y: { duration: 0.9, ease: EASE_OUT_EXPO },
+            }}
+            style={{
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              padding: '0 2vw',
+            }}
+          >
+            {/* Logo — fades in with float-up, gentle scale, and blur-to-clear */}
             <motion.div
               initial={{ opacity: 0, scale: 0.85, y: 14, filter: 'blur(6px)' }}
               animate={{
@@ -159,15 +268,19 @@ export default function Preloader({ onComplete }) {
               />
             </motion.div>
 
-            {/* PEAK AQUATIC SPORTS — clip-mask reveal from bottom, staggered */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexWrap: 'nowrap',
-              height: showTitle ? 'auto' : 0,
-              overflow: 'hidden',
-            }}>
+            {/* PEAK AQUATIC SPORTS — clip-mask reveal from bottom, staggered,
+                with a chrome-shine shimmer sweep after the letters settle */}
+            <div
+              style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexWrap: 'nowrap',
+                height: showTitle ? 'auto' : 0,
+                overflow: 'hidden',
+              }}
+            >
               {showTitle && TITLE_LETTERS.map((char, i) => (
                 <span
                   key={i}
@@ -201,6 +314,28 @@ export default function Preloader({ onComplete }) {
                   </motion.span>
                 </span>
               ))}
+
+              {/* Shimmer sweep — diagonal highlight passes across once */}
+              {showShimmer && (
+                <motion.div
+                  initial={{ x: '-120%', opacity: 0 }}
+                  animate={{ x: '120%', opacity: [0, 1, 1, 0] }}
+                  transition={{
+                    x: { duration: 1.3, ease: 'easeInOut' },
+                    opacity: { duration: 1.3, times: [0, 0.15, 0.85, 1] },
+                  }}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    background:
+                      'linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.22) 50%, transparent 62%)',
+                    pointerEvents: 'none',
+                  }}
+                />
+              )}
             </div>
 
             {/* Rise Higher — letter spacing expands outward */}
@@ -246,7 +381,31 @@ export default function Preloader({ onComplete }) {
                 }}
               />
             )}
-          </div>
+          </motion.div>
+
+          {/* Subtle skip hint — only after content is settled */}
+          {showTagline && !isFading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.35 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              style={{
+                position: 'absolute',
+                bottom: 'clamp(1.5rem, 3vw, 2.5rem)',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                fontFamily: 'var(--mono, ui-monospace, monospace)',
+                fontSize: '0.55rem',
+                letterSpacing: '0.25em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.7)',
+                userSelect: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Tap or press Esc to skip
+            </motion.div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
