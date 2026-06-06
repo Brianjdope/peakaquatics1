@@ -2,8 +2,8 @@ import React from 'react'
 
 // Real logo images from the original peakaquaticsports.com site
 const SCHOOL_LOGOS = {
-  'Princeton University':       'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1710177732669-5EE3FX2WO1F1IMY17YUE/Chloe+Princeton.png',
-  'Harvard University':         'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1687948198978-GXOUUKKXL0ML5DQ6EU61/harvard-university-logo.png',
+  'Princeton University':       '/logos/princeton.png',
+  'Harvard University':         '/logos/harvard.png',
   'University of Texas':        'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1695319439504-Z0N3WB4CCSKZJS2UVVBL/Long+horns.png',
   'Brown University':           'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1687948198992-FGXQBHW8NVS9D7DLK8D4/1200px-Brown_Bears_logo.svg.png',
   'West Point':                 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1690334253065-ZFL95C5IXRU1RJFH8VPG/Army-West-Point-New-Logo.jpeg',
@@ -37,10 +37,7 @@ const SCHOOL_FALLBACK = {
 }
 
 // Schools whose logos should be rendered in white (via CSS filter) for dark backgrounds
-const WHITE_FILTER_SCHOOLS = new Set([
-  'Harvard University',
-  'Princeton University',
-])
+const WHITE_FILTER_SCHOOLS = new Set([])
 
 export function getSchoolData(school) {
   return SCHOOL_FALLBACK[school] || { abbr: school.split(' ').map(w => w[0]).join('').slice(0, 3), bg: '#2a3550', color: '#4b8fd4' }
