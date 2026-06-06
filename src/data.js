@@ -12,10 +12,10 @@ export const TICKER_ITEMS = [
 ]
 
 export const STATS = [
-  { num: '5+', label: 'Years coaching elite swimmers' },
-  { num: '20+', label: 'College placements, D1 to D3' },
-  { num: '12th', label: 'All-time US 1500m Freestyle record' },
+  { num: '10', label: 'Years coaching elite swimmers' },
+  { num: '30+', label: 'College placements, D1 to D3' },
   { num: '1st', label: 'World Junior Aquatics Championship 2023' },
+  { num: '4th', label: 'World Junior Aquatics Championships 2025' },
 ]
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
