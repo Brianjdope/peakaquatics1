@@ -158,12 +158,19 @@ function AthleteSlide({ slide, onClick }) {
   )
 }
 
+// Module-level flag so the preloader only plays once per page load,
+// not on every return to the home page via the nav.
+let preloaderShown = false
+
 // ── MAIN HOMEPAGE ──
 export default function HomePage({ setPage, goToBooking }) {
   const statsRef = useRef(null)
   const [statsInView, setStatsInView] = useState(false)
-  const [preloaderDone, setPreloaderDone] = useState(false)
-  const handlePreloaderComplete = useCallback(() => setPreloaderDone(true), [])
+  const [preloaderDone, setPreloaderDone] = useState(preloaderShown)
+  const handlePreloaderComplete = useCallback(() => {
+    preloaderShown = true
+    setPreloaderDone(true)
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
