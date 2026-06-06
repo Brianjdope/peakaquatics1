@@ -18,6 +18,7 @@ const SCHOOL_LOGOS = {
   'Holy Cross University':              '/logos/holy-cross.png',
   'Lehigh University':                  '/logos/lehigh.png',
   'TCNJ':                               '/logos/tcnj.webp',
+  'University of Maine':                '/logos/maine.png',
 }
 
 // Fallback color badges for schools not in the image map

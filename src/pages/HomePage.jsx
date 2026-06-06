@@ -42,7 +42,8 @@ const FEATURED_SCHOOLS = [
   'Brown University', 'Columbia University', 'West Point',
   'Wesleyan University', 'Tufts University', 'Cornell University',
   'Northwestern University', 'TCNJ', 'Colgate University',
-  'University of California San Diego', 'University of Maine',
+  'University of California San Diego', 'Lehigh University',
+  'Holy Cross University', 'University of Maine',
 ]
 
 const FEATURES = [
