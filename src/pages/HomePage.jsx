@@ -39,9 +39,10 @@ const ATHLETE_SLIDES = [
 
 const FEATURED_SCHOOLS = [
   'Princeton University', 'University of Texas', 'Harvard University',
-  'Brown University', 'West Point', 'Wesleyan University',
-  'Tufts University', 'Cornell University', 'Northwestern University',
-  'Purdue University', 'Colgate University', 'University of Maine',
+  'Brown University', 'Columbia University', 'West Point',
+  'Wesleyan University', 'Tufts University', 'Cornell University',
+  'Northwestern University', 'Purdue University', 'Colgate University',
+  'University of California San Diego', 'University of Maine',
 ]
 
 const FEATURES = [
