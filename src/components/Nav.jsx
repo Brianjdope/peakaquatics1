@@ -81,7 +81,7 @@ export default function Nav({ page, setPage, goToBooking }) {
           )}
         </div>
         <div className="nav-social">
-          <a href="https://www.instagram.com/philkangg/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
+          <a href="https://www.instagram.com/peakaquatic_sports/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
           <a href="mailto:peakaquaticsports@gmail.com" aria-label="Email"><EmailIcon /></a>
           {phoneAvailable ? (
             <a href="tel:+12013595688" aria-label="Phone"><PhoneIcon /></a>

@@ -25,7 +25,7 @@ export const MILESTONES = [
   { tag: 'National Runner-Up',       time: '50.19',    event: '100Y Freestyle',     name: 'Jessie Wolf',     date: 'Apr 2026' },
   { tag: 'NJ State Record',          time: '8:23.11',  event: '800M Freestyle',     name: 'Ethan Reines',    date: 'May 2026' },
   { tag: 'Toyota Nationals Cut',     time: '54.14',    event: '100M Butterfly',     name: 'Ryker Levi',      date: 'Mar 2026' },
-  { tag: 'World Juniors — 4th',      time: '—',        event: 'World Championships', name: 'Chloe Kim',      date: '2025' },
+  { tag: 'World Juniors — 4th',      time: '16:22.56', event: '1500M Freestyle',    name: 'Chloe Kim',       date: '2025' },
   { tag: 'World Junior Champion',    time: '16:09.37', event: '1500M Freestyle',    name: 'Kate Hurst',      date: '2023' },
   { tag: 'Junior Nationals Cut',     time: '2:20.91',  event: '200M Breaststroke',  name: 'Joshua Reines',   date: 'Mar 2026' },
   { tag: 'Relay Lead-Off Best',      time: '46.07',    event: '100Y Freestyle',     name: 'Cole Wilson',     date: 'Apr 2026' },
