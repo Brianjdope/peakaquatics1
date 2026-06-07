@@ -19,16 +19,19 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
     ctx.fillRect(Math.random() * W, Math.random() * H, 1, 1)
   }
 
-  // ── Deboss on white: dark shadow above, white catch below ────
+  // ── Deboss on white: subtle shadow, then solid black ink on top ──
+  // The shadow layers stay light so the card still feels like letterpress,
+  // but the main fill is pure black so the text reads clearly when the
+  // texture is downsampled onto the 3D card.
   function deboss(text, x, y, font, align = 'left', depth = 1.1) {
     ctx.save()
     ctx.font = font
     ctx.textAlign = align
-    ctx.fillStyle = `rgba(0,0,0,${depth * 0.22})`
-    ctx.fillText(text, x, y - depth * 0.7)
-    ctx.fillStyle = `rgba(255,255,255,${depth * 0.5})`
-    ctx.fillText(text, x, y + depth)
-    ctx.fillStyle = '#111111'
+    ctx.fillStyle = `rgba(0,0,0,${depth * 0.15})`
+    ctx.fillText(text, x, y - depth * 0.5)
+    ctx.fillStyle = `rgba(255,255,255,${depth * 0.35})`
+    ctx.fillText(text, x, y + depth * 0.8)
+    ctx.fillStyle = '#000000'
     ctx.fillText(text, x, y)
     ctx.restore()
   }
@@ -56,15 +59,15 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
     const topY = 118  // baseline for top row
 
     // ── Top-left: phone ──────────────────────────────────────
-    deboss('201 359 5688', pad, topY, `400 22px ${G}`, 'left', 0.9)
+    deboss('201 359 5688', pad, topY, `500 26px ${G}`, 'left', 0.9)
 
     // ── Top-right: logo symbol + company name on same line ───
-    const compFont = `500 28px ${G}`
+    const compFont = `600 32px ${G}`
     ctx.font = compFont
     const compW = ctx.measureText('PEAK AQUATIC SPORTS').width
 
     // Measure logo symbol width given fixed height
-    const symH = 40
+    const symH = 46
     const symRatio = logoImg ? (logoImg.naturalWidth / (logoImg.naturalHeight * 0.62)) : 1
     const symW = symH * symRatio
     const symGap = 14
@@ -76,13 +79,13 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
 
     drawLogo(symCX, symCY, symW, symH)
     deboss('PEAK AQUATIC SPORTS', textX, topY, compFont, 'right')
-    deboss('Elite Aquatic Coaching', textX, topY + 26,
-      `italic 400 19px ${G}`, 'right', 0.8)
+    deboss('Elite Aquatic Coaching', textX, topY + 30,
+      `italic 500 22px ${G}`, 'right', 0.8)
 
     // ── Center: mixed-weight name ────────────────────────────
     const nameY  = H / 2 + 26
-    const fFirst = `400 54px ${G}`
-    const fLast  = `700 54px ${G}`
+    const fFirst = `500 60px ${G}`
+    const fLast  = `700 60px ${G}`
     ctx.font = fFirst; const w1 = ctx.measureText('PHILIP  ').width
     ctx.font = fLast;  const w2 = ctx.measureText('KANG').width
     const nameStartX = W / 2 - (w1 + w2) / 2
@@ -90,12 +93,12 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
     deboss('KANG',     nameStartX + w1,  nameY, fLast,  'left', 1.8)
 
     // Title
-    deboss('Head Coach  ·  Founder', W / 2, nameY + 46,
-      `400 22px ${G}`, 'center', 0.9)
+    deboss('Head Coach  ·  Founder', W / 2, nameY + 50,
+      `500 26px ${G}`, 'center', 0.9)
 
     // ── Bottom: address line ─────────────────────────────────
     deboss('150 TRIANGLE PLAZA, RAMSEY NJ 07446  ·  peakaquaticsports@gmail.com  ·  @philkangg',
-      W / 2, H - pad + 8, `400 14px ${G}`, 'center', 0.7)
+      W / 2, H - pad + 8, `500 18px ${G}`, 'center', 0.7)
 
   } else {
     // Logo — top center, large, aspect-correct
@@ -103,8 +106,8 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
 
     // Hairline below logo
     ctx.save()
-    ctx.strokeStyle = 'rgba(0,0,0,0.14)'
-    ctx.lineWidth = 0.8
+    ctx.strokeStyle = 'rgba(0,0,0,0.22)'
+    ctx.lineWidth = 1.0
     ctx.beginPath()
     ctx.moveTo(W * 0.28, pad + 112); ctx.lineTo(W * 0.72, pad + 112)
     ctx.stroke()
@@ -119,12 +122,12 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
       { label: 'WEBSITE',   value: 'peakaquaticsports.com' },
     ]
 
-    const rowH = 52
+    const rowH = 56
     let cy = H / 2 - (items.length * rowH) / 2 + 30
 
     items.forEach(({ label, value }) => {
-      deboss(label, W / 2, cy, `400 11px ${G}`, 'center', 0.7)
-      deboss(value, W / 2, cy + 26, `400 21px ${G}`, 'center', 1.0)
+      deboss(label, W / 2, cy, `600 14px ${G}`, 'center', 0.7)
+      deboss(value, W / 2, cy + 30, `500 25px ${G}`, 'center', 1.0)
       cy += rowH
     })
   }
@@ -163,7 +166,9 @@ export default function BusinessCard3D() {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
       renderer.setSize(W, H)
       renderer.setClearColor(0x000000, 0)
-      renderer.toneMapping = THREE.ACESFilmicToneMapping
+      // No tone mapping — keep the black ink truly black on screen so
+      // small text doesn't gray out from filmic curves.
+      renderer.toneMapping = THREE.NoToneMapping
       renderer.toneMappingExposure = 1.0
       el.appendChild(renderer.domElement)
 
@@ -171,25 +176,29 @@ export default function BusinessCard3D() {
       const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 100)
       camera.position.set(0, 0, 4.4)
 
-      // Lighting for white coated card — dramatic but clean
-      scene.add(new THREE.AmbientLight(0xffffff, 0.8))
-      const key = new THREE.DirectionalLight(0xffffff, 1.8)
+      // Lighting tuned for readability: bright ambient base so the white
+      // card never falls into shadow, softer key light so the gloss doesn't
+      // blow out the text under the highlight.
+      scene.add(new THREE.AmbientLight(0xffffff, 1.1))
+      const key = new THREE.DirectionalLight(0xffffff, 1.0)
       key.position.set(3, 5, 4)
       scene.add(key)
-      const fill = new THREE.DirectionalLight(0xe8f4ff, 0.4)
+      const fill = new THREE.DirectionalLight(0xe8f4ff, 0.35)
       fill.position.set(-4, -1, 3)
       scene.add(fill)
-      const spot = new THREE.PointLight(0xffffff, 1.0, 12)
+      const spot = new THREE.PointLight(0xffffff, 0.6, 12)
       spot.position.set(0, 1.5, 3.5)
       scene.add(spot)
 
-      // Satin-coated white card material
+      // Matte-coated white card material — much less clearcoat, so the
+      // surface reads as paper instead of glossy plastic, and the text
+      // doesn't disappear into highlights.
       const cardMat = (tex) => new THREE.MeshPhysicalMaterial({
         map: tex,
-        roughness: 0.55,
+        roughness: 0.7,
         metalness: 0.0,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.35,
+        clearcoat: 0.1,
+        clearcoatRoughness: 0.6,
       })
       const edgeMat = new THREE.MeshStandardMaterial({
         color: 0xfafafa,
