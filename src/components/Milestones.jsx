@@ -28,8 +28,7 @@ export default function Milestones() {
             justifyContent: 'space-between',
             marginBottom: '2.5rem',
             flexWrap: 'wrap',
-            gap: '1rem',
-            padding: '0 max(0px, calc((100vw - var(--container-w, 1200px)) / 2))',
+            gap: '1.5rem',
           }}
         >
           <div>
