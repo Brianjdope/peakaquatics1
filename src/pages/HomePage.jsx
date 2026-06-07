@@ -44,7 +44,8 @@ const FEATURED_SCHOOLS = [
   'Wesleyan University', 'Tufts University', 'Cornell University',
   'Northwestern University', 'New York University', 'TCNJ',
   'Colgate University', 'University of California San Diego',
-  'Lehigh University', 'Holy Cross University', 'University of Maine',
+  'Lehigh University', 'Holy Cross University', 'Bryant University',
+  'University of Maine',
 ]
 
 const FEATURES = [

@@ -22,6 +22,7 @@ const SCHOOL_LOGOS = {
   'University of Rochester':            '/logos/rochester.png',
   'Lafayette College':                  '/logos/lafayette.png',
   'New York University':                '/logos/nyu.png',
+  'Bryant University':                  '/logos/bryant.jpg',
 }
 
 // Fallback color badges for schools not in the image map
@@ -38,9 +39,7 @@ const SCHOOL_FALLBACK = {
 }
 
 // Schools whose logos should be rendered in white (via CSS filter) for dark backgrounds
-const WHITE_FILTER_SCHOOLS = new Set([
-  'New York University',
-])
+const WHITE_FILTER_SCHOOLS = new Set([])
 
 export function getSchoolData(school) {
   return SCHOOL_FALLBACK[school] || { abbr: school.split(' ').map(w => w[0]).join('').slice(0, 3), bg: '#2a3550', color: '#4b8fd4' }
