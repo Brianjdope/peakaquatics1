@@ -921,7 +921,7 @@ export const PLACEMENTS = [
   { name: 'Roy Dafinoiu',         school: 'Lafayette College',           year: '2024', photo: '/photos/roy-dafinoiu.jpg', photoStyle: { objectPosition: 'center 20%', transform: 'scale(0.85)' } },
   { name: 'Harrison Lee',         school: 'Lehigh University',           year: '2025', photo: CDN + '1762189435887-LS6BS9O946JF5B24GILK/Harrison+Lee+commits.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Sienna Plutzer',       school: 'Holy Cross University',       year: '2025', photo: CDN + '1762189559773-A432QAWJ3081AJNK604W/Sienna+Sacred+Heart.jpg', photoStyle: { objectPosition: 'center 20%' } },
-  { name: 'Timothy Lee',          school: 'Columbia University',         year: '2026', photo: CDN + '1730135596929-CT3TH0EQRII0VQI725SB/Timothy+Harvard.jpg', photoStyle: { objectPosition: 'center 15%' } },
+  { name: 'Timothy Lee',          school: 'Columbia University',         year: '2026', photo: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/452e648c-5a8b-4cbb-99ad-57459dde132d/Timothy+Lee.jpg', photoStyle: { objectPosition: 'center 25%' } },
 ]
 
 export const TESTIMONIALS = [
