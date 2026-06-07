@@ -205,6 +205,7 @@ export default function HomePage({ setPage, goToBooking }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
         >
+          <div className="pas-hero-accent-line pas-hero-accent-top" aria-hidden="true" />
           <div className="pas-hero-logo-wrap">
             <img
               className="pas-hero-logo"
@@ -214,6 +215,7 @@ export default function HomePage({ setPage, goToBooking }) {
           </div>
           <h1 className="pas-hero-h1">Peak Aquatic Sports</h1>
           <p className="pas-hero-tagline">Rise Higher</p>
+          <div className="pas-hero-accent-line pas-hero-accent-bottom" aria-hidden="true" />
         </motion.div>
         <motion.div
           className="pas-hero-scroll"
