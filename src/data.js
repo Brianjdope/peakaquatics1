@@ -188,7 +188,7 @@ export const ARTICLES = {
     date: 'November 2, 2025',
     title: 'Jacob Kim Commits to UC San Diego',
     img: '/photos/jacob-kim-ucsd.jpg',
-    imgPos: 'center 30%',
+    imgPos: 'center 55%',
     excerpt: '"I am honored to announce my verbal commitment to the academic process at the University of California, San Diego!"',
     body: [
       'I am honored to announce my verbal commitment to the academic process at the University of California, San Diego!',
@@ -203,7 +203,7 @@ export const ARTICLES = {
     date: 'October 26, 2025',
     title: 'Jessica Wolf Commits to Colgate University',
     img: CDN2 + '1762189818941-1RC3X9NYU3MKFS7ZVMO6/Jessie+Wolf+commits+to+Colgate+University.jpg',
-    imgPos: 'center 20%',
+    imgPos: 'center 55%',
     excerpt: '"I am so excited to announce my commitment to continue my academic and athletic career at Colgate University!"',
     body: [
       'I am so excited to announce my commitment to continue my academic and athletic career at Colgate University!',
@@ -218,7 +218,7 @@ export const ARTICLES = {
     date: 'September 24, 2025',
     title: 'Sienna Plutzer Commits to Holy Cross University',
     img: CDN2 + '1762189559773-A432QAWJ3081AJNK604W/Sienna+Sacred+Heart.jpg',
-    imgPos: 'center 20%',
+    imgPos: 'center 55%',
     excerpt: '"I am beyond excited to announce my verbal commitment to swim D1 and continue my academic careers at Holy Cross!"',
     body: [
       'I am beyond excited to announce my verbal commitment to swim D1 and continue my academic careers at Holy Cross!',
@@ -235,7 +235,7 @@ export const ARTICLES = {
     date: 'August 8, 2025',
     title: 'Harrison Lee Commits to Lehigh University',
     img: CDN2 + '1762189435887-LS6BS9O946JF5B24GILK/Harrison+Lee+commits.jpg',
-    imgPos: 'center 20%',
+    imgPos: 'center 55%',
     excerpt: '"I am thrilled to announce my commitment to Lehigh University to continue my academic and athletic career."',
     body: [
       'I am thrilled to announce my commitment to Lehigh University to continue my academic and athletic career.',
