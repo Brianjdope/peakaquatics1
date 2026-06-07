@@ -160,7 +160,7 @@ export const ARTICLES = {
     date: 'November 11, 2025',
     title: 'Jonas Emerson Commits to Wesleyan University',
     img: CDN2 + '1763302742372-VYK1VZZKBPAA4NAQTF5X/Wesleyan.jpg',
-    imgPos: 'center 25%',
+    imgPos: 'center 55%',
     excerpt: '"I am very excited to announce my commitment to Wesleyan University to further my academic and athletic career!"',
     body: [
       'I am very excited to announce my commitment to Wesleyan University to further my academic and athletic career! I\'d like to thank my Condors coaches, Phil, and all of my family and friends for supporting me along the way. I\'d also like to give a special thanks to Coach Williamson for giving me this amazing opportunity. Go Cardinals! 🔴⚫️',
@@ -172,7 +172,7 @@ export const ARTICLES = {
     date: 'November 7, 2025',
     title: 'Rebekah Jung Commits to the University of Rochester',
     img: CDN2 + '1763303017571-59SHN1ZWRQIT4OREL4FV/Rebekah+Jung.jpg',
-    imgPos: 'center 20%',
+    imgPos: 'center 55%',
     excerpt: '"I am excited to announce my verbal commitment to continue my academic and athletic career at the University of Rochester!"',
     body: [
       'I am excited to announce my verbal commitment to continue my academic and athletic career at the University of Rochester!',
@@ -188,7 +188,7 @@ export const ARTICLES = {
     date: 'November 2, 2025',
     title: 'Jacob Kim Commits to UC San Diego',
     img: '/photos/jacob-kim-ucsd.jpg',
-    imgPos: 'center 55%',
+    imgPos: 'center 70%',
     excerpt: '"I am honored to announce my verbal commitment to the academic process at the University of California, San Diego!"',
     body: [
       'I am honored to announce my verbal commitment to the academic process at the University of California, San Diego!',
