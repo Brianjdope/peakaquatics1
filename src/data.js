@@ -203,7 +203,7 @@ export const ARTICLES = {
     date: 'October 26, 2025',
     title: 'Jessica Wolf Commits to Colgate University',
     img: CDN2 + '1762189818941-1RC3X9NYU3MKFS7ZVMO6/Jessie+Wolf+commits+to+Colgate+University.jpg',
-    imgPos: 'center 85%',
+    imgPos: 'center bottom',
     excerpt: '"I am so excited to announce my commitment to continue my academic and athletic career at Colgate University!"',
     body: [
       'I am so excited to announce my commitment to continue my academic and athletic career at Colgate University!',
