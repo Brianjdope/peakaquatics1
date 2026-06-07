@@ -38,9 +38,7 @@ const SCHOOL_FALLBACK = {
 }
 
 // Schools whose logos should be rendered in white (via CSS filter) for dark backgrounds
-const WHITE_FILTER_SCHOOLS = new Set([
-  'New York University',
-])
+const WHITE_FILTER_SCHOOLS = new Set([])
 
 export function getSchoolData(school) {
   return SCHOOL_FALLBACK[school] || { abbr: school.split(' ').map(w => w[0]).join('').slice(0, 3), bg: '#2a3550', color: '#4b8fd4' }
