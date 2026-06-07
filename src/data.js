@@ -12,7 +12,7 @@ export const TICKER_ITEMS = [
 ]
 
 export const STATS = [
-  { num: '10+', label: 'Years coaching\nelite swimmers' },
+  { num: '7', label: 'Years coaching\nelite swimmers' },
   { num: '30+', label: 'College placements,\nD1 to D3' },
   { num: '12th', label: 'All-time\nUS 1500m Freestyle record' },
   { num: '1st & 4th', label: "World Junior Aquatics\nChampionships ('23 & '25)" },
