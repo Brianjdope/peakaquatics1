@@ -2495,7 +2495,8 @@ body::after {
 @media (max-width: 768px) {
   .pas-athlete-text { padding: 2.5rem 1.5rem; }
   .pas-athlete-name { font-size: clamp(3rem, 12vw, 6rem); }
-  .pas-hero-content { padding: 2rem 1.5rem 2.5rem; }
-  .pas-hero-scroll { bottom: 1.2rem; }
-  .pas-hero-scroll-line { height: 28px; }
+  .pas-hero-content { padding: 2rem 1.5rem 1rem; }
+  .pas-hero-scroll { bottom: 0.9rem; }
+  .pas-hero-scroll-line { height: 24px; }
+  .pas-hero-accent-bottom { margin-top: 0.8rem; }
 }
