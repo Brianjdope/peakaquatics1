@@ -16,6 +16,15 @@ export default function Preloader({ onComplete }) {
     typeof window !== 'undefined' &&
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
   )
+  // Detect mobile once so the hand-off morph offset matches the hero header
+  // layout for the current breakpoint. On desktop, the hero's heavier bottom
+  // padding offsets its content ~4rem above viewport center; on mobile that
+  // offset is essentially zero after the recent padding tightening.
+  const [isMobile] = useState(() =>
+    typeof window !== 'undefined' && window.innerWidth <= 768
+  )
+  const heroOffsetY = isMobile ? '-0.4rem' : '-4rem'
+  const heroOffsetScale = isMobile ? 0.94 : 0.89
   const timeoutsRef = useRef([])
 
   useEffect(() => {
@@ -210,13 +219,16 @@ export default function Preloader({ onComplete }) {
             }}
           />
 
-          {/* Hand-off morph wrapper: during reveal, scale down toward hero size
-              and lift slightly so the elements feel like they're settling into
-              the homepage hero position. */}
+          {/* Hand-off morph wrapper: during reveal, scale down to match the
+              hero header's size exactly (logo ratio 250/280 = 0.89) and lift
+              up by the hero's content offset so the preloader's logo/title
+              come to rest at the precise position where the hero version will
+              render. The result is a seamless dissolve — the eye sees one
+              continuous element, not a curtain. */}
           <motion.div
             animate={{
-              scale: isReveal ? 0.9 : 1,
-              y: isReveal ? '-3vh' : 0,
+              scale: isReveal ? heroOffsetScale : 1,
+              y: isReveal ? heroOffsetY : 0,
             }}
             transition={{
               scale: { duration: 0.9, ease: EASE_OUT_EXPO },
