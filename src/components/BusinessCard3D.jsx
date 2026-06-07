@@ -59,7 +59,7 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
     const topY = 118  // baseline for top row
 
     // ── Top-left: phone ──────────────────────────────────────
-    deboss('201 359 5688', pad, topY, `500 26px ${G}`, 'left', 0.9)
+    deboss('201 359 5688', pad, topY, `500 30px ${G}`, 'left', 0.9)
 
     // ── Top-right: logo symbol + company name on same line ───
     const compFont = `600 32px ${G}`
@@ -79,8 +79,8 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
 
     drawLogo(symCX, symCY, symW, symH)
     deboss('PEAK AQUATIC SPORTS', textX, topY, compFont, 'right')
-    deboss('Elite Aquatic Coaching', textX, topY + 30,
-      `italic 500 22px ${G}`, 'right', 0.8)
+    deboss('Elite Coaching', textX, topY + 32,
+      `italic 500 25px ${G}`, 'right', 0.8)
 
     // ── Center: mixed-weight name ────────────────────────────
     const nameY  = H / 2 + 26
@@ -93,12 +93,12 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
     deboss('KANG',     nameStartX + w1,  nameY, fLast,  'left', 1.8)
 
     // Title
-    deboss('Head Coach  ·  Founder', W / 2, nameY + 50,
-      `500 26px ${G}`, 'center', 0.9)
+    deboss('Head Coach  ·  Founder', W / 2, nameY + 54,
+      `500 30px ${G}`, 'center', 0.9)
 
     // ── Bottom: address line ─────────────────────────────────
     deboss('150 TRIANGLE PLAZA, RAMSEY NJ 07446  ·  peakaquaticsports@gmail.com  ·  @philkangg',
-      W / 2, H - pad + 8, `500 18px ${G}`, 'center', 0.7)
+      W / 2, H - pad + 8, `500 22px ${G}`, 'center', 0.7)
 
   } else {
     // Logo — top center, large, aspect-correct
@@ -122,12 +122,12 @@ function makeCardCanvas(side, logoImg, W = 1080, H = 640) {
       { label: 'WEBSITE',   value: 'peakaquaticsports.com' },
     ]
 
-    const rowH = 56
+    const rowH = 60
     let cy = H / 2 - (items.length * rowH) / 2 + 30
 
     items.forEach(({ label, value }) => {
-      deboss(label, W / 2, cy, `600 14px ${G}`, 'center', 0.7)
-      deboss(value, W / 2, cy + 30, `500 25px ${G}`, 'center', 1.0)
+      deboss(label, W / 2, cy, `600 16px ${G}`, 'center', 0.7)
+      deboss(value, W / 2, cy + 32, `500 28px ${G}`, 'center', 1.0)
       cy += rowH
     })
   }
