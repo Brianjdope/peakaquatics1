@@ -327,24 +327,28 @@ export default function Preloader({ onComplete }) {
                 </span>
               ))}
 
-              {/* Shimmer sweep — diagonal highlight passes across once */}
+              {/* Soft halo breath — a faint ambient glow blooms once behind
+                  the title and dissolves. Quiet, no movement of light across
+                  the letters — just a sense of weight settling in. */}
               {showShimmer && (
                 <motion.div
-                  initial={{ x: '-120%', opacity: 0 }}
-                  animate={{ x: '120%', opacity: [0, 1, 1, 0] }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: [0, 0.45, 0], scale: 1.15 }}
                   transition={{
-                    x: { duration: 1.3, ease: 'easeInOut' },
-                    opacity: { duration: 1.3, times: [0, 0.15, 0.85, 1] },
+                    opacity: { duration: 1.8, times: [0, 0.35, 1], ease: 'easeOut' },
+                    scale: { duration: 1.8, ease: EASE_OUT_EXPO },
                   }}
                   style={{
                     position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '110%',
+                    height: '180%',
                     background:
-                      'linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.22) 50%, transparent 62%)',
+                      'radial-gradient(ellipse at center, rgba(255,255,255,0.10) 0%, transparent 60%)',
                     pointerEvents: 'none',
+                    zIndex: -1,
                   }}
                 />
               )}
