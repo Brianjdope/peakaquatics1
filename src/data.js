@@ -35,6 +35,26 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'zone-select-2026': {
+    tag: 'Achievement',
+    date: 'June 8, 2026',
+    title: 'Ryker Levi & Ethan Reines Named to USA Swimming Eastern Zone Select Camp',
+    img: '/photos/ethan-reines-state-record.jpg',
+    imgPos: 'center 40%',
+    excerpt: 'Two of our top age-group athletes earn invitations to USA Swimming\'s prestigious Eastern Zone Select Camp — a national developmental program reserved for the highest-ranked swimmers in their age groups.',
+    body: [
+      'Congratulations to Ryker Levi (15) and Ethan Reines (14) on being named to the 2026 USA Swimming Eastern Zone Select Camp — one of the most prestigious developmental honors a young American swimmer can earn.',
+      'What is the Zone Select Camp?',
+      'Operated by USA Swimming, the Zone Select Camp is a national identification and development program for the country\'s top age-group athletes — the 13-14 and 15-16 age groups. Athletes are selected from each of USA Swimming\'s four geographic zones (Eastern, Southern, Central, and Western) based strictly on national age-group rankings, with only a small number of swimmers invited from each zone every year.',
+      'The camp combines elite training, technique work, race strategy, and mental performance coaching led by USA Swimming national team staff and some of the country\'s top NCAA coaches. It exposes athletes to the standards and systems used at the highest levels of the sport — and serves as a recognized stepping stone on the development pathway from age-group swimming toward National Junior Team and beyond.',
+      'How They Earned It',
+      'Ethan Reines (14) earned his selection on the strength of a breakout long course season — including two New Jersey State Records (500Y Freestyle 4:30.88 and 800M Freestyle 8:23.11), multiple Winter Junior National qualifying times, and a national #2 ranking in the 13-14 boys 800M Freestyle for the 2025–2026 long course season.',
+      'Ryker Levi (15) earned his invitation after a string of national-level performances headlined by a Toyota National Championship qualifying time of 54.14 in the 100M Butterfly. Ryker has also racked up cuts and personal bests across the 100M Freestyle, 200M Butterfly, and 50M Butterfly throughout the 2026 season.',
+      'What\'s Next',
+      'Both athletes will represent Peak Aquatic Sports at the camp later this year, training and competing alongside the East Coast\'s top age-group swimmers under the eye of USA Swimming\'s national coaching staff. Selection at this level reinforces what we already see in the pool every day — these are two extraordinary young athletes with very bright futures ahead.',
+      'Congratulations to Ryker, Ethan, and their families on a tremendous honor!',
+    ],
+  },
   'scarlet-memorial-2026': {
     tag: 'Competition',
     date: 'May 24, 2026',
@@ -658,7 +678,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'scarlet-memorial-2026', featured: true },
+  { id: 'zone-select-2026', featured: true },
+  { id: 'scarlet-memorial-2026' },
   { id: 'ymca-nationals-2026' },
   { id: 'speedo-sectionals-2026' },
   { id: 'ethan-state-record' },
