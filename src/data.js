@@ -51,7 +51,7 @@ export const ARTICLES = {
       'Ethan Reines (14) earned his selection on the strength of a breakout long course season — including two New Jersey State Records (500Y Freestyle 4:30.88 and 800M Freestyle 8:23.11), multiple Winter Junior National qualifying times, and a national #2 ranking in the 13-14 boys 800M Freestyle for the 2025–2026 long course season.',
       'Ryker Levi (15) earned his invitation after a string of national-level performances headlined by a Toyota National Championship qualifying time of 54.14 in the 100M Butterfly. Ryker has also racked up cuts and personal bests across the 100M Freestyle, 200M Butterfly, and 50M Butterfly throughout the 2026 season.',
       'What\'s Next',
-      'Both athletes will represent Peak Aquatic Sports at the camp later this year, training and competing alongside the East Coast\'s top age-group swimmers under the eye of USA Swimming\'s national coaching staff. Selection at this level reinforces what we already see in the pool every day — these are two extraordinary young athletes with very bright futures ahead.',
+      'Both athletes will represent Scarlet Aquatics (their club team) at the camp later this year, training and competing alongside the East Coast\'s top age-group swimmers under the eye of USA Swimming\'s national coaching staff. Selection at this level reinforces what we already see in the pool every day — these are two extraordinary young athletes with very bright futures ahead.',
       'Congratulations to Ryker, Ethan, and their families on a tremendous honor!',
     ],
   },
