@@ -39,8 +39,8 @@ export const ARTICLES = {
     tag: 'Achievement',
     date: 'June 8, 2026',
     title: 'Ryker Levi & Ethan Reines Named to USA Swimming Eastern Zone Select Camp',
-    img: '/photos/ethan-reines-state-record.jpg',
-    imgPos: 'center 40%',
+    img: '/photos/zone-select-2026.jpg',
+    imgPos: 'center top',
     excerpt: 'Two of our top age-group athletes earn invitations to USA Swimming\'s prestigious Eastern Zone Select Camp — a national developmental program reserved for the highest-ranked swimmers in their age groups.',
     body: [
       'Congratulations to Ryker Levi (15) and Ethan Reines (14) on being named to the 2026 USA Swimming Eastern Zone Select Camp — one of the most prestigious developmental honors a young American swimmer can earn.',
