@@ -39,8 +39,9 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'June 19, 2026',
     title: '2026 TYR Pro Series — Indianapolis',
-    img: '/photos/ethan-reines-state-record.jpg',
-    imgPos: 'center 40%',
+    img: '/photos/tyr-pro-series-logo.png',
+    imgPos: 'center',
+    imgStyle: { objectFit: 'contain', background: '#0a1f3d', padding: '1.5rem' },
     gallery: [
       '/photos/tyr-pro-2026/1.jpg',
       '/photos/tyr-pro-2026/2.jpg',

@@ -63,7 +63,7 @@ export default function NewsModal({ id, onClose }) {
               className="modal-img"
               src={article.img}
               alt={article.title}
-              style={{ objectPosition: article.imgPos || 'center 30%' }}
+              style={{ objectPosition: article.imgPos || 'center 30%', ...article.imgStyle }}
             />
             <div className="modal-body">
               <div className="modal-meta">

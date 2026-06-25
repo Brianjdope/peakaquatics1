@@ -42,7 +42,7 @@ export default function NewsPage() {
                   <img
                     src={ARTICLES[featured.id].img}
                     alt={ARTICLES[featured.id].title}
-                    style={{ objectPosition: ARTICLES[featured.id].imgPos || 'center 30%' }}
+                    style={{ objectPosition: ARTICLES[featured.id].imgPos || 'center 30%', ...ARTICLES[featured.id].imgStyle }}
                   />
                 </div>
                 <div className="news-featured-body">
@@ -73,7 +73,7 @@ export default function NewsPage() {
                         className="news-card-img"
                         src={a.img}
                         alt={a.title}
-                        style={{ objectPosition: a.imgPos || 'center 30%' }}
+                        style={{ objectPosition: a.imgPos || 'center 30%', ...a.imgStyle }}
                       />
                       <div className="news-card-body">
                         <span className="article-tag">{a.tag}</span>
