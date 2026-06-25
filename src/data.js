@@ -35,6 +35,25 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'tyr-pro-indy-2026': {
+    tag: 'Competition',
+    date: 'June 19, 2026',
+    title: '2026 TYR Pro Series — Indianapolis',
+    img: '/photos/ethan-reines-state-record.jpg',
+    imgPos: 'center 40%',
+    excerpt: 'Our athletes traveled to the prestigious TYR Pro Series in Indianapolis — one of USA Swimming\'s premier elite meets. Ryker Levi delivers a lifetime best in the 200M Butterfly, Joshua Reines doubles in finals, and Ava Lan posts a personal best in the 200M Freestyle.',
+    body: [
+      'June 17 – 19, 2026 — Indiana University Natatorium, Indianapolis, IN',
+      'Our athletes traveled to the prestigious TYR Pro Series — one of USA Swimming\'s premier elite meets, featuring Olympic medalists, national team members, and the country\'s top up-and-coming swimmers. Several Peak Aquatic Sports athletes turned in strong performances against this national field.',
+      'Day 1 — June 17:',
+      'Ethan Reines opened the meet with a 16:22.64 in the 1500M Freestyle, placing 22nd. Ava Lan followed in the same event with a 17:23.94, placing 24th. Stephanie Kim swam 34.18 in the 50M Breaststroke, placing 38th.',
+      'Day 2 — June 18:',
+      'Joshua Reines delivered a standout double-event day — first qualifying for finals in the 200M Breaststroke and placing 28th overall with a 2:22.05, then turning around for the 400M Individual Medley and placing 29th at finals with a 4:39.58. Ava Lan posted a personal best of 2:08.15 in the 200M Freestyle time trial. Ryker Levi swam 54.35 in the 100M Butterfly, right off his lifetime best, placing 29th overall. Stephanie Kim swam 2:42.53 in the 200M Breaststroke, placing 40th.',
+      'Day 3 — June 19:',
+      'Ryker Levi capped off the meet with a lifetime best of 2:01.35 in the 200M Butterfly, placing 17th overall in the national field. Ava Lan finished out the meet with a 4:26.02 in the 400M Freestyle, placing 51st.',
+      'Congratulations to all of our athletes on a fantastic showing at this elite-level meet!',
+    ],
+  },
   'zone-select-2026': {
     tag: 'Achievement',
     date: 'June 8, 2026',
@@ -678,7 +697,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'zone-select-2026', featured: true },
+  { id: 'tyr-pro-indy-2026', featured: true },
+  { id: 'zone-select-2026' },
   { id: 'scarlet-memorial-2026' },
   { id: 'ymca-nationals-2026' },
   { id: 'speedo-sectionals-2026' },
