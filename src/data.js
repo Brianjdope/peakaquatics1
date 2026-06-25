@@ -41,6 +41,12 @@ export const ARTICLES = {
     title: '2026 TYR Pro Series — Indianapolis',
     img: '/photos/ethan-reines-state-record.jpg',
     imgPos: 'center 40%',
+    gallery: [
+      '/photos/tyr-pro-2026/1.jpg',
+      '/photos/tyr-pro-2026/2.jpg',
+      '/photos/tyr-pro-2026/3.jpg',
+      '/photos/tyr-pro-2026/4.jpg',
+    ],
     excerpt: 'Our athletes traveled to the prestigious TYR Pro Series in Indianapolis — one of USA Swimming\'s premier elite meets. Ryker Levi delivers a lifetime best in the 200M Butterfly, Joshua Reines doubles in finals, and Ava Lan posts a personal best in the 200M Freestyle.',
     body: [
       'June 17 – 19, 2026 — Indiana University Natatorium, Indianapolis, IN',
