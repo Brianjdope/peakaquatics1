@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ARTICLES } from '../data'
 
@@ -98,52 +99,61 @@ export default function NewsModal({ id, onClose }) {
             </div>
           </motion.div>
 
-          {/* Lightbox */}
-          <AnimatePresence>
-            {lightboxIndex !== null && gallery && (
-              <motion.div
-                className="modal-lightbox"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                onClick={(e) => { if (e.target === e.currentTarget) closeLightbox() }}
-              >
-                <button
-                  className="modal-lightbox-close"
-                  onClick={closeLightbox}
-                  aria-label="Close photo"
-                >✕</button>
-                {gallery.length > 1 && (
-                  <>
-                    <button
-                      className="modal-lightbox-nav modal-lightbox-prev"
-                      onClick={prevPhoto}
-                      aria-label="Previous photo"
-                    >‹</button>
-                    <button
-                      className="modal-lightbox-nav modal-lightbox-next"
-                      onClick={nextPhoto}
-                      aria-label="Next photo"
-                    >›</button>
-                  </>
-                )}
-                <motion.img
-                  key={lightboxIndex}
-                  className="modal-lightbox-img"
-                  src={gallery[lightboxIndex]}
-                  alt={`Photo ${lightboxIndex + 1} of ${gallery.length}`}
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                />
-                <div className="modal-lightbox-counter">
-                  {lightboxIndex + 1} / {gallery.length}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </motion.div>
+      )}
+
+      {/* Lightbox — rendered via portal so it escapes the modal-backdrop's
+          backdrop-filter containing block. With backdrop-filter set on the
+          backdrop, any descendant with position:fixed would be positioned
+          relative to the (scrolled) backdrop, not the viewport — meaning the
+          lightbox would appear off-screen above whatever the user is reading.
+          Portaling to document.body keeps position:fixed truly viewport-fixed. */}
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {lightboxIndex !== null && gallery && (
+            <motion.div
+              className="modal-lightbox"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => { if (e.target === e.currentTarget) closeLightbox() }}
+            >
+              <button
+                className="modal-lightbox-close"
+                onClick={closeLightbox}
+                aria-label="Close photo"
+              >✕</button>
+              {gallery.length > 1 && (
+                <>
+                  <button
+                    className="modal-lightbox-nav modal-lightbox-prev"
+                    onClick={prevPhoto}
+                    aria-label="Previous photo"
+                  >‹</button>
+                  <button
+                    className="modal-lightbox-nav modal-lightbox-next"
+                    onClick={nextPhoto}
+                    aria-label="Next photo"
+                  >›</button>
+                </>
+              )}
+              <motion.img
+                key={lightboxIndex}
+                className="modal-lightbox-img"
+                src={gallery[lightboxIndex]}
+                alt={`Photo ${lightboxIndex + 1} of ${gallery.length}`}
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              />
+              <div className="modal-lightbox-counter">
+                {lightboxIndex + 1} / {gallery.length}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
       )}
     </AnimatePresence>
   )
