@@ -46,6 +46,9 @@ export const ARTICLES = {
       '/photos/tyr-pro-2026/2.jpg',
       '/photos/tyr-pro-2026/3.jpg',
       '/photos/tyr-pro-2026/4.jpg',
+      '/photos/tyr-pro-2026/5.jpg',
+      '/photos/tyr-pro-2026/6.jpg',
+      '/photos/tyr-pro-2026/7.jpg',
     ],
     excerpt: 'Our athletes traveled to the prestigious TYR Pro Series in Indianapolis — one of USA Swimming\'s premier elite meets. Ryker Levi delivers a lifetime best in the 200M Butterfly, Joshua Reines doubles in finals, and Ava Lan posts a personal best in the 200M Freestyle.',
     body: [
