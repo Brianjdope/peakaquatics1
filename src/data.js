@@ -852,7 +852,7 @@ export const RECORDS_TABLES = {
   'lcm-girls-14': buildTable('LCM Girls 14 & Under', [
     r('50 Free',    p('Chloe Kim',      '27.72',    2022), p('Emma Zhang',        '27.79',    2026), p('Jessica Sung',       '28.52',    2025)),
     r('100 Free',   p('Chloe Kim',      '59.36',    2022), p('Emma Zhang',        '1:00.66',  2026), p('Rebekah Jung',       '1:01.87',  2022)),
-    r('200 Free',   p('Chloe Kim',      '2:04.81',  2022), p('Ava Lan',           '2:09.09',  2026), p('Emma Zhang',         '2:11.40',  2025)),
+    r('200 Free',   p('Chloe Kim',      '2:04.81',  2022), p('Ava Lan',           '2:09.09',  2026), p('Emma Zhang',         '2:11.04',  2026)),
     r('400 Free',   p('Chloe Kim',      '4:18.60',  2022), p('Ava Lan',           '4:26.15',  2026), p('Susie Lee',          '4:30.82',  2019)),
     r('800 Free',   p('Chloe Kim',      '8:47.86',  2022), p('Ava Lan',           '9:09.68',  2026), p('Susie Lee',          '9:17.66',  2020)),
     r('1500 Free',  p('Chloe Kim',      '16:36.10', 2022), p('Ava Lan',           '17:27.68', 2026), p('Lauren Muller',      '18:23.22', 2022)),
