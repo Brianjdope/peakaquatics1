@@ -35,6 +35,27 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'summer-champs-2026': {
+    tag: 'Competition',
+    date: 'July 12, 2026',
+    title: '2026 Senior Metropolitan & Central Zone Summer Championships',
+    img: '/photos/ethan-reines-state-record.jpg',
+    imgPos: 'center 40%',
+    excerpt: 'Our athletes competed across two championship meets this week — the MR TYR Senior Metropolitan Summer Championships and the Central Zone North Summer Championships in Westmont. Sienna Cho earns her first Summer Junior National Cut and a wave of lifetime bests pour in across the board.',
+    body: [
+      'July 9 – 12, 2026 — MR TYR Senior Metropolitan Summer Championships & Central Zone North Summer Championships (Westmont)',
+      'Our athletes split across two championship meets this week, and the results were outstanding — highlighted by a first Summer Junior National Cut and a flood of lifetime bests.',
+      'Day 1 — July 9:',
+      'Sienna Cho made her first Summer Junior National Cut in the 800M Freestyle with a 9:05.06, placing 9th at Senior Mets! At Central Zone (Westmont), Chase Kim placed 13th in the 200M Butterfly with a personal best of 2:07.01. Sebastian Hendrawan posted a lifetime best of 1:08.94 in the 100M Breaststroke and a 16:39.12 in the 1500M Freestyle. Milo Pfeifer swam a lifetime best of 16:30.85 in the 1500M Freestyle.',
+      'Day 2 — July 10:',
+      'Sean Darder dropped a lifetime best of 1:05.99 in the 100M Breaststroke at Senior Mets. Sienna Cho posted a best time of 2:06.25 in the 200M Freestyle and a best of 5:08.24 in the 400M IM. Milo Pfeifer went a lifetime best of 4:48.01 in the 400M IM, with Chase Kim right behind at a best of 4:49.14.',
+      'Day 3 — July 11:',
+      'Sebastian Hendrawan posted a lifetime best of 4:12.98 in the 400M Freestyle, with Milo Pfeifer close behind at a best of 4:15.36.',
+      'Day 4 — July 12:',
+      'The distance crew closed out the meet in style — Sebastian Hendrawan (8:44.35) and Milo Pfeifer (8:44.63) both went lifetime bests in the 800M Freestyle, touching within two-tenths of each other. Joshua Reines posted a best of 2:10.33 in the 200M IM, and Sean Darder swam a 2:25.61 in the 200M Breaststroke.',
+      'Congratulations to all of our athletes on a phenomenal week of racing!',
+    ],
+  },
   'tyr-pro-indy-2026': {
     tag: 'Competition',
     date: 'June 19, 2026',
@@ -706,7 +727,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'tyr-pro-indy-2026', featured: true },
+  { id: 'summer-champs-2026', featured: true },
+  { id: 'tyr-pro-indy-2026' },
   { id: 'zone-select-2026' },
   { id: 'scarlet-memorial-2026' },
   { id: 'ymca-nationals-2026' },
