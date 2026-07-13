@@ -39,9 +39,10 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'July 12, 2026',
     title: '2026 Senior Metropolitan & Central Zone Summer Championships',
-    img: '/photos/ethan-reines-state-record.jpg',
-    imgPos: 'center 40%',
-    excerpt: 'Our athletes competed across two championship meets this week — the MR TYR Senior Metropolitan Summer Championships and the Central Zone North Summer Championships in Westmont. Sienna Cho earns her first Summer Junior National Cut and a wave of lifetime bests pour in across the board.',
+    img: '/photos/speedo-sectionals-westmont-2026.jpg',
+    imgPos: 'center',
+    imgStyle: { objectFit: 'contain', background: '#ffffff' },
+    excerpt: 'Sienna Cho makes her first Summer Junior National Cut! Our athletes competed across two championship meets this week — the MR TYR Senior Metropolitan Summer Championships and the Central Zone North Summer Championships (Speedo Sectionals) in Westmont, IL — with a wave of lifetime bests across the board.',
     body: [
       'July 9 – 12, 2026 — MR TYR Senior Metropolitan Summer Championships & Central Zone North Summer Championships (Westmont)',
       'Our athletes split across two championship meets this week, and the results were outstanding — highlighted by a first Summer Junior National Cut and a flood of lifetime bests.',
