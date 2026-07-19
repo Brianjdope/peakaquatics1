@@ -875,7 +875,7 @@ export const RECORDS_TABLES = {
   'lcm-girls-14': buildTable('LCM Girls 14 & Under', [
     r('50 Free',    p('Chloe Kim',      '27.72',    2022), p('Emma Zhang',        '27.79',    2026), p('Jessica Sung',       '28.52',    2025)),
     r('100 Free',   p('Chloe Kim',      '59.36',    2022), p('Emma Zhang',        '1:00.66',  2026), p('Rebekah Jung',       '1:01.87',  2022)),
-    r('200 Free',   p('Chloe Kim',      '2:04.81',  2022), p('Ava Lan',           '2:09.09',  2026), p('Emma Zhang',         '2:11.04',  2026)),
+    r('200 Free',   p('Chloe Kim',      '2:04.81',  2022), p('Ava Lan',           '2:09.09',  2026), p('Emma Zhang',         '2:10.69',  2026)),
     r('400 Free',   p('Chloe Kim',      '4:18.60',  2022), p('Ava Lan',           '4:26.15',  2026), p('Susie Lee',          '4:30.82',  2019)),
     r('800 Free',   p('Chloe Kim',      '8:47.86',  2022), p('Ava Lan',           '9:09.68',  2026), p('Susie Lee',          '9:17.66',  2020)),
     r('1500 Free',  p('Chloe Kim',      '16:36.10', 2022), p('Ava Lan',           '17:27.68', 2026), p('Lauren Muller',      '18:23.22', 2022)),
@@ -885,7 +885,7 @@ export const RECORDS_TABLES = {
     r('200 Fly',    p('Chloe Kim',      '2:19.50',  2022), p('Jessica Sung',      '2:22.80',  2025), p('Susie Lee',          '2:24.06',  2019)),
     r('50 Breast',  p('Emma Zhang',     '35.52',    2026), p('',                  '',         ''),    p('',                   '',         '')),
     r('100 Breast', p('Stephanie Kim',  '1:13.91',  2024), p('Emma Zhang',        '1:13.98',  2025), p('Chloe Kim',          '1:14.87',  2022)),
-    r('200 Breast', p('Chloe Kim',      '2:38.66',  2022), p('Stephanie Kim',     '2:38.75',  2024), p('Madelyn Raguindin',  '2:44.55',  2023)),
+    r('200 Breast', p('Chloe Kim',      '2:38.66',  2022), p('Stephanie Kim',     '2:38.75',  2024), p('Emma Zhang',         '2:43.49',  2026)),
     r('200 IM',     p('Chloe Kim',      '2:18.79',  2022), p('Ava Lan',           '2:25.31',  2026), p('Susie Lee',          '2:25.46',  2019)),
     r('400 IM',     p('Chloe Kim',      '4:51.63',  2022), p('Susie Lee',         '5:04.43',  2019), p('Ava Lan',            '5:06.04',  2026)),
   ]),
