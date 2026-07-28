@@ -35,6 +35,29 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'nj-gold-champs-2026': {
+    tag: 'Competition',
+    date: 'July 26, 2026',
+    title: '2026 NJ Swim LC Gold & PA YMCA Summer Championships',
+    img: '/photos/ethan-reines-state-record.jpg',
+    imgPos: 'center 40%',
+    excerpt: 'Joshua Reines and Chase Kim both earn Winter Junior National cuts at the NJ Swim LC Gold Championships, headlining a four-day flood of lifetime bests. Meanwhile Cole Wilson drops over three seconds at the PA YMCA Summer Championships.',
+    body: [
+      'July 23 – 26, 2026 — Sonny Werblin Recreation Center (NJ Swim LC Gold Championships)',
+      'Our athletes delivered a phenomenal four days at the NJ Swim Long Course Gold Championships, headlined by two Winter Junior National cuts and a steady stream of lifetime bests across every stroke and distance.',
+      'Day 1 — July 23:',
+      'Sebastian Hendrawan opened the meet with a lifetime best of 16:33.64 in the 1500M Freestyle.',
+      'Day 2 — July 24:',
+      'Joshua Reines earned a Winter Junior National cut in the 100M Breaststroke with a 1:05.67! Ava Lan went lifetime bests in the 200M Freestyle (2:07.65) and 100M Breaststroke (1:19.04). Chase Kim posted best times in the 200M Freestyle (1:59.16), 100M Butterfly (58.24), and 100M Backstroke (1:01.04). Eric Shin went a best of 1:01.48 in the 100M Butterfly. Matthew Jun dropped over two seconds for a best of 59.59 in the 100M Backstroke. Sebastian Hendrawan added another best in the 200M Freestyle with a 2:00.29.',
+      'Day 3 — July 25:',
+      'Chase Kim earned his first Winter Junior National cut in the 200M Butterfly with a 2:05.56! Collin Lee posted a lifetime best of 2:12.33 in the 200M Butterfly. Ava Lan went best times in the 50M Freestyle (28.18) and 200M Breaststroke (2:46.07). Matthew Jun swam a best of 27.92 in the 50M Backstroke, with Eric Shin close behind at a best of 29.24. Milo Pfeifer posted a lifetime best of 4:45.26 in the 400M IM.',
+      'Day 4 — July 26:',
+      'The team closed out with a strong showing in the 200M IM — Joshua Reines led with a best of 2:09.69, Ethan Reines went 2:12.05, Milo Pfeifer posted 2:17.01, and Ava Lan swam a best of 2:24.02, all lifetime bests.',
+      'July 25 – 26, 2026 — York YMCA, Graham Aquatic Center (PA YMCA Summer Championships)',
+      'At the PA YMCA Summer Championships, Cole Wilson dropped over three seconds in the 100Y Breaststroke with a 57.78, and added a lifetime best of 1:56.96 in the 200Y IM.',
+      'Congratulations to all of our athletes on an incredible week of racing!',
+    ],
+  },
   'summer-champs-2026': {
     tag: 'Competition',
     date: 'July 12, 2026',
@@ -728,7 +751,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'summer-champs-2026', featured: true },
+  { id: 'nj-gold-champs-2026', featured: true },
+  { id: 'summer-champs-2026' },
   { id: 'tyr-pro-indy-2026' },
   { id: 'zone-select-2026' },
   { id: 'scarlet-memorial-2026' },
