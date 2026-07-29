@@ -987,7 +987,7 @@ export const RECORDS_TABLES = {
   // ═══════════════════════════════════════════════════════════
   'lcm-women': buildTable("LCM Women's Open", [
     r('50 Free',    p('Jessie Wolf',       '27.07',    2025), p('Chloe Kim',         '27.26',    2025), p('Grace Lee',          '27.53',    2022)),
-    r('100 Free',   p('Kate Hurst',        '57.27',    2024), p('Jessie Wolf',       '58.36',    2025), p('Chloe Kim',          '58.44',    2022)),
+    r('100 Free',   p('Kate Hurst',        '57.27',    2024), p('Taylor Leishman',   '58.13',    2026), p('Jessie Wolf',        '58.30',    2026)),
     r('200 Free',   p('Kate Hurst',        '2:00.32',  2024), p('Chloe Kim',         '2:02.85',  2025), p('Grace Lee',          '2:04.83',  2023)),
     r('400 Free',   p('Kate Hurst',        '4:10.89',  2024), p('Chloe Kim',         '4:15.02',  2025), p('Kathleen Turano',    '4:19.53',  2025)),
     r('800 Free',   p('Kate Hurst',        '8:28.92',  2024), p('Chloe Kim',         '8:42.31',  2025), p('Kathleen Turano',    '8:51.43',  2025)),
