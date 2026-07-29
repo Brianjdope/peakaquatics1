@@ -42,6 +42,11 @@ export const ARTICLES = {
     img: '/photos/matthew-jun-nj-gold-2026.jpg',
     imgPos: 'center 35%',
     highlight: 'Chase Kim earned his first-ever Winter Junior National cut in the 200M Butterfly (2:05.56)!',
+    video: {
+      src: '/videos/chase-cut-2026.mp4',
+      poster: '/photos/chase-cut-poster.jpg',
+      caption: 'Chase Kim races to his first Winter Junior National cut in the 200M Butterfly.',
+    },
     excerpt: 'Joshua Reines and Chase Kim both earn Winter Junior National cuts at the NJ Swim LC Gold Championships, headlining a four-day flood of lifetime bests. Meanwhile Cole Wilson drops over three seconds at the PA YMCA Summer Championships.',
     body: [
       'July 23 – 26, 2026 — Sonny Werblin Recreation Center (NJ Swim LC Gold Championships)',

@@ -79,6 +79,21 @@ export default function NewsModal({ id, onClose }) {
                   <span className="modal-highlight-text">{article.highlight}</span>
                 </div>
               )}
+              {article.video && (
+                <div className="modal-video">
+                  <video
+                    className="modal-video-player"
+                    src={article.video.src}
+                    poster={article.video.poster}
+                    controls
+                    playsInline
+                    preload="none"
+                  />
+                  {article.video.caption && (
+                    <p className="modal-video-caption">{article.video.caption}</p>
+                  )}
+                </div>
+              )}
               <div style={{ marginTop: '1.5rem' }}>
                 {article.body.map((para, i) => (
                   <p key={i}>{para}</p>
