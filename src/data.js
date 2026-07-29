@@ -39,8 +39,9 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'July 26, 2026',
     title: '2026 NJ Swim LC Gold & PA YMCA Summer Championships',
-    img: '/photos/ethan-reines-state-record.jpg',
-    imgPos: 'center 40%',
+    img: '/photos/matthew-jun-nj-gold-2026.jpg',
+    imgPos: 'center 35%',
+    highlight: 'Chase Kim earned his first-ever Winter Junior National cut in the 200M Butterfly (2:05.56)!',
     excerpt: 'Joshua Reines and Chase Kim both earn Winter Junior National cuts at the NJ Swim LC Gold Championships, headlining a four-day flood of lifetime bests. Meanwhile Cole Wilson drops over three seconds at the PA YMCA Summer Championships.',
     body: [
       'July 23 – 26, 2026 — Sonny Werblin Recreation Center (NJ Swim LC Gold Championships)',
@@ -65,6 +66,7 @@ export const ARTICLES = {
     img: '/photos/speedo-sectionals-westmont-2026.jpg',
     imgPos: 'center',
     imgStyle: { objectFit: 'contain', background: '#ffffff' },
+    highlight: 'Sienna Cho earned her first-ever Summer Junior National cut in the 800M Freestyle (9:05.06), placing 9th!',
     excerpt: 'Sienna Cho makes her first Summer Junior National Cut! Our athletes competed across two championship meets this week — the MR TYR Senior Metropolitan Summer Championships and the Central Zone North Summer Championships (Speedo Sectionals) in Westmont, IL — with a wave of lifetime bests across the board.',
     body: [
       'July 9 – 12, 2026 — MR TYR Senior Metropolitan Summer Championships & Central Zone North Summer Championships (Westmont)',

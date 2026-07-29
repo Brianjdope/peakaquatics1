@@ -73,6 +73,12 @@ export default function NewsModal({ id, onClose }) {
                 <span className="article-date">{article.date}</span>
               </div>
               <h2>{article.title}</h2>
+              {article.highlight && (
+                <div className="modal-highlight">
+                  <span className="modal-highlight-badge">Highlight</span>
+                  <span className="modal-highlight-text">{article.highlight}</span>
+                </div>
+              )}
               <div style={{ marginTop: '1.5rem' }}>
                 {article.body.map((para, i) => (
                   <p key={i}>{para}</p>
