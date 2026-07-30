@@ -21,6 +21,8 @@ export const STATS = [
 // Recent athlete milestones — shown in a horizontal scrolling band on the
 // home page. Most recent first. Keep result short & punchy (ALL CAPS in UI).
 export const MILESTONES = [
+  { tag: 'First Winter Junior Cut',  time: '2:05.56',  event: '200M Butterfly',     name: 'Chase Kim',       date: 'Jul 2026' },
+  { tag: 'First Summer Junior Cut',  time: '9:05.06',  event: '800M Freestyle',     name: 'Sienna Cho',      date: 'Jul 2026' },
   { tag: 'NJ State Record',          time: '8:23.11',  event: '800M Freestyle',     name: 'Ethan Reines',    date: 'May 2026' },
   { tag: 'Toyota Nationals Cut',     time: '54.14',    event: '100M Butterfly',     name: 'Ryker Levi',      date: 'Mar 2026' },
   { tag: 'World Junior Champion',    time: '16:09.37', event: '1500M Freestyle',    name: 'Kate Hurst',      date: '2023' },
