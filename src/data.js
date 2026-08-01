@@ -978,6 +978,7 @@ export const RECORDS_TABLES = {
     r('50 Fly',     p('Ryker Levi',          '24.78',    2026), p('',                    '',         ''),    p('',                    '',         '')),
     r('100 Fly',    p('Ryker Levi',          '54.14',    2026), p('Richard Poplawski',   '54.96',    2024), p('Timothy Lee',          '56.34',    2025)),
     r('200 Fly',    p('Ryker Levi',          '2:01.35',  2026), p('Richard Poplawski',   '2:01.40',  2024), p('Chase Kim',            '2:05.56',  2026)),
+    r('50 Breast',  p('Sean Darder',         '29.99',    2026), p('Will Mulder',         '30.99',    2026), p('',                    '',         '')),
     r('100 Breast', p('Eric Lee',            '1:04.49',  2023), p('Dimitri Melnikov',    '1:05.18',  2024), p('Joshua Reines',        '1:05.67',  2026)),
     r('200 Breast', p('Joshua Reines',       '2:20.91',  2026), p('Eric Lee',            '2:21.52',  2022), p('Michael Granin',       '2:23.48',  2024)),
     r('200 IM',     p('Richard Poplawski',   '2:03.26',  2024), p('Eric Lee',            '2:04.96',  2022), p('Timothy Lee',          '2:08.05',  2025)),
@@ -988,14 +989,14 @@ export const RECORDS_TABLES = {
   // LCM WOMEN'S OPEN
   // ═══════════════════════════════════════════════════════════
   'lcm-women': buildTable("LCM Women's Open", [
-    r('50 Free',    p('Jessie Wolf',       '27.07',    2025), p('Chloe Kim',         '27.26',    2025), p('Grace Lee',          '27.53',    2022)),
+    r('50 Free',    p('Jessie Wolf',       '26.90',    2026), p('Chloe Kim',         '27.26',    2025), p('Grace Lee',          '27.53',    2022)),
     r('100 Free',   p('Kate Hurst',        '57.27',    2024), p('Taylor Leishman',   '58.13',    2026), p('Jessie Wolf',        '58.30',    2026)),
     r('200 Free',   p('Kate Hurst',        '2:00.32',  2024), p('Chloe Kim',         '2:02.85',  2025), p('Grace Lee',          '2:04.83',  2023)),
     r('400 Free',   p('Kate Hurst',        '4:10.89',  2024), p('Chloe Kim',         '4:15.02',  2025), p('Kathleen Turano',    '4:19.53',  2025)),
     r('800 Free',   p('Kate Hurst',        '8:28.92',  2024), p('Chloe Kim',         '8:42.31',  2025), p('Kathleen Turano',    '8:51.43',  2025)),
     r('1500 Free',  p('Kate Hurst',        '16:09.37', 2023), p('Chloe Kim',         '16:22.56', 2025), p('Kathleen Turano',    '16:59.01', 2025)),
     r('100 Back',   p('Chloe Kim',         '1:04.96',  2023), p('Rebekah Jung',      '1:06.14',  2024), p('Sienna Cho',         '1:07.67',  2026)),
-    r('200 Back',   p('Chloe Kim',         '2:17.40',  2025), p('Sienna Cho',        '2:22.52',  2026), p('Rebekah Jung',       '2:23.67',  2024)),
+    r('200 Back',   p('Chloe Kim',         '2:17.40',  2025), p('Sienna Cho',        '2:21.78',  2026), p('Rebekah Jung',       '2:23.67',  2024)),
     r('100 Fly',    p('Chloe Kim',         '1:01.92',  2025), p('Kate Hurst',        '1:04.43',  2023), p('Kayla Rodriguez',    '1:04.68',  2025)),
     r('200 Fly',    p('Chloe Kim',         '2:12.69',  2025), p('Kate Hurst',        '2:17.46',  2023), p('Kathleen Turano',    '2:19.31',  2025)),
     r('50 Breast',  p('Stephanie Kim',     '33.58',    2026), p('',                  '',         ''),    p('',                   '',         '')),
