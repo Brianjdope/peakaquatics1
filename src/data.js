@@ -37,6 +37,30 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'ymca-futures-2026': {
+    tag: 'Competition',
+    date: 'August 1, 2026',
+    title: '2026 Long Course YMCA Championships & USA Swimming Futures',
+    img: '/photos/matthew-jun-nj-gold-2026.jpg',
+    imgPos: 'center 35%',
+    highlight: 'Taylor Leishman lands on the podium — 3rd in the 100M Freestyle and 4th in the 100M Backstroke — at USA Swimming Futures!',
+    excerpt: 'Our athletes closed out the summer at two of the country\'s premier meets — the Long Course YMCA National Championships in Greensboro and USA Swimming Futures in Ocala, FL. Taylor Leishman earns two finals podium finishes and lifetime bests pour in across five days of racing.',
+    body: [
+      'July 28 – August 1, 2026 — Florida Aquatics Swimming & Training (Ocala, FL) & Greensboro Aquatic Center',
+      'Our athletes wrapped up the long course season at two of the nation\'s top summer meets — the Long Course YMCA National Championships and USA Swimming Futures — turning in a phenomenal week of finals swims and lifetime bests.',
+      'Day 1 — July 28:',
+      'Taylor Leishman went a lifetime best of 58.13 in the 100M Freestyle, placing 3rd at finals! Jessie Wolf also went a best time of 58.30, placing 11th. Cole Wilson swam a 54.81 in the 100M Freestyle and Jeremiah Rhee posted a lifetime best of 55.07. Isabella Kowalski went a best time of 37.57 in the 50M Breaststroke.',
+      'Day 2 — July 29:',
+      'Jeremiah Rhee dropped 0.77 for a personal best of 1:56.16 in the 200M Freestyle, and Jessie Wolf swam a 2:12.69 (42nd). Taylor Leishman went a best time of 30.76 in the 50M Backstroke, dropping 0.46 to place 8th. Isabella Kowalski swam a lifetime best of 2:48.48 in the 200M Breaststroke (25th). Cole Wilson led off the 4x100 Freestyle relay with a best 100M split of 53.88. At Greensboro, Ethan Reines went a lifetime best of 2:07.90 in the 200M Butterfly, dropping 0.64 to place 20th, and Ryker Levi swam a lifetime best of 24.55 in the 50M Butterfly at finals.',
+      'Day 3 — July 30:',
+      'Cole Wilson went a best time of 59.37 in the 100M Butterfly, dropping 0.14. Isabella Kowalski time-trialed a lifetime best of 2:37.30 at YMCA Nationals! Sean Darder posted a best of 1:05.93 in the 100M Breaststroke. Sienna Cho went a lifetime best of 5:05.59 in the 400M IM (12th), and Ethan Reines posted a best of 4:36.65 in the 400M IM to place 10th.',
+      'Day 4 — July 31:',
+      'Sienna Cho went a lifetime best of 4:26.87 in the 400M Freestyle (15th). Isabella Kowalski posted a lifetime best of 1:20.53 in the 100M Breaststroke. Taylor Leishman placed 4th in the 100M Backstroke with a 1:04.89! Jeremiah Rhee went a lifetime best of 4:07.28 in the 400M Freestyle.',
+      'Day 5 — August 1:',
+      'Jessie Wolf broke the 27-second barrier with a 26.90 in the 50M Freestyle, placing 5th! Sienna Cho went a 2:21.78 in the 200M Backstroke. Taylor Leishman posted a best of 2:26.42 in the 200M IM. Sean Darder broke 30 seconds with a 29.92 in the 50M Breaststroke, with Will Mulder right behind at 30.99. Jeremiah Rhee placed 12th in the 200M IM with a lifetime best of 2:12.06.',
+      'Congratulations to all of our athletes on an incredible week and a phenomenal long course season!',
+    ],
+  },
   'nj-gold-champs-2026': {
     tag: 'Competition',
     date: 'July 26, 2026',
@@ -760,7 +784,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'nj-gold-champs-2026', featured: true },
+  { id: 'ymca-futures-2026', featured: true },
+  { id: 'nj-gold-champs-2026' },
   { id: 'summer-champs-2026' },
   { id: 'tyr-pro-indy-2026' },
   { id: 'zone-select-2026' },
