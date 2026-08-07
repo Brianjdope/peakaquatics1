@@ -41,8 +41,8 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'August 1, 2026',
     title: '2026 Long Course YMCA Championships & USA Swimming Futures',
-    img: '/photos/matthew-jun-nj-gold-2026.jpg',
-    imgPos: 'center 35%',
+    img: '/photos/ymca-futures-relay-2026.jpg',
+    imgPos: 'center 58%',
     highlight: 'Taylor Leishman lands on the podium — 3rd in the 100M Freestyle and 4th in the 100M Backstroke — at USA Swimming Futures!',
     excerpt: 'Our athletes closed out the summer at two of the country\'s premier meets — the Long Course YMCA National Championships in Greensboro and USA Swimming Futures in Ocala, FL. Taylor Leishman earns two finals podium finishes and lifetime bests pour in across five days of racing.',
     body: [
