@@ -37,6 +37,28 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'junior-nationals-2026': {
+    tag: 'Competition',
+    date: 'August 7, 2026',
+    title: '2026 U.S. Junior National Championships',
+    img: '/photos/ethan-reines-state-record.jpg',
+    imgPos: 'center 40%',
+    highlight: 'Joshua Reines earns two more Summer Junior National cuts — in the 100M Breaststroke and the 400M IM!',
+    excerpt: 'Our athletes closed out the summer at the U.S. Junior National Championships in Irvine, CA. Joshua Reines earns two more Summer Junior National cuts, and Ryker Levi races to a 17th-place finish in the 200M Butterfly final.',
+    body: [
+      'August 3 – 7, 2026 — William Woollett Jr. Aquatic Center, Irvine, CA',
+      'Our athletes capped off the long course season at the U.S. Junior National Championships — one of the highest levels of age-group racing in the country — with lifetime bests and multiple national qualifying cuts.',
+      'Day 1 — August 3:',
+      'Joshua Reines went a lifetime best of 1:04.87 in the 100M Breaststroke, dropping another 0.80 from the previous weekend to earn another Summer Junior National cut! Stephanie Kim swam a 1:14.43 in the 100M Breaststroke, placing 96th.',
+      'Day 2 — August 4:',
+      'Ryker Levi went a lifetime best of 2:01.10 in the 200M Butterfly, placing 17th at finals, and added a 52.43 in the 100M Freestyle. Ava Lan posted a best time of 5:03.43 in the 400M IM, placing 55th. Joshua Reines went a best time of 4:32.76 in the 400M IM, earning yet another Summer Junior National cut!',
+      'Day 3 — August 5:',
+      'Ryker Levi swam a 54.52 in the 100M Butterfly, placing 19th. Ava Lan went a 4:25.04 in the 400M Freestyle, placing 51st, just off her best time.',
+      'Day 4 — August 6:',
+      'Joshua Reines went a lifetime best of 2:20.09 in the 200M Breaststroke! Ryker Levi swam a 24.49 in the 50M Butterfly, and Stephanie Kim went a 2:38.87 in the 200M Breaststroke to place 50th.',
+      'Congratulations to all of our athletes on a phenomenal week and an outstanding long course season!',
+    ],
+  },
   'ymca-futures-2026': {
     tag: 'Competition',
     date: 'August 1, 2026',
@@ -784,7 +806,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'ymca-futures-2026', featured: true },
+  { id: 'junior-nationals-2026', featured: true },
+  { id: 'ymca-futures-2026' },
   { id: 'nj-gold-champs-2026' },
   { id: 'summer-champs-2026' },
   { id: 'tyr-pro-indy-2026' },
