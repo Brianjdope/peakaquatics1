@@ -42,8 +42,8 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'August 7, 2026',
     title: '2026 U.S. Junior National Championships',
-    img: '/photos/ethan-reines-state-record.jpg',
-    imgPos: 'center 40%',
+    img: '/photos/junior-nationals-2026.jpg',
+    imgPos: 'center 68%',
     highlight: 'Joshua Reines earns two more Summer Junior National cuts — in the 100M Breaststroke and the 400M IM!',
     excerpt: 'Our athletes closed out the summer at the U.S. Junior National Championships in Irvine, CA. Joshua Reines earns two more Summer Junior National cuts, and Ryker Levi races to a 17th-place finish in the 200M Butterfly final.',
     body: [
