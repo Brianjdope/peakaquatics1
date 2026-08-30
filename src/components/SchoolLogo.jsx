@@ -25,6 +25,7 @@ const SCHOOL_LOGOS = {
   'Bryant University':                  '/logos/bryant.jpg',
   'Boston University':                  '/logos/boston-university.png',
   'Williams College':                   '/logos/williams.png',
+  'Bowdoin College':                    '/logos/bowdoin.jpg',
 }
 
 // Fallback color badges for schools not in the image map

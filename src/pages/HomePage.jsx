@@ -41,11 +41,12 @@ const ATHLETE_SLIDES = [
 const FEATURED_SCHOOLS = [
   'Princeton University', 'University of Texas', 'Harvard University',
   'Brown University', 'Columbia University', 'West Point',
-  'Wesleyan University', 'Williams College', 'Tufts University',
-  'Cornell University', 'Northwestern University', 'New York University',
-  'Boston University', 'TCNJ', 'Colgate University',
-  'University of California San Diego', 'Lehigh University',
-  'Holy Cross University', 'Bryant University', 'University of Maine',
+  'Wesleyan University', 'Williams College', 'Bowdoin College',
+  'Tufts University', 'Cornell University', 'Northwestern University',
+  'New York University', 'Boston University', 'TCNJ',
+  'Colgate University', 'University of California San Diego',
+  'Lehigh University', 'Holy Cross University', 'Bryant University',
+  'University of Maine',
 ]
 
 const FEATURES = [
