@@ -118,6 +118,15 @@ export default function NewsModal({ id, onClose }) {
                   </div>
                 </div>
               )}
+
+              {article.credit && (
+                <p className="modal-credit">
+                  {article.credit.label}{' '}
+                  <a href={article.credit.url} target="_blank" rel="noopener noreferrer">
+                    {article.credit.linkText || 'View source'}
+                  </a>
+                </p>
+              )}
             </div>
           </motion.div>
 

@@ -50,6 +50,11 @@ export const ARTICLES = {
     gallery: [
       '/photos/kate-hurst-womens-roster.jpg',
     ],
+    credit: {
+      label: 'Photos via SwimSwam.',
+      linkText: 'View on Instagram',
+      url: 'https://www.instagram.com/p/DcwCvJDlGNv/?img_index=1',
+    },
     excerpt: 'Kate Hurst has earned a place on the USA Swimming National Team roster for 2026–2027 — the highest honor in American swimming, reserved for the top-ranked athletes in the country.',
     body: [
       'We are incredibly proud to share that Kate Hurst has been named to the 2026–2027 USA Swimming National Team!',
