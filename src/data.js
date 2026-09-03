@@ -39,6 +39,22 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'kate-hurst-national-team-2026': {
+    tag: 'Achievement',
+    date: 'September 3, 2026',
+    title: 'Kate Hurst Named to the USA Swimming National Team',
+    img: '/photos/kate-hurst-national-team.jpg',
+    imgPos: 'center',
+    imgStyle: { objectFit: 'contain', background: '#0b1f3a' },
+    highlight: 'Kate Hurst has been named to the USA Swimming National Team for 2026–2027!',
+    excerpt: 'Kate Hurst has earned a place on the USA Swimming National Team roster for 2026–2027 — the highest honor in American swimming, reserved for the top-ranked athletes in the country.',
+    body: [
+      'We are incredibly proud to share that Kate Hurst has been named to the 2026–2027 USA Swimming National Team!',
+      'The National Team is USA Swimming\'s top competitive roster — earned each year by the highest-ranked American swimmers based on their performances at the sport\'s premier meets. It represents the very best swimmers in the country and the pipeline to international competition for Team USA.',
+      'Kate\'s selection follows a standout season that included a National Championship in the 800M Freestyle (8:28.33). She joins the women\'s roster alongside the nation\'s elite, including Olympic champions and world-record holders.',
+      'Congratulations to Kate on this extraordinary achievement — a testament to years of dedication, discipline, and hard work. We could not be prouder!',
+    ],
+  },
   'junior-nationals-2026': {
     tag: 'Competition',
     date: 'August 7, 2026',
@@ -808,7 +824,8 @@ export const ARTICLES = {
 }
 
 export const NEWS_LIST = [
-  { id: 'junior-nationals-2026', featured: true },
+  { id: 'kate-hurst-national-team-2026', featured: true },
+  { id: 'junior-nationals-2026' },
   { id: 'ymca-futures-2026' },
   { id: 'nj-gold-champs-2026' },
   { id: 'summer-champs-2026' },
