@@ -1163,6 +1163,10 @@ export const TESTIMONIALS = [
     image: '/athletes/kathleen-bendoraitis.webp',
     imageStyle: { objectPosition: 'top' },
   },
+  {
+    quote: "Training with Coach Phil was an incredible experience. He helped me grow into a tougher athlete, not only physically, but also mentally. He is someone you can rely on in all areas of your life, not just in the pool. I wouldn't be where I am today without his support and guidance.",
+    name: 'Rebekah Jung',
+  },
 ]
 
 export const ABOUT = {
