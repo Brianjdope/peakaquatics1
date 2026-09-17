@@ -1173,6 +1173,8 @@ export const TESTIMONIALS = [
   {
     quote: "I'm so grateful to have been one of Coach Phil's swimmers. Without his constant support and no bs mentality, I never would've achieved the level of success I have in swim and in life. Thanks to him, I've been able to look at all things in life more as an opportunity, not as a task.",
     name: 'Collin Lee',
+    image: '/athletes/collin-lee.jpg',
+    imageStyle: { objectPosition: 'center 42%' },
   },
 ]
 
