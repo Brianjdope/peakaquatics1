@@ -1177,6 +1177,13 @@ export const TESTIMONIALS = [
     image: '/athletes/collin-lee.jpg',
     imageStyle: { objectPosition: 'center 42%' },
   },
+  {
+    quote: "Training with Phil has truly been a blessing and a privilege. Throughout my time working with him, he has helped me grow as an athlete and an individual. He has pushed me to challenge myself and believe in my abilities. I'm incredibly grateful for all the time, guidance and support he has given me. I know the lessons I've learned from him will stay with me far beyond the pool.",
+    name: 'Kayla Rodriguez',
+    school: 'Northwestern University',
+    image: '/athletes/kayla-rodriguez.jpg',
+    imageStyle: { objectPosition: 'center 40%' },
+  },
 ]
 
 export const ABOUT = {
