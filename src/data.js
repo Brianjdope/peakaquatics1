@@ -45,7 +45,7 @@ export const ARTICLES = {
     date: 'October 6, 2026',
     title: 'Olivia De Los Reyes Commits to Providence College',
     img: '/photos/olivia-de-los-reyes-providence.jpg',
-    imgPos: 'center 42%',
+    imgPos: 'center 50%',
     excerpt: '"I am so excited to announce my verbal commitment to continue my academic career and swim at the Division I level at Providence College!"',
     body: [
       'I am so excited to announce my verbal commitment to continue my academic career and swim at the Division I level at Providence College!',
