@@ -45,7 +45,7 @@ export const ARTICLES = {
     date: 'October 6, 2026',
     title: 'Olivia De Los Reyes Commits to Providence College',
     img: '/photos/olivia-de-los-reyes-providence.jpg',
-    imgPos: 'center 30%',
+    imgPos: 'center 42%',
     excerpt: '"I am so excited to announce my verbal commitment to continue my academic career and swim at the Division I level at Providence College!"',
     body: [
       'I am so excited to announce my verbal commitment to continue my academic career and swim at the Division I level at Providence College!',
@@ -1112,6 +1112,7 @@ export const PLACEMENTS = [
   { name: 'Grace Lee',            school: 'Cornell University',          photo: '/athletes/grace-lee.webp', photoStyle: { objectPosition: 'center 5%' } },
   { name: 'Jacob Kim',            school: 'University of California San Diego',  year: '2025', photo: '/photos/jacob-kim-ucsd.jpg', photoStyle: { objectPosition: 'center 90%', transform: 'scale(1.7)' } },
   { name: 'Kayla Rodriguez',      school: 'Northwestern University',     photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/nusports.com/images/2025/10/7/Rodriguez_Kayla.jpg', photoStyle: { objectPosition: 'center 10%' } },
+  { name: 'Olivia De Los Reyes',  school: 'Providence College',          year: '2026', photo: '/photos/olivia-de-los-reyes-providence.jpg', photoStyle: { objectPosition: 'center 18%' } },
   { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/athletes/matt-bendoraitis.webp' },
   { name: 'Kathleen Bendoraitis', school: 'University of Maine',         photo: '/athletes/kathleen-bendoraitis.webp' },
