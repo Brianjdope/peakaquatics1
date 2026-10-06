@@ -6,6 +6,7 @@ export const TICKER_ITEMS = [
   ['Jessica Wolf', 'Commits to Colgate University'],
   ['Rebekah Jung', 'Commits to University of Rochester'],
   ['Jonas Emerson', 'Commits to Wesleyan University'],
+  ['Olivia De Los Reyes', 'Commits to Providence College'],
   ['Ryker Levi', 'Junior National Qualifier 2025'],
   ['Harrison Lee', 'Commits to Lehigh University'],
   ['Sienna Plutzer', 'Commits to Holy Cross University'],
@@ -39,6 +40,21 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'olivia-providence': {
+    tag: 'College Commitment',
+    date: 'October 6, 2026',
+    title: 'Olivia De Los Reyes Commits to Providence College',
+    img: '/photos/olivia-de-los-reyes-providence.jpg',
+    imgPos: 'center 30%',
+    excerpt: '"I am so excited to announce my verbal commitment to continue my academic career and swim at the Division I level at Providence College!"',
+    body: [
+      'I am so excited to announce my verbal commitment to continue my academic career and swim at the Division I level at Providence College!',
+      'None of this would have been possible without my parents and siblings for their endless guidance and support, my friends and teammates for always believing in me and making me laugh, and my coaches at Scarlet for always pushing me to be better.',
+      'And a big thank you to Coach Allison and Coach Randall for supporting me throughout this process and for making this possible!',
+      'I feel so blessed for this opportunity and I can\'t wait for the next 4 in the Big East! GO FRIARS!! 🖤🤍',
+      'Congratulations Olivia!!',
+    ],
+  },
   'kate-hurst-national-team-2026': {
     tag: 'Achievement',
     date: 'September 3, 2026',
@@ -833,6 +849,7 @@ export const ARTICLES = {
 
 export const NEWS_LIST = [
   { id: 'kate-hurst-national-team-2026', featured: true },
+  { id: 'olivia-providence' },
   { id: 'junior-nationals-2026' },
   { id: 'ymca-futures-2026' },
   { id: 'nj-gold-champs-2026' },
