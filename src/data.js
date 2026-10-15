@@ -1202,6 +1202,13 @@ export const TESTIMONIALS = [
     image: '/athletes/kayla-rodriguez.jpg',
     imageStyle: { objectPosition: 'center 40%' },
   },
+  {
+    quote: "Training under Coach Phil has been one of the best choices I have made in my swimming career. His expertise on stroke development and technique helped me accomplish goals that had once seemed impossible. Coach Phil's practices toughened me both physically and mentally, and most importantly he fostered in me an even greater love for the sport. I am forever grateful for the lessons I have learned and continue to reap the benefits of my work with him both in and out of the pool.",
+    name: 'Jonas Emerson',
+    school: 'Wesleyan University',
+    image: '/athletes/jonas-emerson.jpg',
+    imageStyle: { objectPosition: 'center 30%' },
+  },
 ]
 
 export const ABOUT = {
