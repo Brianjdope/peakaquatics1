@@ -20,8 +20,9 @@ export async function fetchAvailability(date, day) {
   return readJson(res)
 }
 
-export async function lookupBookings(email) {
-  const params = new URLSearchParams({ action: 'lookup', email })
+// The backend only returns a booking when both the ID and the exact email match
+export async function lookupBookings(email, bookingId) {
+  const params = new URLSearchParams({ action: 'lookup', email, bookingId })
   const res = await fetch(`${SHEETS_API}?${params.toString()}`)
   return readJson(res)
 }
