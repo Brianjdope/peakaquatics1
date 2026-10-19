@@ -4,6 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors, spacing, fonts } from '../theme'
 import { CONTACT_INFO } from '../data'
 
+const openLink = (url, fallback) => {
+  Linking.openURL(url).catch(() => Alert.alert('Unable to open link', fallback))
+}
+
 export default function ContactScreen({ navigation }) {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
 
@@ -14,7 +18,7 @@ export default function ContactScreen({ navigation }) {
     }
     const subject = encodeURIComponent('Peak Aquatic Sports Inquiry')
     const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)
-    Linking.openURL(`mailto:${CONTACT_INFO.email}?subject=${subject}&body=${body}`)
+    openLink(`mailto:${CONTACT_INFO.email}?subject=${subject}&body=${body}`, `No mail app found. Email us at ${CONTACT_INFO.email}.`)
   }
 
   return (
@@ -30,7 +34,7 @@ export default function ContactScreen({ navigation }) {
         </View>
 
         {/* Contact info */}
-        <TouchableOpacity style={styles.row} onPress={() => Linking.openURL(`mailto:${CONTACT_INFO.email}`)}>
+        <TouchableOpacity style={styles.row} onPress={() => openLink(`mailto:${CONTACT_INFO.email}`, `No mail app found. Email us at ${CONTACT_INFO.email}.`)}>
           <Text style={styles.rowLabel}>Email</Text>
           <Text style={styles.rowValue}>{CONTACT_INFO.email}</Text>
         </TouchableOpacity>
@@ -45,7 +49,7 @@ export default function ContactScreen({ navigation }) {
         {CONTACT_INFO.instagram ? (
           <TouchableOpacity
             style={styles.row}
-            onPress={() => Linking.openURL(`https://instagram.com/${CONTACT_INFO.instagram.replace('@', '')}`)}
+            onPress={() => openLink(`https://instagram.com/${CONTACT_INFO.instagram.replace('@', '')}`, `Find us on Instagram at ${CONTACT_INFO.instagram}.`)}
           >
             <Text style={styles.rowLabel}>Instagram</Text>
             <Text style={styles.rowValue}>{CONTACT_INFO.instagram}</Text>
