@@ -4,5 +4,6 @@ dist/
 firebase-debug.log
 *.local
 .vercel
+.env
 .env*.local
 .claude/worktrees/
