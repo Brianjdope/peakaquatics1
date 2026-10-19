@@ -21,7 +21,7 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: ({ request, sameOrigin }) => sameOrigin && request.destination === 'image',
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: { cacheName: 'image-cache', expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 } },
           },
           {
