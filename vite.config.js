@@ -12,10 +12,23 @@ export default defineConfig({
       injectRegister: 'auto',
       base,
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,webp,jpg,woff2}'],
-        navigateFallback: null,
+        // Precache only the app shell; photos and the lazy three.js chunk are cached on demand
+        globPatterns: ['**/*.{js,css,html,svg,woff2}'],
+        globIgnores: ['**/BusinessCard3D-*.js', 'offline.html'],
+        navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,
         runtimeCaching: [
+          {
+            urlPattern: ({ request, sameOrigin }) => sameOrigin && request.destination === 'image',
+            handler: 'CacheFirst',
+            options: { cacheName: 'image-cache', expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 } },
+          },
+          {
+            urlPattern: /\/assets\/BusinessCard3D-.*\.js$/,
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'lazy-chunk-cache', expiration: { maxEntries: 4 } },
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
