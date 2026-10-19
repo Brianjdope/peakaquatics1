@@ -137,6 +137,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   // Cancellation state
   const [mode, setMode] = useState('book') // 'book' or 'cancel'
   const [cancelEmail, setCancelEmail] = useState('')
+  const [cancelBookingId, setCancelBookingId] = useState('')
   const [lookupLoading, setLookupLoading] = useState(false)
   const [bookings, setBookings] = useState([])
   const [lookupDone, setLookupDone] = useState(false)
@@ -148,6 +149,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     if (cancelParams?.bookingId && cancelParams?.email) {
       setMode('cancel')
       setCancelEmail(cancelParams.email)
+      setCancelBookingId(cancelParams.bookingId)
       setCancellingId(cancelParams.bookingId)
       onCancelParamsUsed?.()
       setTimeout(async () => {
@@ -263,8 +265,10 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     }
   }
 
+  const canLookup = Boolean(cancelEmail.trim() && cancelBookingId.trim())
+
   const handleLookup = async () => {
-    if (!cancelEmail) return
+    if (!canLookup) return
     setLookupLoading(true)
     setError('')
     setBookings([])
@@ -272,7 +276,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     setCancelSuccess('')
 
     try {
-      const data = await lookupBookings(cancelEmail)
+      const data = await lookupBookings(cancelEmail.trim(), cancelBookingId.trim())
       if (data.success) {
         setBookings(data.bookings || [])
         setLookupDone(true)
@@ -459,7 +463,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
         <p style={{ color: 'var(--muted)', fontSize: '0.72rem', lineHeight: 1.6, maxWidth: 300, margin: '0 auto 1.25rem' }}>
           To cancel or reschedule, use the{' '}
           <span
-            onClick={() => { setConfirmed(false); setMode('cancel'); setCancelEmail(clientEmail) }}
+            onClick={() => { setConfirmed(false); setMode('cancel'); setCancelEmail(clientEmail); setCancelBookingId(bookingId) }}
             style={{ color: 'var(--text)', textDecoration: 'underline', cursor: 'pointer' }}
           >Cancel Booking</span>
           {' '}tab below, or call <a href="tel:+12013595688" style={{ color: 'var(--text)', textDecoration: 'underline' }}>201-359-5688</a>.
@@ -534,8 +538,18 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
           style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         >
           <p style={{ color: 'var(--muted)', fontSize: '0.82rem', lineHeight: 1.6 }}>
-            Enter the email you used when booking to look up your appointments.
+            Enter the booking ID from your confirmation email and the email you used when booking.
           </p>
+
+          <input
+            type="text"
+            placeholder="Booking ID (e.g. PAS-XXXXX-XXXXXXXX)"
+            value={cancelBookingId}
+            onChange={e => setCancelBookingId(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleLookup()}
+            autoCapitalize="characters"
+            style={inputStyle}
+          />
 
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <input
@@ -548,16 +562,16 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             />
             <button
               onClick={handleLookup}
-              disabled={!cancelEmail || lookupLoading}
+              disabled={!canLookup || lookupLoading}
               style={{
-                background: cancelEmail ? 'var(--text)' : 'rgba(255,255,255,0.1)',
-                color: cancelEmail ? '#000' : 'var(--muted)',
+                background: canLookup ? 'var(--text)' : 'rgba(255,255,255,0.1)',
+                color: canLookup ? '#000' : 'var(--muted)',
                 border: 'none',
                 borderRadius: 6,
                 padding: '0.6rem 1.25rem',
                 fontSize: '0.82rem',
                 fontWeight: 600,
-                cursor: cancelEmail ? 'pointer' : 'default',
+                cursor: canLookup ? 'pointer' : 'default',
                 whiteSpace: 'nowrap',
                 opacity: lookupLoading ? 0.6 : 1,
               }}
@@ -586,7 +600,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
 
           {lookupDone && bookings.length === 0 && !cancelSuccess && (
             <p style={{ color: 'var(--muted)', fontSize: '0.82rem', textAlign: 'center', padding: '1rem 0' }}>
-              No active bookings found for this email.
+              No active booking found for this booking ID and email.
             </p>
           )}
 
