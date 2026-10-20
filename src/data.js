@@ -7,6 +7,7 @@ export const TICKER_ITEMS = [
   ['Rebekah Jung', 'Commits to University of Rochester'],
   ['Jonas Emerson', 'Commits to Wesleyan University'],
   ['Olivia De Los Reyes', 'Commits to Providence College'],
+  ['Connor Hong', 'Commits to Lafayette College'],
   ['Ryker Levi', 'Junior National Qualifier 2025'],
   ['Harrison Lee', 'Commits to Lehigh University'],
   ['Sienna Plutzer', 'Commits to Holy Cross University'],
@@ -40,6 +41,22 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'connor-lafayette': {
+    tag: 'College Commitment',
+    date: 'October 20, 2026',
+    title: 'Connor Hong Commits to Lafayette College',
+    img: '/photos/connor-hong-lafayette.jpg',
+    imgPos: 'center 38%',
+    excerpt: '"I am honored to announce my verbal commitment to Lafayette College, where I will continue my athletic and academic career at the D1 level!"',
+    body: [
+      'I am honored to announce my verbal commitment to Lafayette College, where I will continue my athletic and academic career at the D1 level.',
+      'First, I want to give all glory to God.',
+      'A huge thank you to my parents, family, friends, teammates, and all of my coaches for their endless support and for pushing me along the way.',
+      'Lastly, I want to extend a special thanks to Coach Mike and the entire Lafayette staff for believing in me and giving me this incredible opportunity.',
+      'I\'m excited for the work ahead. GO PARDS!',
+      'Congratulations Connor!!',
+    ],
+  },
   'olivia-providence': {
     tag: 'College Commitment',
     date: 'October 6, 2026',
@@ -849,6 +866,7 @@ export const ARTICLES = {
 
 export const NEWS_LIST = [
   { id: 'kate-hurst-national-team-2026', featured: true },
+  { id: 'connor-lafayette' },
   { id: 'olivia-providence' },
   { id: 'junior-nationals-2026' },
   { id: 'ymca-futures-2026' },
@@ -1114,6 +1132,7 @@ export const PLACEMENTS = [
   { name: 'Jacob Kim',            school: 'University of California San Diego',  year: '2025', photo: '/photos/jacob-kim-roster.jpg', photoStyle: { objectPosition: 'center 15%' } },
   { name: 'Kayla Rodriguez',      school: 'Northwestern University',     photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/nusports.com/images/2025/10/7/Rodriguez_Kayla.jpg', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Olivia De Los Reyes',  school: 'Providence College',          year: '2026', photo: '/photos/olivia-de-los-reyes-providence.jpg', photoStyle: { objectPosition: 'center 18%' } },
+  { name: 'Connor Hong',          school: 'Lafayette College',           year: '2026', photo: '/photos/connor-hong-lafayette-crop.jpg', photoStyle: { objectPosition: 'center 15%' } },
   { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/athletes/matt-bendoraitis.webp' },
   { name: 'Kathleen Bendoraitis', school: 'University of Maine',         photo: '/athletes/kathleen-bendoraitis.webp' },
