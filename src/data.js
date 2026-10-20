@@ -47,7 +47,7 @@ export const ARTICLES = {
     date: 'October 20, 2026',
     title: 'Madelyn Raguindin Commits to Lafayette College',
     img: '/photos/madelyn-raguindin-lafayette.jpg',
-    imgPos: 'center 46%',
+    imgPos: 'center 50%',
     excerpt: '"I am excited and beyond blessed to announce my verbal commitment to swim at the Division I level and continue my academic career at Lafayette College!"',
     body: [
       'I am excited and beyond blessed to announce my verbal commitment to swim at the Division I level and continue my academic career at Lafayette College!',
@@ -63,7 +63,7 @@ export const ARTICLES = {
     date: 'October 20, 2026',
     title: 'Connor Hong Commits to Lafayette College',
     img: '/photos/connor-hong-lafayette.jpg',
-    imgPos: 'center 52%',
+    imgPos: 'center 55%',
     excerpt: '"I am honored to announce my verbal commitment to Lafayette College, where I will continue my athletic and academic career at the D1 level!"',
     body: [
       'I am honored to announce my verbal commitment to Lafayette College, where I will continue my athletic and academic career at the D1 level.',
