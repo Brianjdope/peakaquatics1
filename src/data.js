@@ -8,6 +8,7 @@ export const TICKER_ITEMS = [
   ['Jonas Emerson', 'Commits to Wesleyan University'],
   ['Olivia De Los Reyes', 'Commits to Providence College'],
   ['Connor Hong', 'Commits to Lafayette College'],
+  ['Madelyn Raguindin', 'Commits to Lafayette College'],
   ['Ryker Levi', 'Junior National Qualifier 2025'],
   ['Harrison Lee', 'Commits to Lehigh University'],
   ['Sienna Plutzer', 'Commits to Holy Cross University'],
@@ -41,6 +42,22 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'madelyn-lafayette': {
+    tag: 'College Commitment',
+    date: 'October 20, 2026',
+    title: 'Madelyn Raguindin Commits to Lafayette College',
+    img: '/photos/madelyn-raguindin-lafayette.jpg',
+    imgPos: 'center 30%',
+    excerpt: '"I am excited and beyond blessed to announce my verbal commitment to swim at the Division I level and continue my academic career at Lafayette College!"',
+    body: [
+      'I am excited and beyond blessed to announce my verbal commitment to swim at the Division I level and continue my academic career at Lafayette College!',
+      'I\'d like to thank my family and friends for their endless love and encouragement, my teammates for the countless laughs and memories, and my coaches at Scarlet Aquatics for always believing in me and pushing me to be my best. I am forever grateful!!',
+      'Additionally, thank you to Coach Dailey and Coach Rinde for their support throughout this journey and for giving me this incredible opportunity!',
+      'And above all, I want to thank the Lord for blessing me and guiding me every step of the way.',
+      'I am so grateful and excited for this new chapter and I can\'t wait for the next 4! GO PARDS!! ❤️🤍',
+      'Congratulations Mady!!',
+    ],
+  },
   'connor-lafayette': {
     tag: 'College Commitment',
     date: 'October 20, 2026',
@@ -866,6 +883,7 @@ export const ARTICLES = {
 
 export const NEWS_LIST = [
   { id: 'kate-hurst-national-team-2026', featured: true },
+  { id: 'madelyn-lafayette' },
   { id: 'connor-lafayette' },
   { id: 'olivia-providence' },
   { id: 'junior-nationals-2026' },
@@ -1133,6 +1151,7 @@ export const PLACEMENTS = [
   { name: 'Kayla Rodriguez',      school: 'Northwestern University',     photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/nusports.com/images/2025/10/7/Rodriguez_Kayla.jpg', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Olivia De Los Reyes',  school: 'Providence College',          year: '2026', photo: '/photos/olivia-de-los-reyes-providence.jpg', photoStyle: { objectPosition: 'center 18%' } },
   { name: 'Connor Hong',          school: 'Lafayette College',           year: '2026', photo: '/photos/connor-hong-lafayette-crop.jpg', photoStyle: { objectPosition: 'center 15%' } },
+  { name: 'Madelyn Raguindin',    school: 'Lafayette College',           year: '2026', photo: '/photos/madelyn-raguindin-lafayette-crop.jpg', photoStyle: { objectPosition: 'center 12%' } },
   { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/athletes/matt-bendoraitis.webp' },
   { name: 'Kathleen Bendoraitis', school: 'University of Maine',         photo: '/athletes/kathleen-bendoraitis.webp' },
