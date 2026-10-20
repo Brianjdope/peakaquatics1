@@ -2097,6 +2097,13 @@ section { padding: 8rem 0; }
   .booking-time-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
 
+/* Smallest phones (320px): the 2-up stat strip and 3-up school grid
+   otherwise push the page wider than the viewport. */
+@media (max-width: 360px) {
+  .hero-stat-item { padding: 1.25rem 1rem; }
+  .schools-emblem-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 600px) {
   .instagram-grid { grid-template-columns: repeat(3, 1fr) !important; }
 }

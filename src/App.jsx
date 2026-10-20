@@ -35,9 +35,24 @@ function parseCancelHash() {
   return null
 }
 
+// Pages are addressed as #/services, #/contact, ... (home has no hash).
+// #admin is still accepted as a legacy alias for the admin page.
+const PAGES = ['home', 'about', 'news', 'records', 'services', 'placements', 'contact', 'gallery', 'terms', 'admin']
+
+function pageFromHash() {
+  const hash = window.location.hash
+  if (hash === '#admin') return 'admin'
+  const name = hash.startsWith('#/') ? hash.slice(2) : ''
+  return PAGES.includes(name) ? name : 'home'
+}
+
+function hashForPage(page) {
+  return page === 'home' ? window.location.pathname + window.location.search : `#/${page}`
+}
+
 export default function App() {
   const initialCancel = parseCancelHash()
-  const initialPage = initialCancel ? 'services' : (window.location.hash === '#admin' ? 'admin' : 'home')
+  const initialPage = initialCancel ? 'services' : pageFromHash()
   const [page, setPage] = useState(initialPage)
   const [scrollPct, setScrollPct] = useState(0)
   const [scrollToBooking, setScrollToBooking] = useState(!!initialCancel)
@@ -46,7 +61,7 @@ export default function App() {
   // Clean up hash after reading it, and handle future hash changes
   useEffect(() => {
     if (window.location.hash.startsWith('#cancel')) {
-      window.history.replaceState(null, '', window.location.pathname)
+      window.history.replaceState(null, '', hashForPage('services'))
     }
     const handleHash = () => {
       const cancel = parseCancelHash()
@@ -54,12 +69,25 @@ export default function App() {
         setCancelParams(cancel)
         setScrollToBooking(true)
         setPage('services')
-        setTimeout(() => { window.history.replaceState(null, '', window.location.pathname) }, 0)
+        setTimeout(() => { window.history.replaceState(null, '', hashForPage('services')) }, 0)
       }
     }
     window.addEventListener('hashchange', handleHash)
     return () => window.removeEventListener('hashchange', handleHash)
   }, [])
+
+  // Keep the URL in sync with the current page so Back/Forward stay in the
+  // site, refresh keeps the page, and pages can be linked.
+  useEffect(() => {
+    const onPop = () => { if (!window.location.hash.startsWith('#cancel')) setPage(pageFromHash()) }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
+  useEffect(() => {
+    if (window.location.hash.startsWith('#cancel')) return
+    if (pageFromHash() !== page) window.history.pushState(null, '', hashForPage(page))
+  }, [page])
 
   const goToBooking = () => {
     if (page === 'services') {
