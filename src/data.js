@@ -1168,7 +1168,7 @@ export const PLACEMENTS = [
   { name: 'Kayla Rodriguez',      school: 'Northwestern University',     photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/nusports.com/images/2025/10/7/Rodriguez_Kayla.jpg', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Olivia De Los Reyes',  school: 'Providence College',          year: '2026', photo: '/photos/olivia-de-los-reyes-providence.jpg', photoStyle: { objectPosition: 'center 18%' } },
   { name: 'Connor Hong',          school: 'Lafayette College',           year: '2026', photo: '/photos/connor-hong-lafayette-crop.jpg', photoStyle: { objectPosition: 'center 15%' } },
-  { name: 'Madelyn Raguindin',    school: 'Lafayette College',           year: '2026', photo: '/photos/madelyn-raguindin-lafayette.jpg', photoStyle: { objectPosition: 'center 20%', transform: 'scale(1.12)' } },
+  { name: 'Madelyn Raguindin',    school: 'Lafayette College',           year: '2026', photo: '/photos/madelyn-raguindin-lafayette.jpg', photoStyle: { objectPosition: 'center 35%', transform: 'scale(1.28)' } },
   { name: 'Sebastian Hendrawan',  school: 'Middlebury College',          year: '2026', photo: '/photos/sebastian-hendrawan-middlebury.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/athletes/matt-bendoraitis.webp' },
