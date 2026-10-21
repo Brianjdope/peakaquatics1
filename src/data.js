@@ -47,8 +47,8 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'October 21, 2026',
     title: 'Sebastian Hendrawan Commits to Middlebury College',
-    img: '/photos/sebastian-hendrawan-middlebury.jpg',
-    imgPos: 'center 40%',
+    img: '/photos/sebastian-hendrawan-middlebury-hero.jpg',
+    imgPos: 'center 30%',
     excerpt: '"I am extremely honored to announce my commitment to the admissions process at Middlebury College where I will be continuing my academic and athletic career!"',
     body: [
       'I am extremely honored to announce my commitment to the admissions process at Middlebury College where I will be continuing my academic and athletic career.',
