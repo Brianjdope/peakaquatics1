@@ -9,6 +9,7 @@ export const TICKER_ITEMS = [
   ['Olivia De Los Reyes', 'Commits to Providence College'],
   ['Connor Hong', 'Commits to Lafayette College'],
   ['Madelyn Raguindin', 'Commits to Lafayette College'],
+  ['Sebastian Hendrawan', 'Commits to Middlebury College'],
   ['Ryker Levi', 'Junior National Qualifier 2025'],
   ['Harrison Lee', 'Commits to Lehigh University'],
   ['Sienna Plutzer', 'Commits to Holy Cross University'],
@@ -42,6 +43,21 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'sebastian-middlebury': {
+    tag: 'College Commitment',
+    date: 'October 21, 2026',
+    title: 'Sebastian Hendrawan Commits to Middlebury College',
+    img: '/photos/sebastian-hendrawan-middlebury.jpg',
+    imgPos: 'center 40%',
+    excerpt: '"I am extremely honored to announce my commitment to the admissions process at Middlebury College where I will be continuing my academic and athletic career!"',
+    body: [
+      'I am extremely honored to announce my commitment to the admissions process at Middlebury College where I will be continuing my academic and athletic career.',
+      'I would first like to thank my parents, who have given me nothing but unconditional support throughout this journey.',
+      'Another thank you to all of my teammates, friends and coaches who have been there along the way.',
+      'Finally, thank you to Coach Bob for this amazing opportunity. Go Panthers!',
+      'Congratulations Sebastian!!',
+    ],
+  },
   'madelyn-lafayette': {
     tag: 'College Commitment',
     date: 'October 20, 2026',
@@ -883,6 +899,7 @@ export const ARTICLES = {
 
 export const NEWS_LIST = [
   { id: 'kate-hurst-national-team-2026', featured: true },
+  { id: 'sebastian-middlebury' },
   { id: 'madelyn-lafayette' },
   { id: 'connor-lafayette' },
   { id: 'olivia-providence' },
@@ -1152,6 +1169,7 @@ export const PLACEMENTS = [
   { name: 'Olivia De Los Reyes',  school: 'Providence College',          year: '2026', photo: '/photos/olivia-de-los-reyes-providence.jpg', photoStyle: { objectPosition: 'center 18%' } },
   { name: 'Connor Hong',          school: 'Lafayette College',           year: '2026', photo: '/photos/connor-hong-lafayette-crop.jpg', photoStyle: { objectPosition: 'center 15%' } },
   { name: 'Madelyn Raguindin',    school: 'Lafayette College',           year: '2026', photo: '/photos/madelyn-raguindin-lafayette-crop.jpg', photoStyle: { objectPosition: 'center 12%' } },
+  { name: 'Sebastian Hendrawan',  school: 'Middlebury College',          year: '2026', photo: '/photos/sebastian-hendrawan-middlebury-crop.jpg', photoStyle: { objectPosition: 'center 15%' } },
   { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/athletes/matt-bendoraitis.webp' },
   { name: 'Kathleen Bendoraitis', school: 'University of Maine',         photo: '/athletes/kathleen-bendoraitis.webp' },

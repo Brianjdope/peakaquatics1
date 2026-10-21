@@ -37,6 +37,7 @@ const SCHOOL_FALLBACK = {
   'Lehigh University':           { abbr: 'LU',    bg: '#653700', color: '#fff' },
   'Holy Cross University':       { abbr: 'HC',    bg: '#602D8C', color: '#fff' },
   'Lafayette College':           { abbr: 'LAF',   bg: '#8B2346', color: '#fff' },
+  'Middlebury College':          { abbr: 'MIDD',  bg: '#0a2240', color: '#fff' },
   'University of Maine':         { abbr: 'UME',   bg: '#003DA5', color: '#fff' },
   'TCNJ':                        { abbr: 'TCNJ',  bg: '#1E3A6E', color: '#C9A94A' },
   'Columbia University':              { abbr: 'COL',  bg: '#003DA5', color: '#fff' },
