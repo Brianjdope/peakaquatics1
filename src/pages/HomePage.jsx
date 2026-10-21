@@ -47,6 +47,7 @@ const FEATURED_SCHOOLS = [
   'Colgate University', 'University of California San Diego',
   'Lehigh University', 'Holy Cross University', 'Bryant University',
   'University of Maine', 'Carnegie Mellon University', 'Providence College',
+  'Middlebury College',
 ]
 
 const FEATURES = [
