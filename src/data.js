@@ -49,7 +49,7 @@ export const ARTICLES = {
     date: 'October 26, 2026',
     title: 'Jeremiah Rhee Commits to Colgate University',
     img: '/photos/jeremiah-rhee-colgate.jpg',
-    imgPos: 'center 62%',
+    imgPos: 'center 74%',
     excerpt: '"I\'m excited to announce my commitment to continue my academic and athletic career at the Division I level at Colgate University!"',
     body: [
       'I\'m excited to announce my commitment to continue my academic and athletic career at the Division I level at Colgate University.',
