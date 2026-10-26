@@ -43,6 +43,26 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'scarlet-halloween-2026': {
+    tag: 'Competition',
+    date: 'October 25, 2026',
+    title: '2026 Scarlet Haunted Halloween Invitational',
+    img: '/photos/junior-nationals-2026.jpg',
+    imgPos: 'center 58%',
+    highlight: 'Ryker Levi sets two team records — 50 Yard Freestyle (20.49) and 100 Yard Backstroke (48.39)!',
+    excerpt: 'Our athletes opened the short course season at the Scarlet Haunted Halloween Invitational with a flood of lifetime bests — headlined by two new team records from Ryker Levi and a sensational Scarlet debut from Sean Darder.',
+    body: [
+      'October 24–26, 2026 — Scarlet Haunted Halloween Invitational',
+      'Our athletes kicked off the short course yards season in style, rewriting the all-time record board and dropping lifetime bests across every stroke and distance.',
+      'Ryker Levi led the way with two new team records, touching in 20.49 in the 50 Yard Freestyle and 48.39 in the 100 Yard Backstroke. He also posted a huge lifetime best of 1:52.15 in the 200 Yard IM, dropping nearly seven seconds.',
+      'In a sensational Scarlet debut, Sean Darder turned in enormous drops across the board — 4:48.49 in the 500 Yard Freestyle (−15.69), 4:09.81 in the 400 Yard IM (−6.31), 1:56.29 in the 200 Yard IM (−3.82), 2:04.88 in the 200 Yard Breaststroke, 57.35 in the 100 Yard Breaststroke, and 21.72 in the 50 Yard Freestyle.',
+      'Matthew Jun climbed onto the all-time board with a 1:48.90 in the 200 Yard Backstroke, a 5.22-second lifetime best, and added a 50.42 in the 100 Yard Backstroke. Ethan Reines continued his strong season with a 51.08 lifetime best in the 100 Yard Backstroke, a 47.29 in the 100 Yard Freestyle, 51.97 in the 100 Yard Butterfly, and 22.10 in the 50 Yard Freestyle.',
+      'Joshua Reines dropped bests of 4:42.48 in the 500 Yard Freestyle and 22.84 in the 50 Yard Freestyle, while Chase Kim went 47.99 in the 100 Yard Freestyle, a 2.86-second drop.',
+      'Lifetime bests poured in across the roster: Michael Kim (2:04.54 in the 200 IM, 2:18.64 in the 200 Breaststroke, 58.89 in the 100 Butterfly), Aaron Hong (56.33 in the 100 Backstroke, 50.44 in the 100 Freestyle, 54.13 in the 100 Butterfly), Eric Shin (53.63 in the 100 Backstroke, 54.72 in the 100 Butterfly, 1:02.20 in the 100 Breaststroke), Harrison Trokhan (2:00.77 in the 200 IM, 50.67 in the 100 Freestyle, 4:16.51 in the 400 IM), and Milo Pfeifer (50.66 in the 100 Freestyle, 55.09 in the 100 Butterfly).',
+      'At the MR LIAC Chappy\'s Invite, Yuriel Lee posted a 1:49.04 in the 200 Yard Backstroke.',
+      'Congratulations to all of our swimmers on a phenomenal start to the short course season!',
+    ],
+  },
   'sebastian-middlebury': {
     tag: 'College Commitment',
     date: 'October 21, 2026',
@@ -899,6 +919,7 @@ export const ARTICLES = {
 
 export const NEWS_LIST = [
   { id: 'kate-hurst-national-team-2026', featured: true },
+  { id: 'scarlet-halloween-2026' },
   { id: 'sebastian-middlebury' },
   { id: 'madelyn-lafayette' },
   { id: 'connor-lafayette' },
@@ -1072,14 +1093,14 @@ export const RECORDS_TABLES = {
   // SCY MEN'S OPEN
   // ═══════════════════════════════════════════════════════════
   'scy-men': buildTable("SCY Men's Open", [
-    r('50 Free',    p('Timothy Lee',         '20.54',    2024), p('Ryker Levi',          '20.56',    2025), p('Richard Poplawski',    '20.81',    2023)),
+    r('50 Free',    p('Ryker Levi',          '20.49',    2026), p('Timothy Lee',         '20.54',    2024), p('Richard Poplawski',    '20.81',    2023)),
     r('100 Free',   p('Timothy Lee',         '44.71',    2024), p('Richard Poplawski',   '45.18',    2023), p('Eric Lee',             '46.23',    2023)),
     r('200 Free',   p('Richard Poplawski',   '1:37.90',  2023), p('Timothy Lee',         '1:38.75',  2025), p('Ryker Levi',           '1:39.61',  2025)),
     r('500 Free',   p('Richard Poplawski',   '4:28.84',  2023), p('Steven Bendoraitis',  '4:29.22',  2022), p('Christopher Chang',    '4:29.52',  2022)),
     r('1000 Free',  p('Steven Bendoraitis',  '9:08.65',  2022), p('Eric Lee',            '9:18.38',  2022), p('Raymond Stelmark',     '9:20.12',  2023)),
     r('1650 Free',  p('Steven Bendoraitis',  '15:17.44', 2022), p('Christopher Chang',   '15:40.96', 2022), p('Richard Poplawski',    '15:42.14', 2023)),
-    r('100 Back',   p('Eric Lee',            '48.69',    2023), p('Jacob Kim',           '49.57',    2025), p('Richard Poplawski',    '49.61',    2022)),
-    r('200 Back',   p('Eric Lee',            '1:45.33',  2023), p('Richard Poplawski',   '1:47.02',  2022), p('Yuriel Lee',           '1:49.58',  2025)),
+    r('100 Back',   p('Ryker Levi',          '48.39',    2026), p('Eric Lee',            '48.69',    2023), p('Jacob Kim',            '49.57',    2025)),
+    r('200 Back',   p('Eric Lee',            '1:45.33',  2023), p('Richard Poplawski',   '1:47.02',  2022), p('Matthew Jun',          '1:48.90',  2026)),
     r('100 Fly',    p('Ryker Levi',          '46.94',    2026), p('Richard Poplawski',   '48.16',    2024), p('Harrison Lee',         '48.80',    2026)),
     r('200 Fly',    p('Richard Poplawski',   '1:46.59',  2023), p('Eric Lee',            '1:47.49',  2022), p('Ryker Levi',           '1:47.52',  2026)),
     r('100 Breast', p('Dimitri Melnikov',    '54.75',    2025), p('Doyee Kim',           '54.91',    2024), p('Eric Lee',             '55.04',    2024)),
