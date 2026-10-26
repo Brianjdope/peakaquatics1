@@ -47,8 +47,8 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'October 25, 2026',
     title: '2026 Scarlet Haunted Halloween Invitational',
-    img: '/photos/junior-nationals-2026.jpg',
-    imgPos: 'center 58%',
+    img: '/photos/scarlet-halloween-2026.jpg',
+    imgPos: 'center 45%',
     highlight: 'Ryker Levi sets two team records — 50 Yard Freestyle (20.49) and 100 Yard Backstroke (48.39)!',
     excerpt: 'Our athletes opened the short course season at the Scarlet Haunted Halloween Invitational with a flood of lifetime bests — headlined by two new team records from Ryker Levi and a sensational Scarlet debut from Sean Darder.',
     body: [
