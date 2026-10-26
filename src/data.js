@@ -10,6 +10,7 @@ export const TICKER_ITEMS = [
   ['Connor Hong', 'Commits to Lafayette College'],
   ['Madelyn Raguindin', 'Commits to Lafayette College'],
   ['Sebastian Hendrawan', 'Commits to Middlebury College'],
+  ['Jeremiah Rhee', 'Commits to Colgate University'],
   ['Ryker Levi', 'Junior National Qualifier 2025'],
   ['Harrison Lee', 'Commits to Lehigh University'],
   ['Sienna Plutzer', 'Commits to Holy Cross University'],
@@ -43,6 +44,21 @@ export const MILESTONES = [
 
 const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
+  'jeremiah-colgate': {
+    tag: 'College Commitment',
+    date: 'October 26, 2026',
+    title: 'Jeremiah Rhee Commits to Colgate University',
+    img: '/photos/jeremiah-rhee-colgate.jpg',
+    imgPos: 'center 48%',
+    excerpt: '"I\'m excited to announce my commitment to continue my academic and athletic career at the Division I level at Colgate University!"',
+    body: [
+      'I\'m excited to announce my commitment to continue my academic and athletic career at the Division I level at Colgate University.',
+      'First, I would like to thank God for blessing me with this opportunity and guiding me throughout this journey.',
+      'Next, I\'d like to thank my friends, family, WFY coaches, and teammates for their support.',
+      'Finally, thank you to Coach Ed and Coach Kelsey for this incredible opportunity. GO \'GATE!',
+      'Congratulations Jeremiah!!',
+    ],
+  },
   'scarlet-halloween-2026': {
     tag: 'Competition',
     date: 'October 25, 2026',
@@ -919,6 +935,7 @@ export const ARTICLES = {
 
 export const NEWS_LIST = [
   { id: 'kate-hurst-national-team-2026', featured: true },
+  { id: 'jeremiah-colgate' },
   { id: 'scarlet-halloween-2026' },
   { id: 'sebastian-middlebury' },
   { id: 'madelyn-lafayette' },
@@ -1191,6 +1208,7 @@ export const PLACEMENTS = [
   { name: 'Connor Hong',          school: 'Lafayette College',           year: '2026', photo: '/photos/connor-hong-lafayette-crop.jpg', photoStyle: { objectPosition: 'center 15%' } },
   { name: 'Madelyn Raguindin',    school: 'Lafayette College',           year: '2026', photo: '/photos/madelyn-raguindin-lafayette.jpg', photoStyle: { objectPosition: 'center 35%', transform: 'scale(1.28)' } },
   { name: 'Sebastian Hendrawan',  school: 'Middlebury College',          year: '2026', photo: '/photos/sebastian-hendrawan-middlebury.jpg', photoStyle: { objectPosition: 'center 20%' } },
+  { name: 'Jeremiah Rhee',        school: 'Colgate University',          year: '2026', photo: '/photos/jeremiah-rhee-colgate-crop.jpg', photoStyle: { objectPosition: 'center 15%' } },
   { name: 'Steven Bendoraitis',   school: 'TCNJ',           photo: '/athletes/steven-bendoraitis.webp', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Matt Bendoraitis',     school: 'University of Maine',         photo: '/athletes/matt-bendoraitis.webp' },
   { name: 'Kathleen Bendoraitis', school: 'University of Maine',         photo: '/athletes/kathleen-bendoraitis.webp' },
