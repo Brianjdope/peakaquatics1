@@ -10,10 +10,10 @@ const COURSE_TABS = [
 ]
 
 const GROUP_TABS = [
-  { key: 'boys-14', label: 'Boys 14 & Under' },
-  { key: 'girls-14', label: 'Girls 14 & Under' },
   { key: 'men', label: "Men's Open" },
   { key: 'women', label: "Women's Open" },
+  { key: 'boys-14', label: 'Boys 14 & Under' },
+  { key: 'girls-14', label: 'Girls 14 & Under' },
 ]
 
 const Medal = ({ place }) => {
@@ -39,7 +39,7 @@ const Medal = ({ place }) => {
 
 export default function RecordsPage() {
   const [course, setCourse] = useState('scy')
-  const [group, setGroup] = useState('boys-14')
+  const [group, setGroup] = useState('men')
 
   const tableKey = `${course}-${group}`
   const table = RECORDS_TABLES[tableKey]
