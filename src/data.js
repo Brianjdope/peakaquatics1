@@ -1143,7 +1143,7 @@ export const RECORDS_TABLES = {
     r('100 Breast', p('Kayla Rodriguez',   '1:02.38',  2023), p('Stephanie Kim',     '1:03.38',  2025), p('Chloe Kim',          '1:03.51',  2025)),
     r('200 Breast', p('Kayla Rodriguez',   '2:14.33',  2023), p('Stephanie Kim',     '2:15.43',  2025), p('Chloe Kim',          '2:16.12',  2022)),
     r('200 IM',     p('Chloe Kim',         '1:59.30',  2024), p('Kate Hurst',        '2:03.24',  2023), p('Rebekah Jung',       '2:06.04',  2024)),
-    r('400 IM',     p('Chloe Kim',         '4:07.11',  2024), p('Kate Hurst',        '4:14.82',  2023), p('Stephanie Kim',      '4:26.61',  2025)),
+    r('400 IM',     p('Chloe Kim',         '4:07.11',  2024), p('Kate Hurst',        '4:14.82',  2023), p('Sienna Cho',         '4:26.11',  2026)),
   ]),
 
   // ═══════════════════════════════════════════════════════════
