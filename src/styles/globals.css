@@ -337,8 +337,8 @@ section { padding: 8rem 0; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 160;
-  padding: 0 2rem;
-  height: 62px;
+  padding: env(safe-area-inset-top, 0px) 2rem 0;
+  height: calc(62px + env(safe-area-inset-top, 0px));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -349,7 +349,7 @@ section { padding: 8rem 0; }
   background: rgba(3,3,3,0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  height: 54px;
+  height: calc(54px + env(safe-area-inset-top, 0px));
 }
 
 .nav-left {
@@ -403,7 +403,7 @@ section { padding: 8rem 0; }
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 4rem 4rem 6rem;
+  padding: calc(4rem + env(safe-area-inset-top, 0px)) 4rem 6rem;
 }
 .nav-drawer-social {
   position: absolute;
@@ -471,7 +471,7 @@ section { padding: 8rem 0; }
 .nav-social {
   position: absolute;
   right: 2rem;
-  top: 50%;
+  top: calc(50% + env(safe-area-inset-top, 0px) / 2);
   transform: translateY(-50%);
   display: flex;
   gap: 1.2rem;
@@ -2040,9 +2040,9 @@ section { padding: 8rem 0; }
 @media (max-width: 768px) {
   section { padding: 5rem 0; }
   .container { padding: 0 1.5rem; }
-  .nav { padding: 1.2rem 1.5rem; }
-  .nav.scrolled { padding: 0.9rem 1.5rem; }
-  .nav-drawer { padding: 5rem 2rem 8rem; }
+  .nav { padding: calc(1.2rem + env(safe-area-inset-top, 0px)) 1.5rem 1.2rem; }
+  .nav.scrolled { padding: calc(0.9rem + env(safe-area-inset-top, 0px)) 1.5rem 0.9rem; }
+  .nav-drawer { padding: calc(5rem + env(safe-area-inset-top, 0px)) 2rem 8rem; }
   .nav-drawer-footer { left: 2rem; bottom: 2rem; right: auto; }
   .nav-drawer-link { font-size: clamp(1.4rem, 7vw, 2.5rem); }
   .hero { padding: 0 0 12rem 1.5rem; }
@@ -2095,6 +2095,13 @@ section { padding: 8rem 0; }
 @media (max-width: 400px) {
   .booking-session-grid { grid-template-columns: 1fr !important; }
   .booking-time-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Smallest phones (320px): the 2-up stat strip and 3-up school grid
+   otherwise push the page wider than the viewport. */
+@media (max-width: 360px) {
+  .hero-stat-item { padding: 1.25rem 1rem; }
+  .schools-emblem-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 600px) {

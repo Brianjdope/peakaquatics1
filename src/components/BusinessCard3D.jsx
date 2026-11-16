@@ -232,8 +232,8 @@ export default function BusinessCard3D() {
         s.targetFlip = s.flipped ? Math.PI : 0
         setHint(s.flipped ? 'TAP TO FLIP BACK' : 'HOVER TO TILT  ·  CLICK TO FLIP')
       }
+      // Passive: tilting follows the finger but never blocks page scrolling.
       const onTouchMove = (e) => {
-        e.preventDefault()
         const touch = e.touches[0]
         const r  = el.getBoundingClientRect()
         const nx = ((touch.clientX - r.left) / r.width  - 0.5) * 2
@@ -245,10 +245,11 @@ export default function BusinessCard3D() {
 
       el.addEventListener('mousemove',  onMouseMove)
       el.addEventListener('mouseleave', onMouseLeave)
-      el.addEventListener('touchmove',  onTouchMove, { passive: false })
+      el.addEventListener('touchmove',  onTouchMove, { passive: true })
       el.addEventListener('touchend',   onTouchEnd)
+      // A tap already fires click, so listening to touchstart too would flip
+      // the card and immediately flip it back.
       renderer.domElement.addEventListener('click',      onFlip)
-      renderer.domElement.addEventListener('touchstart', onFlip, { passive: true })
 
       let rafId
       const animate = () => {
@@ -277,7 +278,6 @@ export default function BusinessCard3D() {
         el.removeEventListener('touchmove',  onTouchMove)
         el.removeEventListener('touchend',   onTouchEnd)
         renderer.domElement.removeEventListener('click',      onFlip)
-        renderer.domElement.removeEventListener('touchstart', onFlip)
         window.removeEventListener('resize', onResize)
         renderer.dispose()
         if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement)

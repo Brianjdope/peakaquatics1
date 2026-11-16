@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 // Real logo images from the original peakaquaticsports.com site
 const SCHOOL_LOGOS = {
@@ -54,8 +54,9 @@ export function getSchoolData(school) {
 
 export default function SchoolLogo({ school, size = 60 }) {
   const imgSrc = SCHOOL_LOGOS[school]
+  const [imgFailed, setImgFailed] = useState(false)
 
-  if (imgSrc) {
+  if (imgSrc && !imgFailed) {
     const whiteFilter = WHITE_FILTER_SCHOOLS.has(school)
         ? { filter: 'brightness(0) invert(1)' }
         : null
@@ -66,11 +67,8 @@ export default function SchoolLogo({ school, size = 60 }) {
         title={school}
         className="school-logo-img"
         style={{ width: size, height: size, objectFit: 'contain', flexShrink: 0, ...whiteFilter }}
-        onError={(e) => {
-          // Fall back to badge if image fails
-          e.target.style.display = 'none'
-          e.target.nextSibling && (e.target.nextSibling.style.display = 'flex')
-        }}
+        // Fall back to the badge below if the image fails to load
+        onError={() => setImgFailed(true)}
       />
     )
   }
