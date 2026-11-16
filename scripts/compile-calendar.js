@@ -77,9 +77,8 @@ function buildICSEvent(event) {
 
   if (event.allDay) {
     lines.push(`DTSTART;VALUE=DATE:${toICSDate(event.start, true)}`);
-    const endDate = new Date(event.end || event.start);
-    endDate.setDate(endDate.getDate() + 1);
-    lines.push(`DTEND;VALUE=DATE:${toICSDate(endDate, true)}`);
+    // event.end is exclusive for all-day events (as in Google's end.date and ICS DTEND)
+    lines.push(`DTEND;VALUE=DATE:${toICSDate(event.end, true)}`);
   } else {
     lines.push(`DTSTART:${toICSDate(event.start)}`);
     lines.push(`DTEND:${toICSDate(event.end || new Date(event.start.getTime() + 3600000))}`);
@@ -118,11 +117,8 @@ async function getGoogleAuth() {
     throw new Error('Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET in .env');
   }
 
-  const oAuth2Client = new google.auth.OAuth2(
-    GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET,
-    'urn:ietf:wg:oauth:2.0:oob'
-  );
+  // No redirect URI needed here: this only refreshes the token saved by setup-google-auth.js.
+  const oAuth2Client = new google.auth.OAuth2(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
   if (!fs.existsSync(TOKEN_PATH)) {
     throw new Error(`No token.json found. Run: node setup-google-auth.js`);
@@ -190,6 +186,14 @@ async function fetchGoogleEvents() {
 
 // ── Notion Calendar ───────────────────────────────────────────────────────────
 
+const NOTION_DATE_NAMES = ['Date', 'When', 'Start', 'Scheduled', 'Due', 'Due Date', 'Event Date'];
+
+/** Name of the date property to use: the first common name present, else any date property. */
+function findNotionDateProperty(props) {
+  const name = NOTION_DATE_NAMES.find((n) => props[n]?.type === 'date');
+  return name || Object.keys(props).find((n) => props[n].type === 'date');
+}
+
 /**
  * Tries to extract date/title from common Notion calendar database property names.
  * Adjust the property names below to match your Notion database columns.
@@ -204,10 +208,8 @@ function parseNotionEvent(page, dbId) {
   const title = titleProp?.title?.map((t) => t.plain_text).join('') || '(No title)';
 
   // Date — try common names
-  const dateProp =
-    props['Date'] || props['When'] || props['Start'] || props['Scheduled'] ||
-    props['Due'] || props['Due Date'] || props['Event Date'] ||
-    Object.values(props).find((p) => p.type === 'date');
+  const dateName = findNotionDateProperty(props);
+  const dateProp = dateName && props[dateName];
 
   if (!dateProp?.date?.start) return null;
 
@@ -218,6 +220,8 @@ function parseNotionEvent(page, dbId) {
   const start = new Date(startStr);
   const end = endStr ? new Date(endStr) : new Date(start);
   if (!endStr && !isAllDay) end.setHours(end.getHours() + 1);
+  // Notion's all-day end date is inclusive; ICS DTEND is exclusive.
+  if (isAllDay) end.setUTCDate(end.getUTCDate() + 1);
 
   // Description
   const descProp =
@@ -259,25 +263,19 @@ async function fetchNotionEvents() {
   const allEvents = [];
 
   for (const dbId of dbIds) {
+    // Notion rejects filters on properties the database lacks, so filter on the one that exists.
+    const db = await notion.databases.retrieve({ database_id: dbId });
+    const dateName = findNotionDateProperty(db.properties);
+    if (!dateName) {
+      console.warn(`  ✗ ${dbId}: no date property — skipping`);
+      continue;
+    }
+
     let cursor;
     do {
       const res = await notion.databases.query({
         database_id: dbId,
-        filter: {
-          and: [
-            {
-              or: [
-                { property: 'Date', date: { on_or_after: timeMin.toISOString() } },
-                { property: 'When', date: { on_or_after: timeMin.toISOString() } },
-                { property: 'Start', date: { on_or_after: timeMin.toISOString() } },
-                { property: 'Scheduled', date: { on_or_after: timeMin.toISOString() } },
-                { property: 'Due', date: { on_or_after: timeMin.toISOString() } },
-                { property: 'Due Date', date: { on_or_after: timeMin.toISOString() } },
-                { property: 'Event Date', date: { on_or_after: timeMin.toISOString() } },
-              ],
-            },
-          ],
-        },
+        filter: { property: dateName, date: { on_or_after: timeMin.toISOString() } },
         start_cursor: cursor,
         page_size: 100,
       });

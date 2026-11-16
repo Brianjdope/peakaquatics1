@@ -2,20 +2,28 @@
 
 Website for Peak Aquatic Sports — competitive swimming consultancy based in Ramsey, NJ.
 
+## Develop
+
+```
+npm install
+npm run dev      # Vite dev server on http://localhost:8421
+```
+
 ## Deploy
 
-This site is a single static HTML file. To launch via GitHub Pages:
+The site is a Vite + React app and must be built before it is served; publishing the
+source `index.html` directly renders a blank page.
 
-1. Push this repo to GitHub
-2. Go to **Settings → Pages**
-3. Set source to **Deploy from a branch**, branch: `main`, folder: `/ (root)`
-4. Your site will be live at `https://<your-username>.github.io/peak-aquatic-sports`
+- **Vercel**: builds with `npm run build:vercel` (`vercel.json` sets the Vite framework).
+- **GitHub Pages**: `npm run deploy` builds `dist/` and pushes it to the `gh-pages` branch.
+  The site is served from the root of `peakaquaticsports.com` (`public/CNAME`), so it builds with base `/`.
 
 ## Structure
 
 ```
-index.html   ← entire site (self-contained, no dependencies)
-README.md    ← this file
+index.html   ← Vite entry point
+src/         ← React app
+public/      ← static assets copied as-is (CNAME, images)
+api/         ← serverless functions
+scripts/     ← calendar compiler tooling (see scripts/.env.example)
 ```
-
-All fonts are loaded from Google Fonts (CDN). No build step required.
