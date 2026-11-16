@@ -31,11 +31,6 @@ function ErrorFallback({ error, resetErrorBoundary }) {
   )
 }
 
-// Unregister any stale service workers
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()))
-}
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>

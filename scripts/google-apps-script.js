@@ -8,10 +8,16 @@
 // 2. Extensions → Apps Script → delete existing code → paste this file
 // 3. Run setupSheet() once to create headers + formatting
 // 4. Run populateSchedule() once to load recurring clients
-// 5. Deploy → New deployment → Web app
+// 5. Project Settings → Script Properties → add ADMIN_SECRET
+//    - A long random value (at least 16 characters; 32+ recommended).
+//    - The admin page (#admin) asks for it, and every admin action
+//      (Instagram token, Instagram posting, image upload) is refused
+//      without it. Never commit the value to the repo.
+//    - IG_ACCESS_TOKEN is stored here too, via the admin page.
+// 6. Deploy → New deployment → Web app
 //    - Execute as: Me  /  Who has access: Anyone
-// 6. Copy the Web App URL → paste into BookingCalendar.jsx as SHEETS_API
-// 7. After any script change: Deploy → New deployment (never edit existing)
+// 7. Copy the Web App URL → paste into BookingCalendar.jsx as SHEETS_API
+// 8. After any script change: Deploy → New deployment (never edit existing)
 //
 // COLUMN LAYOUT (A–H):
 //   A: Day/Time  B: Session  C: Members  D: Skill Level
@@ -46,10 +52,11 @@ function doPost(e) {
     if (data.action === 'cancel')    return jsonResponse(handleCancellation(data))
     if (data.action === 'uploadVideo')  return jsonResponse(handleVideoUpload(data))
     if (data.action === 'getUploadUrl') return jsonResponse(handleGetUploadUrl(data))
-    if (data.action === 'uploadImage')       return jsonResponse(handleImageUpload(data))
-    if (data.action === 'setInstagramToken') return jsonResponse(handleSetInstagramToken(data))
-    if (data.action === 'postToInstagram')   return jsonResponse(handlePostToInstagram(data))
-    if (data.action === 'getInstagramConfig') return jsonResponse(handleGetInstagramConfig())
+    // Admin actions: requireAdmin returns an error response unless the secret matches
+    if (data.action === 'verifyAdmin')       return jsonResponse(requireAdmin(data) || { success: true })
+    if (data.action === 'uploadImage')       return jsonResponse(requireAdmin(data) || handleImageUpload(data))
+    if (data.action === 'setInstagramToken') return jsonResponse(requireAdmin(data) || handleSetInstagramToken(data))
+    if (data.action === 'postToInstagram')   return jsonResponse(requireAdmin(data) || handlePostToInstagram(data))
     return jsonResponse({ success: false, error: 'Invalid action' })
   } catch (err) {
     return jsonResponse({ success: false, error: 'doPost error: ' + err.message })
@@ -59,7 +66,7 @@ function doPost(e) {
 function doGet(e) {
   try {
     var action = e.parameter.action
-    if (action === 'lookup')    return jsonResponse(handleLookup(e.parameter.email))
+    if (action === 'lookup')    return jsonResponse(handleLookup(e.parameter.email, e.parameter.bookingId))
     if (action === 'available') return jsonResponse(handleAvailability(e.parameter.date, e.parameter.day))
     return jsonResponse({ success: false, error: 'Invalid action' })
   } catch (err) {
@@ -207,7 +214,9 @@ function handleBooking(data) {
 // =============================================================
 
 function handleCancellation(data) {
-  if (!data.bookingId || !data.email) {
+  var bookingId = String(data.bookingId || '').trim()
+  var email     = normalizeEmail(data.email)
+  if (!bookingId || !email) {
     return { success: false, error: 'Booking ID and email are required.' }
   }
 
@@ -215,12 +224,11 @@ function handleCancellation(data) {
   var rows  = sheet.getDataRange().getValues()
 
   for (var i = 1; i < rows.length; i++) {
-    var cellIds   = rows[i][COL.BOOKING_ID].toString()
-    var cellEmail = rows[i][COL.EMAIL].toString().toLowerCase()
+    var cellIds    = rows[i][COL.BOOKING_ID].toString()
     var cellStatus = rows[i][COL.STATUS].toString()
 
-    if (cellIds.indexOf(data.bookingId) === -1) continue
-    if (cellEmail.indexOf(data.email.toLowerCase()) === -1 && data.email !== 'recurring@peakaquatic.com') continue
+    if (!rowHasBookingId(rows[i], bookingId)) continue
+    if (normalizeEmail(rows[i][COL.EMAIL]) !== email) continue
     if (cellStatus === 'Cancelled') return { success: false, error: 'Booking already cancelled.' }
 
     var names = rows[i][COL.NAME].toString().split('\n')
@@ -228,7 +236,7 @@ function handleCancellation(data) {
 
     if (ids.length > 1) {
       // Group row — remove just this member
-      var idx = ids.indexOf(data.bookingId)
+      var idx = ids.map(function(x) { return x.trim() }).indexOf(bookingId)
       if (idx > -1) {
         names.splice(idx, 1)
         ids.splice(idx, 1)
@@ -242,7 +250,7 @@ function handleCancellation(data) {
     }
 
     try { notifyCoachCancellation(rows[i]) } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
-    try { sendCancellationEmail(rows[i][COL.EMAIL], data.bookingId, rows[i][COL.DATETIME], rows[i][COL.SESSION]) } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
+    try { sendCancellationEmail(rows[i][COL.EMAIL], bookingId, rows[i][COL.DATETIME], rows[i][COL.SESSION]) } catch(e) { Logger.log('Email send failed: ' + e.message + ' | stack: ' + (e.stack || '')) }
     return { success: true, message: 'Booking cancelled.' }
   }
 
@@ -251,34 +259,33 @@ function handleCancellation(data) {
 
 // =============================================================
 // LOOKUP
-// Returns all active bookings for an email address
+// Returns the active booking matching both the booking ID and the
+// exact email it was made with. Never lists bookings by email alone.
 // =============================================================
 
-function handleLookup(email) {
-  if (!email) return { success: false, error: 'Email is required.' }
+function handleLookup(email, bookingId) {
+  var id         = String(bookingId || '').trim()
+  var normalized = normalizeEmail(email)
+  if (!normalized || !id) return { success: false, error: 'Booking ID and email are required.' }
 
   var sheet = getSheet()
   var rows  = sheet.getDataRange().getValues()
   var bookings = []
 
   for (var i = 1; i < rows.length; i++) {
-    var cellEmail  = rows[i][COL.EMAIL].toString().toLowerCase()
     var cellStatus = rows[i][COL.STATUS].toString()
 
-    if (cellEmail.indexOf(email.toLowerCase()) === -1) continue
+    if (!rowHasBookingId(rows[i], id)) continue
+    if (normalizeEmail(rows[i][COL.EMAIL]) !== normalized) continue
     if (cellStatus === 'Cancelled') continue
 
-    var ids = rows[i][COL.BOOKING_ID].toString().split('\n')
-    for (var j = 0; j < ids.length; j++) {
-      if (ids[j].trim()) {
-        bookings.push({
-          bookingId: ids[j].trim(),
-          session:   rows[i][COL.SESSION],
-          date:      rows[i][COL.DATETIME],
-          status:    cellStatus,
-        })
-      }
-    }
+    bookings.push({
+      bookingId: id,
+      session:   rows[i][COL.SESSION],
+      date:      rows[i][COL.DATETIME],
+      status:    cellStatus,
+    })
+    break
   }
 
   return { success: true, bookings: bookings }
@@ -358,40 +365,50 @@ function sendCancellationEmail(email, bookingId, dateTime, session) {
 
 var DRIVE_FOLDER_ID = '1c1qGAl8bpEuTMhZQZfi1o4czcB-d4b2H'
 
+// Upload limits (match the web client's limits in src/lib/bookingClient.js)
+var MAX_VIDEO_BASE64_BYTES = 35 * 1024 * 1024   // base64 fallback through this script
+var MAX_VIDEO_DIRECT_BYTES = 200 * 1024 * 1024  // direct resumable upload to Drive
+var MAX_IMAGE_BYTES        = 8 * 1024 * 1024    // Instagram's image size limit
+var IMAGE_TYPES            = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+
 function handleVideoUpload(data) {
   if (!data.videoBase64 || !data.fileName) {
     return { success: false, error: 'Missing video data or file name.' }
+  }
+  var contentType = data.contentType || 'video/mp4'
+  if (!isVideoType(contentType)) {
+    return { success: false, error: 'Only video files can be uploaded.' }
+  }
+  if (base64Size(data.videoBase64) > MAX_VIDEO_BASE64_BYTES) {
+    return { success: false, error: 'Video must be under 35 MB.' }
+  }
+  var bookingId = String(data.bookingId || '').trim()
+  var booking   = findActiveBookingRow(getSheet().getDataRange().getValues(), bookingId)
+  if (!booking) {
+    return { success: false, error: 'A valid booking ID is required to upload a video.' }
   }
 
   try {
     var folder = DriveApp.getFolderById(DRIVE_FOLDER_ID)
     var blob = Utilities.newBlob(
       Utilities.base64Decode(data.videoBase64),
-      data.contentType || 'video/mp4',
-      data.fileName
+      contentType,
+      String(data.fileName).slice(0, 200)
     )
+    // Not shared: the script runs as the coach, who owns the folder, so the
+    // link in the notification below opens for the coach only.
     var file = folder.createFile(blob)
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
     var videoUrl = file.getUrl()
 
     // Notify coach with video link
-    if (data.bookingId) {
-      var sheet = getSheet()
-      var rows  = sheet.getDataRange().getValues()
-      for (var i = 1; i < rows.length; i++) {
-        if (rows[i][COL.BOOKING_ID].toString().indexOf(data.bookingId) !== -1) {
-          try {
-            notifyCoach({
-              name: rows[i][COL.NAME],
-              email: rows[i][COL.EMAIL],
-              session: rows[i][COL.SESSION],
-              skillLevel: rows[i][COL.SKILL],
-            }, data.bookingId, rows[i][COL.DATETIME], videoUrl)
-          } catch(e) { Logger.log('Coach notify error: ' + e.message) }
-          break
-        }
-      }
-    }
+    try {
+      notifyCoach({
+        name: booking[COL.NAME],
+        email: booking[COL.EMAIL],
+        session: booking[COL.SESSION],
+        skillLevel: booking[COL.SKILL],
+      }, bookingId, booking[COL.DATETIME], videoUrl)
+    } catch(e) { Logger.log('Coach notify error: ' + e.message) }
 
     return { success: true, videoUrl: videoUrl }
   } catch(e) {
@@ -408,17 +425,33 @@ function handleGetUploadUrl(data) {
   if (!data.fileName) {
     return { success: false, error: 'Missing file name.' }
   }
+  var contentType = data.contentType || data.mimeType || 'video/mp4'
+  var fileSize    = Number(data.fileSize)
+  if (!isVideoType(contentType)) {
+    return { success: false, error: 'Only video files can be uploaded.' }
+  }
+  if (!(fileSize > 0) || fileSize > MAX_VIDEO_DIRECT_BYTES) {
+    return { success: false, error: 'Video must be under 200 MB.' }
+  }
+  if (!findActiveBookingRow(getSheet().getDataRange().getValues(), String(data.bookingId || '').trim())) {
+    return { success: false, error: 'A valid booking ID is required to upload a video.' }
+  }
   try {
     var metadata = {
-      name: data.fileName,
-      mimeType: data.mimeType || 'video/mp4',
+      name: String(data.fileName).slice(0, 200),
+      mimeType: contentType,
       parents: [DRIVE_FOLDER_ID]
     }
     var url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable'
     var res = UrlFetchApp.fetch(url, {
       method: 'post',
       contentType: 'application/json',
-      headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+      // Declaring type and length up front makes Drive hold the upload to them
+      headers: {
+        Authorization: 'Bearer ' + ScriptApp.getOAuthToken(),
+        'X-Upload-Content-Type': contentType,
+        'X-Upload-Content-Length': String(fileSize),
+      },
       payload: JSON.stringify(metadata),
       muteHttpExceptions: true
     })
@@ -694,23 +727,29 @@ function setupWeeklyTrigger() {
 // HTML EMAIL TEMPLATE
 // =============================================================
 
+// Every text argument is plain text and is HTML-escaped here, because
+// greeting and detail values carry customer input (name, session, etc.).
 function emailTemplate(title, greeting, message, details, buttons, footer) {
   var isConfirmed = title === 'Booking Confirmed'
   var headerColor = isConfirmed ? '#059669' : '#dc2626'
+  title    = escapeHtml(title)
+  greeting = escapeHtml(greeting)
+  message  = escapeHtml(message)
+  footer   = escapeHtml(footer)
 
   var detailRows = ''
   for (var i = 0; i < details.length; i++) {
     detailRows += '<tr>'
-      + '<td style="padding:8px 12px;color:#6b7280;font-size:14px;border-bottom:1px solid #f3f4f6;">' + details[i].label + '</td>'
-      + '<td style="padding:8px 12px;color:#111827;font-size:14px;font-weight:600;border-bottom:1px solid #f3f4f6;">' + details[i].value + '</td>'
+      + '<td style="padding:8px 12px;color:#6b7280;font-size:14px;border-bottom:1px solid #f3f4f6;">' + escapeHtml(details[i].label) + '</td>'
+      + '<td style="padding:8px 12px;color:#111827;font-size:14px;font-weight:600;border-bottom:1px solid #f3f4f6;">' + escapeHtml(details[i].value) + '</td>'
       + '</tr>'
   }
 
   var buttonHtml = ''
   for (var j = 0; j < buttons.length; j++) {
-    buttonHtml += '<a href="' + buttons[j].url + '" style="display:inline-block;background:' + buttons[j].color
+    buttonHtml += '<a href="' + escapeHtml(buttons[j].url) + '" style="display:inline-block;background:' + buttons[j].color
       + ';color:#fff;padding:12px 28px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:600;margin:0 8px 8px 0;">'
-      + buttons[j].label + '</a>'
+      + escapeHtml(buttons[j].label) + '</a>'
   }
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:#f9fafb;font-family:Arial,sans-serif;">'
@@ -751,9 +790,11 @@ function getSheet() {
   return sheet
 }
 
+// The booking ID plus the exact email is what lets a customer look up or
+// cancel a booking, so the random part comes from a UUID, not Math.random.
 function generateId() {
   var ts   = Date.now().toString(36).toUpperCase().slice(-5)
-  var rand = Math.random().toString(36).slice(2, 5).toUpperCase()
+  var rand = Utilities.getUuid().replace(/-/g, '').slice(0, 8).toUpperCase()
   return 'PAS-' + ts + '-' + rand
 }
 
@@ -762,26 +803,101 @@ function jsonResponse(data) {
     .setMimeType(ContentService.MimeType.JSON)
 }
 
+// Emails compare exactly, ignoring case and surrounding whitespace
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase()
+}
+
+// A row's Booking ID cell holds one ID, or one per line for group rows
+function rowHasBookingId(row, bookingId) {
+  var id = String(bookingId || '').trim()
+  if (!id) return false
+  return row[COL.BOOKING_ID].toString().split('\n').some(function(x) { return x.trim() === id })
+}
+
+// The sheet row holding this exact booking ID, unless it was cancelled
+function findActiveBookingRow(rows, bookingId) {
+  for (var i = 1; i < rows.length; i++) {
+    if (rowHasBookingId(rows[i], bookingId) && rows[i][COL.STATUS].toString() !== 'Cancelled') return rows[i]
+  }
+  return null
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function isVideoType(contentType) {
+  return /^video\/[a-z0-9.+-]+$/i.test(String(contentType || ''))
+}
+
+// Decoded byte size of a base64 string, without decoding it
+function base64Size(b64) {
+  var s = String(b64 || '')
+  var padding = s.slice(-2) === '==' ? 2 : (s.slice(-1) === '=' ? 1 : 0)
+  return Math.floor(s.length * 3 / 4) - padding
+}
+
 // =============================================================
-// IMAGE UPLOAD — Save image to Drive, return public URL for IG
+// ADMIN AUTH — admin actions must send the ADMIN_SECRET Script
+// Property as data.adminSecret (see HOW TO SET UP)
+// =============================================================
+
+var ADMIN_SECRET_MIN_LENGTH = 16
+
+// Returns null when data.adminSecret matches, otherwise an error response
+function requireAdmin(data) {
+  var expected = PropertiesService.getScriptProperties().getProperty('ADMIN_SECRET') || ''
+  if (expected.length < ADMIN_SECRET_MIN_LENGTH) {
+    return { success: false, error: 'Admin access is not configured.' }
+  }
+  if (!secretsMatch(String(data.adminSecret || ''), expected)) {
+    return { success: false, error: 'Unauthorized.' }
+  }
+  return null
+}
+
+// Compares every character so timing doesn't reveal how much matched
+function secretsMatch(given, expected) {
+  if (given.length !== expected.length) return false
+  var diff = 0
+  for (var i = 0; i < expected.length; i++) {
+    diff |= given.charCodeAt(i) ^ expected.charCodeAt(i)
+  }
+  return diff === 0
+}
+
+// =============================================================
+// IMAGE UPLOAD — Save image to Drive (private) for an Instagram post.
+// Admin only; handlePostToInstagram shares it just while posting.
 // =============================================================
 
 function handleImageUpload(data) {
   if (!data.imageBase64 || !data.fileName) {
     return { success: false, error: 'Missing image data or file name.' }
   }
+  var contentType = String(data.contentType || '')
+  if (IMAGE_TYPES.indexOf(contentType) === -1) {
+    return { success: false, error: 'Image must be JPEG, PNG, WebP or GIF.' }
+  }
+  if (base64Size(data.imageBase64) > MAX_IMAGE_BYTES) {
+    return { success: false, error: 'Image must be under 8 MB.' }
+  }
 
   try {
     var folder = DriveApp.getFolderById(DRIVE_FOLDER_ID)
     var blob = Utilities.newBlob(
       Utilities.base64Decode(data.imageBase64),
-      data.contentType || 'image/jpeg',
-      data.fileName
+      contentType,
+      String(data.fileName).slice(0, 200)
     )
     var file = folder.createFile(blob)
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
-    var imageUrl = 'https://lh3.googleusercontent.com/d/' + file.getId()
-    return { success: true, imageUrl: imageUrl }
+    return { success: true, imageFileId: file.getId() }
   } catch (e) {
     Logger.log('Image upload error: ' + e.message)
     return { success: false, error: 'Upload failed: ' + e.message }
@@ -789,24 +905,11 @@ function handleImageUpload(data) {
 }
 
 // =============================================================
-// INSTAGRAM — Server-side posting via Graph API
-// Token stored in Script Properties (not exposed to frontend)
+// INSTAGRAM — Server-side posting via Graph API (admin only)
+// Token stored in Script Properties and never returned to a client
 // =============================================================
 
 var IG_USER_ID = '17841438687144817' // Peak Aquatic Sports IG Business Account ID
-
-/**
- * Return stored Instagram config (token + user ID) so the client
- * can call the Graph API directly — avoids UrlFetchApp permission issues.
- */
-function handleGetInstagramConfig() {
-  var props = PropertiesService.getScriptProperties()
-  var token = props.getProperty('IG_ACCESS_TOKEN')
-  if (!token) {
-    return { success: false, error: 'No Instagram token configured. Use setInstagramToken first.' }
-  }
-  return { success: true, token: token, igUserId: IG_USER_ID }
-}
 
 /**
  * Save or exchange an Instagram access token.
@@ -857,11 +960,12 @@ function handleSetInstagramToken(data) {
 
 /**
  * Post an image to Instagram.
- * data.imageUrl  — public URL of the image (required)
- * data.caption   — post caption (required)
+ * data.imageUrl     — public URL of the image, or
+ * data.imageFileId  — an image saved by handleImageUpload
+ * data.caption      — post caption (required)
  */
 function handlePostToInstagram(data) {
-  if (!data.imageUrl) return { success: false, error: 'Missing imageUrl.' }
+  if (!data.imageUrl && !data.imageFileId) return { success: false, error: 'Missing imageUrl or imageFileId.' }
   if (!data.caption)  return { success: false, error: 'Missing caption.' }
 
   var props = PropertiesService.getScriptProperties()
@@ -870,14 +974,24 @@ function handlePostToInstagram(data) {
     return { success: false, error: 'No Instagram token configured. Use setInstagramToken first.' }
   }
 
+  var sharedFile = null
   try {
+    var imageUrl = data.imageUrl
+    if (data.imageFileId) {
+      sharedFile = getUploadedImage(data.imageFileId)
+      if (!sharedFile) return { success: false, error: 'Uploaded image not found.' }
+      // Instagram fetches the image by URL, so share it only for this post
+      sharedFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
+      imageUrl = 'https://lh3.googleusercontent.com/d/' + sharedFile.getId()
+    }
+
     // Step 1: Create media container
     var containerRes = UrlFetchApp.fetch(
       'https://graph.facebook.com/v19.0/' + IG_USER_ID + '/media', {
         method: 'post',
         contentType: 'application/json',
         payload: JSON.stringify({
-          image_url: data.imageUrl,
+          image_url: imageUrl,
           caption: data.caption,
           access_token: token
         }),
@@ -915,5 +1029,24 @@ function handlePostToInstagram(data) {
   } catch (e) {
     Logger.log('Instagram post error: ' + e.message)
     return { success: false, error: 'Failed to post: ' + e.message }
+  } finally {
+    if (sharedFile) {
+      try { sharedFile.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE) }
+      catch (e) { Logger.log('Unshare error: ' + e.message) }
+    }
   }
+}
+
+// A file saved by handleImageUpload (must live in the upload folder)
+function getUploadedImage(fileId) {
+  try {
+    var file    = DriveApp.getFileById(String(fileId))
+    var parents = file.getParents()
+    while (parents.hasNext()) {
+      if (parents.next().getId() === DRIVE_FOLDER_ID) return file
+    }
+  } catch (e) {
+    Logger.log('Image lookup error: ' + e.message)
+  }
+  return null
 }

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cancelBooking, createBooking, fetchAvailability, lookupBookings, uploadVideo } from '../lib/bookingClient'
+import { isSlotInPast } from '../lib/bookingSlots'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -128,6 +129,9 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const [error, setError] = useState('')
   const [rawBooked, setRawBooked] = useState([])
   const [loadingTimes, setLoadingTimes] = useState(false)
+  const [availabilityError, setAvailabilityError] = useState('')
+  const availabilityReq = useRef(0) // bumps on every date change so stale availability responses are ignored
+  const [bookingFailed, setBookingFailed] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(-1) // -1 = not started, 0-100 = uploading, 101 = done, -2 = error
   const [uploadError, setUploadError] = useState('')
   const fileRef = useRef()
@@ -137,34 +141,24 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   // Cancellation state
   const [mode, setMode] = useState('book') // 'book' or 'cancel'
   const [cancelEmail, setCancelEmail] = useState('')
+  const [cancelBookingId, setCancelBookingId] = useState('')
   const [lookupLoading, setLookupLoading] = useState(false)
   const [bookings, setBookings] = useState([])
   const [lookupDone, setLookupDone] = useState(false)
   const [cancellingId, setCancellingId] = useState('')
   const [cancelSuccess, setCancelSuccess] = useState('')
+  const [linkedBookingId, setLinkedBookingId] = useState('') // booking named by an email cancel link, awaiting confirmation
 
-  // Handle cancel link from confirmation email — auto-cancel immediately
+  // Handle cancel link from confirmation email — look the booking up and ask the user to confirm.
+  // Never cancel on load: mail scanners and link previews open these links too.
   useEffect(() => {
     if (cancelParams?.bookingId && cancelParams?.email) {
       setMode('cancel')
       setCancelEmail(cancelParams.email)
-      setCancellingId(cancelParams.bookingId)
+      setCancelBookingId(cancelParams.bookingId)
+      setLinkedBookingId(cancelParams.bookingId)
       onCancelParamsUsed?.()
-      setTimeout(async () => {
-        setError('')
-        setCancelSuccess('')
-        try {
-          const data = await cancelBooking(cancelParams.bookingId, cancelParams.email)
-          if (data.success) {
-            setCancelSuccess(cancelParams.bookingId)
-          } else {
-            setError(data.error || 'Cancellation failed.')
-          }
-        } catch {
-          setError('Could not connect to booking system. Please try again.')
-        }
-        setCancellingId('')
-      }, 100)
+      handleLookup(cancelParams.email, cancelParams.bookingId)
     }
   }, [cancelParams])
 
@@ -177,6 +171,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
   const bookedTimeSet = new Set((rawBooked || []).map(e => typeof e === 'string' ? e : e.time))
   const availableSlots = daySchedule.filter(slot =>
     !bookedTimeSet.has(slot.time) &&
+    !isSlotInPast(currentYear, currentMonth, selectedDate, slot.time) &&
     (!selectedSession || slot.allowedSessions.includes(selectedSession))
   )
 
@@ -187,6 +182,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     } else {
       setCurrentMonth(currentMonth - 1)
     }
+    availabilityReq.current++
     setSelectedDate(null)
     setSelectedTime(null)
   }
@@ -198,6 +194,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     } else {
       setCurrentMonth(currentMonth + 1)
     }
+    availabilityReq.current++
     setSelectedDate(null)
     setSelectedTime(null)
   }
@@ -212,22 +209,45 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     return d < t
   }
 
+  const loadAvailability = (day) => {
+    const req = ++availabilityReq.current
+    setRawBooked([])
+    setAvailabilityError('')
+    setLoadingTimes(true)
+    const selectedDateStr = `${MONTHS[currentMonth]} ${day}, ${currentYear}`
+    const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(currentYear, currentMonth, day).getDay()]
+    fetchAvailability(selectedDateStr, dayName)
+      .then(d => {
+        if (req !== availabilityReq.current) return
+        if (d.success) setRawBooked(d.booked || [])
+        else setAvailabilityError(d.error || 'Could not load availability.')
+      })
+      .catch(() => {
+        if (req === availabilityReq.current) setAvailabilityError('Could not load availability.')
+      })
+      .finally(() => {
+        if (req === availabilityReq.current) setLoadingTimes(false)
+      })
+  }
+
   const isWeekend = (day) => {
     const d = new Date(currentYear, currentMonth, day).getDay()
     return d === 0 || d === 6
   }
 
-  const sendEmailFallback = () => {
+  // mailto link for a booking the server could not record; opened only by an explicit user click
+  const emailFallbackHref = () => {
     const subject = encodeURIComponent(`New Booking: ${sessionObj?.label} — ${dateStr} at ${selectedTime}`)
     const body = encodeURIComponent(
       `New booking request:\n\nSession: ${sessionObj?.label} (${sessionObj?.duration})\nDate: ${dateStr}\nTime: ${selectedTime}\n\nClient: ${clientName}\nEmail: ${clientEmail}\nPhone: ${clientPhone || 'Not provided'}\n`
     )
-    window.open(`mailto:peakaquaticsports@gmail.com?subject=${subject}&body=${body}`, '_blank')
+    return `mailto:peakaquaticsports@gmail.com?subject=${subject}&body=${body}`
   }
 
   const handleConfirm = async () => {
     setSubmitting(true)
     setError('')
+    setBookingFailed(false)
 
     if (!clientName.trim()) { setError('Please enter your name.'); setSubmitting(false); return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) { setError('Please enter a valid email address.'); setSubmitting(false); return }
@@ -255,16 +275,17 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
         setError(data.error || 'Booking failed. Please try again.')
       }
     } catch {
-      sendEmailFallback()
-      setConfirmed(true)
+      setBookingFailed(true)
     }
     finally {
       setSubmitting(false)
     }
   }
 
-  const handleLookup = async () => {
-    if (!cancelEmail) return
+  const canLookup = Boolean(cancelEmail.trim() && cancelBookingId.trim())
+
+  const handleLookup = async (email = cancelEmail, id = cancelBookingId) => {
+    if (!email.trim() || !id.trim()) return
     setLookupLoading(true)
     setError('')
     setBookings([])
@@ -272,7 +293,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
     setCancelSuccess('')
 
     try {
-      const data = await lookupBookings(cancelEmail)
+      const data = await lookupBookings(email.trim(), id.trim())
       if (data.success) {
         setBookings(data.bookings || [])
         setLookupDone(true)
@@ -294,6 +315,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
       const data = await cancelBooking(id, cancelEmail)
       if (data.success) {
         setCancelSuccess(id)
+        setLinkedBookingId('')
         setBookings(prev => prev.filter(b => b.bookingId !== id))
       } else {
         setError(data.error || 'Cancellation failed.')
@@ -459,7 +481,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
         <p style={{ color: 'var(--muted)', fontSize: '0.72rem', lineHeight: 1.6, maxWidth: 300, margin: '0 auto 1.25rem' }}>
           To cancel or reschedule, use the{' '}
           <span
-            onClick={() => { setConfirmed(false); setMode('cancel'); setCancelEmail(clientEmail) }}
+            onClick={() => { setConfirmed(false); setMode('cancel'); setCancelEmail(clientEmail); setCancelBookingId(bookingId) }}
             style={{ color: 'var(--text)', textDecoration: 'underline', cursor: 'pointer' }}
           >Cancel Booking</span>
           {' '}tab below, or call <a href="tel:+12013595688" style={{ color: 'var(--text)', textDecoration: 'underline' }}>201-359-5688</a>.
@@ -493,7 +515,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
         ].map(tab => (
           <button
             key={tab.key}
-            onClick={() => { setMode(tab.key); setError('') }}
+            onClick={() => { setMode(tab.key); setError(''); setBookingFailed(false); setLinkedBookingId('') }}
             style={{
               flex: 1,
               background: mode === tab.key ? 'var(--surface2)' : 'transparent',
@@ -534,30 +556,40 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
           style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         >
           <p style={{ color: 'var(--muted)', fontSize: '0.82rem', lineHeight: 1.6 }}>
-            Enter the email you used when booking to look up your appointments.
+            Enter the booking ID from your confirmation email and the email you used when booking.
           </p>
+
+          <input
+            type="text"
+            placeholder="Booking ID (e.g. PAS-XXXXX-XXXXXXXX)"
+            value={cancelBookingId}
+            onChange={e => { setCancelBookingId(e.target.value); setLinkedBookingId('') }}
+            onKeyDown={e => e.key === 'Enter' && handleLookup()}
+            autoCapitalize="characters"
+            style={inputStyle}
+          />
 
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <input
               type="email"
               placeholder="Email address"
               value={cancelEmail}
-              onChange={e => setCancelEmail(e.target.value)}
+              onChange={e => { setCancelEmail(e.target.value); setLinkedBookingId('') }}
               onKeyDown={e => e.key === 'Enter' && handleLookup()}
               style={{ ...inputStyle, flex: 1 }}
             />
             <button
-              onClick={handleLookup}
-              disabled={!cancelEmail || lookupLoading}
+              onClick={() => handleLookup()}
+              disabled={!canLookup || lookupLoading}
               style={{
-                background: cancelEmail ? 'var(--text)' : 'rgba(255,255,255,0.1)',
-                color: cancelEmail ? '#000' : 'var(--muted)',
+                background: canLookup ? 'var(--text)' : 'rgba(255,255,255,0.1)',
+                color: canLookup ? '#000' : 'var(--muted)',
                 border: 'none',
                 borderRadius: 6,
                 padding: '0.6rem 1.25rem',
                 fontSize: '0.82rem',
                 fontWeight: 600,
-                cursor: cancelEmail ? 'pointer' : 'default',
+                cursor: canLookup ? 'pointer' : 'default',
                 whiteSpace: 'nowrap',
                 opacity: lookupLoading ? 0.6 : 1,
               }}
@@ -584,9 +616,15 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             </motion.div>
           )}
 
+          {linkedBookingId && !cancelSuccess && bookings.some(b => b.bookingId === linkedBookingId && !isWithin24Hours(b.date)) && (
+            <p style={{ color: 'var(--text)', fontSize: '0.82rem', lineHeight: 1.6 }}>
+              To cancel booking <span style={{ fontFamily: 'monospace' }}>{linkedBookingId}</span>, press <strong>Confirm cancellation</strong> below.
+            </p>
+          )}
+
           {lookupDone && bookings.length === 0 && !cancelSuccess && (
             <p style={{ color: 'var(--muted)', fontSize: '0.82rem', textAlign: 'center', padding: '1rem 0' }}>
-              No active bookings found for this email.
+              No active booking found for this booking ID and email.
             </p>
           )}
 
@@ -658,7 +696,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                         flexShrink: 0,
                       }}
                     >
-                      {cancellingId === b.bookingId ? 'Cancelling...' : 'Cancel'}
+                      {cancellingId === b.bookingId ? 'Cancelling...' : b.bookingId === linkedBookingId ? 'Confirm cancellation' : 'Cancel'}
                     </button>
                   )}
                 </div>
@@ -841,14 +879,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
                 onClick={() => {
                   setSelectedDate(day)
                   setSelectedTime(null)
-                  setRawBooked([])
-                  setLoadingTimes(true)
-                  const selectedDateStr = `${MONTHS[currentMonth]} ${day}, ${currentYear}`
-                  const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(currentYear, currentMonth, day).getDay()]
-                  fetchAvailability(selectedDateStr, dayName)
-                    .then(d => { if (d.success) setRawBooked(d.booked || []) })
-                    .catch(() => {})
-                    .finally(() => setLoadingTimes(false))
+                  loadAvailability(day)
                   if (window.innerWidth <= 768) {
                     setTimeout(() => timeSlotRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
                   }
@@ -898,6 +929,7 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             style={{ overflow: 'hidden' }}
+            ref={timeSlotRef}
           >
             <p style={{
               color: 'var(--muted)',
@@ -911,10 +943,30 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
             </p>
             {loadingTimes ? (
               <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>Loading availability...</p>
+            ) : availabilityError ? (
+              <div style={{ textAlign: 'center', padding: '1.25rem 0' }}>
+                <p style={{ color: '#f87171', fontSize: '0.8rem', marginBottom: '0.75rem' }}>
+                  Couldn't load available times for this date. Please try again, or call 201-359-5688.
+                </p>
+                <button
+                  onClick={() => loadAvailability(selectedDate)}
+                  style={{
+                    background: 'none',
+                    border: '1px solid var(--border)',
+                    color: 'var(--muted)',
+                    padding: '0.4rem 1rem',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    fontSize: '0.78rem',
+                  }}
+                >
+                  Retry
+                </button>
+              </div>
             ) : availableSlots.length === 0 ? (
               <p style={{ color: 'var(--muted)', fontSize: '0.8rem', textAlign: 'center', padding: '1.5rem 0' }}>No available times for this session on this date. Please select another day.</p>
             ) : (
-            <div ref={timeSlotRef} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {availableSlots.map(slot => {
                 const isSelected = selectedTime === slot.time
                 return (
@@ -1096,6 +1148,11 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
               </div>
             </div>
 
+            {bookingFailed && (
+              <p role="alert" style={{ color: '#f87171', fontSize: '0.8rem', lineHeight: 1.6, marginBottom: '0.6rem' }}>
+                Your booking was not sent — we could not reach the booking system. Please try again, or email us your request.
+              </p>
+            )}
             <button
               onClick={handleConfirm}
               disabled={!clientName || !clientEmail || submitting}
@@ -1115,8 +1172,26 @@ export default function BookingCalendar({ cancelParams, onCancelParamsUsed }) {
               onMouseEnter={e => { if (clientName && clientEmail && !submitting) e.currentTarget.style.opacity = '0.85' }}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
-              {submitting ? 'Booking...' : 'Confirm Booking'}
+              {submitting ? 'Booking...' : bookingFailed ? 'Try Again' : 'Confirm Booking'}
             </button>
+            {bookingFailed && (
+              <a
+                href={emailFallbackHref()}
+                style={{
+                  display: 'block',
+                  marginTop: '0.5rem',
+                  textAlign: 'center',
+                  border: '1px solid var(--border)',
+                  borderRadius: 8,
+                  padding: '0.65rem',
+                  color: 'var(--text)',
+                  fontSize: '0.8rem',
+                  textDecoration: 'none',
+                }}
+              >
+                Email us your booking request instead
+              </a>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { bindInstallPrompt, promptInstall } from '../lib/pwa'
 
+const DISMISS_KEY = 'peak-install-banner-dismissed'
+
+function wasDismissed() {
+  try { return localStorage.getItem(DISMISS_KEY) === '1' } catch { return false }
+}
+
 export default function InstallAppBanner() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    bindInstallPrompt((ready) => setVisible(ready))
+    bindInstallPrompt((ready) => setVisible(ready && !wasDismissed()))
   }, [])
+
+  const dismiss = () => {
+    try { localStorage.setItem(DISMISS_KEY, '1') } catch {}
+    setVisible(false)
+  }
 
   if (!visible) return null
 
@@ -23,7 +34,7 @@ export default function InstallAppBanner() {
         >
           Install App
         </button>
-        <button className="install-btn" onClick={() => setVisible(false)}>
+        <button className="install-btn" onClick={dismiss}>
           Not now
         </button>
       </div>

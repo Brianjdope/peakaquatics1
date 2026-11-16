@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 // Real logo images from the original peakaquaticsports.com site
 const SCHOOL_LOGOS = {
@@ -28,6 +28,7 @@ const SCHOOL_LOGOS = {
   'Bowdoin College':                    '/logos/bowdoin.jpg',
   'Carnegie Mellon University':         '/logos/carnegie-mellon.jpg',
   'Providence College':                 '/logos/providence.webp',
+  'Middlebury College':                 '/logos/middlebury.svg',
 }
 
 // Fallback color badges for schools not in the image map
@@ -37,6 +38,7 @@ const SCHOOL_FALLBACK = {
   'Lehigh University':           { abbr: 'LU',    bg: '#653700', color: '#fff' },
   'Holy Cross University':       { abbr: 'HC',    bg: '#602D8C', color: '#fff' },
   'Lafayette College':           { abbr: 'LAF',   bg: '#8B2346', color: '#fff' },
+  'Middlebury College':          { abbr: 'MIDD',  bg: '#0a2240', color: '#fff' },
   'University of Maine':         { abbr: 'UME',   bg: '#003DA5', color: '#fff' },
   'TCNJ':                        { abbr: 'TCNJ',  bg: '#1E3A6E', color: '#C9A94A' },
   'Columbia University':              { abbr: 'COL',  bg: '#003DA5', color: '#fff' },
@@ -44,7 +46,7 @@ const SCHOOL_FALLBACK = {
 }
 
 // Schools whose logos should be rendered in white (via CSS filter) for dark backgrounds
-const WHITE_FILTER_SCHOOLS = new Set([])
+const WHITE_FILTER_SCHOOLS = new Set(['Middlebury College'])
 
 export function getSchoolData(school) {
   return SCHOOL_FALLBACK[school] || { abbr: school.split(' ').map(w => w[0]).join('').slice(0, 3), bg: '#2a3550', color: '#4b8fd4' }
@@ -52,8 +54,9 @@ export function getSchoolData(school) {
 
 export default function SchoolLogo({ school, size = 60 }) {
   const imgSrc = SCHOOL_LOGOS[school]
+  const [imgFailed, setImgFailed] = useState(false)
 
-  if (imgSrc) {
+  if (imgSrc && !imgFailed) {
     const whiteFilter = WHITE_FILTER_SCHOOLS.has(school)
         ? { filter: 'brightness(0) invert(1)' }
         : null
@@ -64,11 +67,8 @@ export default function SchoolLogo({ school, size = 60 }) {
         title={school}
         className="school-logo-img"
         style={{ width: size, height: size, objectFit: 'contain', flexShrink: 0, ...whiteFilter }}
-        onError={(e) => {
-          // Fall back to badge if image fails
-          e.target.style.display = 'none'
-          e.target.nextSibling && (e.target.nextSibling.style.display = 'flex')
-        }}
+        // Fall back to the badge below if the image fails to load
+        onError={() => setImgFailed(true)}
       />
     )
   }

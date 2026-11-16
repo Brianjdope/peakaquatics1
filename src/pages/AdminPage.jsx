@@ -2,8 +2,18 @@ import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ARTICLES } from '../data'
 
-const ADMIN_PASSWORD = 'peakaquatic2026'
 const SHEETS_API = 'https://script.google.com/macros/s/AKfycbxXftEZLmAm-vQ4MQi2GZgycipF-JXo4-ZdnxAWT8kuIojrhhvSyP9XjKJh9WzO3a4d/exec'
+
+// Every admin action is checked by the Apps Script against its ADMIN_SECRET
+// Script Property; the key typed at login is only kept in memory.
+async function callAdmin(adminSecret, action, payload = {}) {
+  const res = await fetch(SHEETS_API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action, adminSecret, ...payload }),
+  })
+  return res.json()
+}
 
 // Convert article data into an Instagram caption
 function articleToCaption(article) {
@@ -23,7 +33,9 @@ function resolveImageUrl(img) {
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
+  const [adminSecret, setAdminSecret] = useState('')
   const [authError, setAuthError] = useState('')
+  const [authChecking, setAuthChecking] = useState(false)
 
   // Tab: 'article' or 'custom'
   const [tab, setTab] = useState('article')
@@ -51,13 +63,24 @@ export default function AdminPage() {
   const articleKeys = Object.keys(ARTICLES)
   const currentArticle = selectedArticle ? ARTICLES[selectedArticle] : null
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    if (password === ADMIN_PASSWORD) {
-      setAuthenticated(true)
-      setAuthError('')
-    } else {
-      setAuthError('Incorrect password')
+    if (!password || authChecking) return
+    setAuthChecking(true)
+    setAuthError('')
+    try {
+      const data = await callAdmin(password, 'verifyAdmin')
+      if (data.success) {
+        setAdminSecret(password)
+        setPassword('')
+        setAuthenticated(true)
+      } else {
+        setAuthError(data.error || 'Incorrect admin key')
+      }
+    } catch (err) {
+      setAuthError('Could not reach the server: ' + err.message)
+    } finally {
+      setAuthChecking(false)
     }
   }
 
@@ -76,15 +99,9 @@ export default function AdminPage() {
     setTokenSaving(true)
     setTokenMsg(null)
     try {
-      const res = await fetch(SHEETS_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'setInstagramToken',
-          longLivedToken: tokenInput.trim(),
-        }),
+      const data = await callAdmin(adminSecret, 'setInstagramToken', {
+        longLivedToken: tokenInput.trim(),
       })
-      const data = await res.json()
       if (data.success) {
         setTokenMsg({ type: 'success', text: data.message })
         setTokenInput('')
@@ -98,7 +115,7 @@ export default function AdminPage() {
     }
   }
 
-  // Upload image to Google Drive and get a public URL
+  // Upload image to Google Drive (kept private); returns its Drive file ID
   async function uploadImageToDrive(file) {
     try {
       const reader = new FileReader()
@@ -107,32 +124,26 @@ export default function AdminPage() {
         reader.onerror = reject
         reader.readAsDataURL(file)
       })
-      const res = await fetch(SHEETS_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'uploadImage',
-          fileName: file.name,
-          contentType: file.type,
-          imageBase64: base64,
-        }),
+      const data = await callAdmin(adminSecret, 'uploadImage', {
+        fileName: file.name,
+        contentType: file.type,
+        imageBase64: base64,
       })
-      const data = await res.json()
-      if (data.success && data.imageUrl) return data.imageUrl
+      if (data.success && data.imageFileId) return data.imageFileId
       throw new Error(data.error || 'Upload failed')
     } catch (err) {
       throw new Error('Image upload failed: ' + err.message)
     }
   }
 
-  // Post to Instagram directly from the browser (bypasses UrlFetchApp)
+  // Post to Instagram through the Apps Script, which holds the access token
   const handlePost = async () => {
     setPosting(true)
     setPostError('')
     setPostResult(null)
 
     try {
-      let finalImageUrl = ''
+      let image = null // { imageUrl } or { imageFileId }
       let finalCaption = ''
 
       if (tab === 'article') {
@@ -141,7 +152,7 @@ export default function AdminPage() {
           setPosting(false)
           return
         }
-        finalImageUrl = resolveImageUrl(currentArticle.img)
+        image = { imageUrl: resolveImageUrl(currentArticle.img) }
         finalCaption = articleToCaption(currentArticle)
       } else {
         finalCaption = caption.trim()
@@ -150,81 +161,32 @@ export default function AdminPage() {
           setPosting(false)
           return
         }
-        finalImageUrl = imageUrl.trim()
-        if (!finalImageUrl && imageFile) {
+        if (imageUrl.trim()) {
+          image = { imageUrl: imageUrl.trim() }
+        } else if (imageFile) {
           try {
-            finalImageUrl = await uploadImageToDrive(imageFile)
+            image = { imageFileId: await uploadImageToDrive(imageFile) }
           } catch (uploadErr) {
             setPostError(uploadErr.message)
             setPosting(false)
             return
           }
         }
-        if (!finalImageUrl) {
+        if (!image) {
           setPostError('Please provide an image URL or upload an image.')
           setPosting(false)
           return
         }
       }
 
-      // 1. Retrieve stored token from Apps Script (no UrlFetchApp needed)
-      const cfgRes = await fetch(SHEETS_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ action: 'getInstagramConfig' }),
-      })
-      const cfg = await cfgRes.json()
-      if (!cfg.success) {
-        setPostError(cfg.error || 'Could not retrieve Instagram config.')
+      const data = await callAdmin(adminSecret, 'postToInstagram', { ...image, caption: finalCaption })
+      if (!data.success) {
+        setPostError(data.error || 'Failed to post.')
         setPosting(false)
         return
       }
 
-      const { token: accessToken, igUserId } = cfg
-
-      // 2. Create media container via Instagram Graph API
-      const containerRes = await fetch(
-        `https://graph.facebook.com/v19.0/${igUserId}/media`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            image_url: finalImageUrl,
-            caption: finalCaption,
-            access_token: accessToken,
-          }),
-        }
-      )
-      const containerData = await containerRes.json()
-      if (containerData.error) {
-        setPostError('Container error: ' + containerData.error.message)
-        setPosting(false)
-        return
-      }
-
-      // 3. Wait for Instagram to process the image
-      await new Promise(r => setTimeout(r, 5000))
-
-      // 4. Publish
-      const publishRes = await fetch(
-        `https://graph.facebook.com/v19.0/${igUserId}/media_publish`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            creation_id: containerData.id,
-            access_token: accessToken,
-          }),
-        }
-      )
-      const publishData = await publishRes.json()
-      if (publishData.error) {
-        setPostError('Publish error: ' + publishData.error.message)
-        setPosting(false)
-        return
-      }
-
-      setPostResult({ success: true, message: 'Posted to Instagram!' })
+      setPostResult({ success: true, message: data.message || 'Posted to Instagram!' })
       if (tab === 'custom') {
         setCaption('')
         setImageFile(null)
@@ -264,25 +226,29 @@ export default function AdminPage() {
           }}
         >
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', marginBottom: '0.5rem' }}>Admin Panel</h2>
-          <p style={{ color: 'var(--muted)', fontSize: '0.8rem', marginBottom: '1.5rem' }}>Enter password to continue</p>
+          <p style={{ color: 'var(--muted)', fontSize: '0.8rem', marginBottom: '1.5rem' }}>Enter the admin key to continue</p>
           <form onSubmit={handleLogin}>
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder="Admin key"
+              autoComplete="current-password"
               style={{ ...inputStyle, marginBottom: '1rem' }}
             />
             {authError && <p style={{ color: '#ef4444', fontSize: '0.75rem', marginBottom: '0.75rem' }}>{authError}</p>}
             <button
               type="submit"
+              disabled={authChecking}
               style={{
                 width: '100%', padding: '0.6rem', background: 'var(--text)',
                 color: 'var(--bg)', border: 'none', borderRadius: 8,
-                fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer',
+                fontSize: '0.85rem', fontWeight: 600,
+                cursor: authChecking ? 'not-allowed' : 'pointer',
+                opacity: authChecking ? 0.6 : 1,
               }}
             >
-              Login
+              {authChecking ? 'Checking...' : 'Login'}
             </button>
           </form>
         </motion.div>
