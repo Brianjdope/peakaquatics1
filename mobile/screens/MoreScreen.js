@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors, spacing, fonts } from '../theme'
 
 const ITEMS = [
-  { label: 'Book & Pay', emoji: '💳', route: 'Payment' },
+  { label: 'Book a Session', emoji: '📅', route: 'Payment' },
   { label: 'About', emoji: '👤', route: 'About' },
   { label: 'Services', emoji: '🏊', route: 'Services' },
   { label: 'Contact', emoji: '📬', route: 'Contact' },

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-// import { StripeProvider } from '@stripe/stripe-react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
