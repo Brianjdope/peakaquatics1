@@ -24,6 +24,5 @@ source `index.html` directly renders a blank page.
 index.html   ← Vite entry point
 src/         ← React app
 public/      ← static assets copied as-is (CNAME, images)
-api/         ← serverless functions
 scripts/     ← calendar compiler tooling (see scripts/.env.example)
 ```

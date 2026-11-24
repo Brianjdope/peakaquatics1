@@ -42,7 +42,6 @@ export const MILESTONES = [
   { tag: 'Winter Junior Nat. Cut',   time: '4:03.05',  event: '400M Freestyle',     name: 'Ethan Reines',    date: 'Mar 2026' },
 ]
 
-const CDN2 = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const ARTICLES = {
   'jeremiah-colgate': {
     tag: 'College Commitment',
@@ -401,7 +400,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'January 19, 2026',
     title: '2026 TYR LC Winter Invitational',
-    img: CDN2 + '1768921889010-CI1NQOOZMBGTLGYH81VB/IMG_2412.JPEG',
+    img: '/legacy/img-2412.jpg',
     imgPos: 'center 40%',
     excerpt: 'Ryker Levi qualifies for Toyota Nationals in the 100M & 200M Butterfly. Joshua Reines earns his first Winter Junior National qualification in the 400 IM.',
     body: [
@@ -422,7 +421,7 @@ export const ARTICLES = {
     tag: 'World Championships',
     date: 'August 23, 2025',
     title: 'Chloe Kim Places 4th at the World Junior Aquatics Championships!',
-    img: CDN2 + '1757435504199-7JNV92ONPYDVPLF8MQ30/World+Juniors.png',
+    img: '/legacy/world-juniors.webp',
     imgPos: 'center 70%',
     excerpt: 'Our very own Chloe Kim delivered an incredible performance on the world stage, finishing 4th in the world with a lifetime best of 16:22.56!',
     body: [
@@ -435,7 +434,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'November 11, 2025',
     title: 'Jonas Emerson Commits to Wesleyan University',
-    img: CDN2 + '1763302742372-VYK1VZZKBPAA4NAQTF5X/Wesleyan.jpg',
+    img: '/legacy/wesleyan.jpg',
     imgPos: 'center 55%',
     excerpt: '"I am very excited to announce my commitment to Wesleyan University to further my academic and athletic career!"',
     body: [
@@ -447,7 +446,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'November 7, 2025',
     title: 'Rebekah Jung Commits to the University of Rochester',
-    img: CDN2 + '1763303017571-59SHN1ZWRQIT4OREL4FV/Rebekah+Jung.jpg',
+    img: '/legacy/rebekah-jung.jpg',
     imgPos: 'center 55%',
     excerpt: '"I am excited to announce my verbal commitment to continue my academic and athletic career at the University of Rochester!"',
     body: [
@@ -478,7 +477,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'October 26, 2025',
     title: 'Jessica Wolf Commits to Colgate University',
-    img: CDN2 + '1762189818941-1RC3X9NYU3MKFS7ZVMO6/Jessie+Wolf+commits+to+Colgate+University.jpg',
+    img: '/legacy/jessie-wolf-commits-to-colgate-university.jpg',
     imgPos: 'center bottom',
     excerpt: '"I am so excited to announce my commitment to continue my academic and athletic career at Colgate University!"',
     body: [
@@ -493,7 +492,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'September 24, 2025',
     title: 'Sienna Plutzer Commits to Holy Cross University',
-    img: CDN2 + '1762189559773-A432QAWJ3081AJNK604W/Sienna+Sacred+Heart.jpg',
+    img: '/legacy/sienna-sacred-heart.jpg',
     imgPos: 'center 55%',
     excerpt: '"I am beyond excited to announce my verbal commitment to swim D1 and continue my academic careers at Holy Cross!"',
     body: [
@@ -510,7 +509,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'August 8, 2025',
     title: 'Harrison Lee Commits to Lehigh University',
-    img: CDN2 + '1762189435887-LS6BS9O946JF5B24GILK/Harrison+Lee+commits.jpg',
+    img: '/legacy/harrison-lee-commits.jpg',
     imgPos: 'center 55%',
     excerpt: '"I am thrilled to announce my commitment to Lehigh University to continue my academic and athletic career."',
     body: [
@@ -525,7 +524,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'July 31, 2025',
     title: 'New Junior National Qualifiers',
-    img: CDN2 + '1757436055642-34YX1R1QZ4E2NLGG4WEL/Yuriel+Junior+National.jpg',
+    img: '/legacy/yuriel-junior-national.jpg',
     imgPos: 'center 30%',
     excerpt: 'July was an incredible month of racing, with our athletes reaching major milestones on the national stage!',
     body: [
@@ -543,7 +542,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'June 8, 2025',
     title: 'Chloe Kim Qualifies For The World Aquatics Junior Swimming Championships 2025',
-    img: CDN2 + '1749494202074-QQKXRI3U855YC2JAE112/754ff89c-5265-46ac-bf63-fdb5d3f19e1f.png',
+    img: '/legacy/754ff89c-5265-46ac-bf63-fdb5d3f19e1f.webp',
     imgPos: 'center 40%',
     excerpt: 'We\'re proud to announce that Chloe Kim has earned a spot on the World Aquatics Junior Team and will represent Team USA in the 1500M Freestyle.',
     body: [
@@ -558,7 +557,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'April 7, 2025',
     title: '2025 YMCA Short Course Nationals',
-    img: CDN2 + '1749494896586-TXCJSMLGZ12XSI3XPOXE/b4ecf5db-cf13-4afb-92bc-a48901bccebe.jpg',
+    img: '/legacy/b4ecf5db-cf13-4afb-92bc-a48901bccebe.jpg',
     imgPos: 'center 40%',
     excerpt: 'Our athletes showcased grit, speed, and determination throughout the competition, earning impressive lifetime bests and top finishes!',
     body: [
@@ -581,7 +580,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'April 6, 2025',
     title: '2025 East Coast Elite Showcase',
-    img: CDN2 + '1745340288812-1HXNL8X77EZX0109KI71/25-isca-East-Elite-Showcase-logo-min.png',
+    img: '/legacy/25-isca-east-elite-showcase-logo-min.webp',
     imgPos: 'center 40%',
     excerpt: 'Our 12–13-year-old athletes had an incredible week at the Youth Championships, achieving impressive time drops, personal bests, and podium finishes!',
     body: [
@@ -598,7 +597,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'April 1, 2025',
     title: '2025 Central & North Speedo Sectional Championships',
-    img: CDN2 + '1743906290447-0OIX1WBTV7TSVY5TX742/Sectionals.png',
+    img: '/legacy/sectionals.webp',
     imgPos: 'center 40%',
     excerpt: 'Chloe Kim wins three events including the 800M Freestyle and 1500M Freestyle at the Speedo Sectional Championships.',
     body: [
@@ -622,7 +621,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'March 24, 2025',
     title: '2025 NJS & Scarlet Gold Championships',
-    img: CDN2 + '1745340373510-CC3GMXQI06876E8UYTRB/scarletlogo_082039.jpg',
+    img: '/legacy/scarletlogo-082039.jpg',
     imgPos: 'center 40%',
     excerpt: 'Ethan Reines earns his first Futures cut. Chloe Kim wins the 200y Butterfly in a lifetime best of 1:56.19.',
     body: [
@@ -642,7 +641,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'January 13, 2025',
     title: 'EEX Holiday Classic XXXVII & 2025 TYR LC Winter Invitational',
-    img: CDN2 + '1736797148196-0WS9ULYM7QP4SC4KJOLQ/Stephanie+Kim+Junior+Nats.jpg',
+    img: '/legacy/stephanie-kim-junior-nats.jpg',
     imgPos: 'center 20%',
     excerpt: 'Stephanie Kim makes her first Winter Junior National Cut. Chloe Kim makes her Junior National cut in the 100 Fly.',
     body: [
@@ -659,7 +658,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'December 15, 2024',
     title: '2024 Winter Junior Championships – East',
-    img: CDN2 + '1734452985162-JRE34SC876PS40S4T7BO/Winter+Juniors+Logo.jpg',
+    img: '/legacy/winter-juniors-logo.jpg',
     imgPos: 'center 40%',
     excerpt: 'Chloe Kim wins the 500y Freestyle, 400y IM (breaking the NJ state record!), and 1650y Freestyle at Junior Nationals.',
     body: [
@@ -682,7 +681,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'October 29, 2024',
     title: 'Roy Dafinoiu Commits to Lafayette College',
-    img: CDN2 + '1730218140435-VXX4ILSW54SKK2N09EEM/Roy+LAF.jpg',
+    img: '/legacy/roy-laf.jpg',
     imgPos: 'center 20%',
     excerpt: '"I am excited to announce my verbal commitment to continue my academic and athletic career at Lafayette College!"',
     body: [
@@ -697,7 +696,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'October 28, 2024',
     title: 'Timothy Lee Commits to Harvard University',
-    img: CDN2 + '1730135596929-CT3TH0EQRII0VQI725SB/Timothy+Harvard.jpg',
+    img: '/legacy/timothy-harvard.jpg',
     imgPos: 'center 20%',
     excerpt: '"I am very grateful to announce my verbal commitment to the admissions process to further my athletic and academic career at Harvard University."',
     body: [
@@ -713,7 +712,7 @@ export const ARTICLES = {
     tag: 'National Team',
     date: 'October 9, 2024',
     title: 'Kate Hurst Makes the 2024–2025 USA National Team',
-    img: CDN2 + '1731428215434-9FS9VU8Z5XPAH034V7OE/Kate+Hurst+Budapest.jpg',
+    img: '/legacy/kate-hurst-budapest.jpg',
     imgPos: 'center 20%',
     excerpt: 'Kate Hurst will be competing at the 2024 World Aquatics Championships (25M) in Budapest, Hungary from December 10-15.',
     body: [
@@ -725,7 +724,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'August 1, 2024',
     title: '2024 Speedo Summer Championships',
-    img: CDN2 + '1722206572624-77MDCCP2W34EG2J14H4X/Speedo.png',
+    img: '/legacy/speedo.webp',
     imgPos: 'center 40%',
     excerpt: 'Kate Hurst wins High Point at the 2024 Speedo Summer Championships!',
     body: [
@@ -788,7 +787,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'April 26, 2024',
     title: 'Kayla Rodriguez Commits to Northwestern University',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/baf4b40c-a32d-40fd-958a-26a5dca41270/Kayla+Northwestern.jpg',
+    img: '/legacy/kayla-northwestern.jpg',
     imgPos: 'center 20%',
     excerpt: '"I am so blessed to announce my verbal commitment to continue my academic and athletic career at Northwestern University!"',
     body: [
@@ -800,7 +799,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'March 3, 2024',
     title: 'Chloe Kim Commits to Princeton University',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/6873bb94-09ca-42c5-b9fb-4414ceef4fb3/Chloe+Princeteonn.jpg',
+    img: '/legacy/chloe-princeteonn.jpg',
     imgPos: 'center 20%',
     excerpt: '"I am so honored to announce my verbal commitment to the admissions process at Princeton University!"',
     body: [
@@ -812,7 +811,7 @@ export const ARTICLES = {
     tag: 'World Championships',
     date: 'February 12, 2024',
     title: 'Congratulations Kate Hurst',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/f487e314-a213-4ca9-851f-95a0088c97e4/Kate+USA+2.jpg',
+    img: '/legacy/kate-usa-2.jpg',
     imgPos: 'center 30%',
     excerpt: 'Kate Hurst places 9th in the world in the 1500m Freestyle at the 2024 World Aquatics Championships!',
     body: [
@@ -825,7 +824,7 @@ export const ARTICLES = {
     tag: 'World Championships',
     date: 'February 5, 2024',
     title: 'Kate Hurst Represents Team USA At World Aquatics Championships',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/8dc06c07-21e9-4109-8efb-80173e43edf3/Kate+Hurst+%26+Ken+O%27Reilly.jpg',
+    img: '/legacy/kate-hurst-ken-o-reilly.jpg',
     imgPos: 'center 30%',
     excerpt: 'Congratulations to USA National Team Member Kate Hurst for representing the red, white and blue at the world stage!',
     body: [
@@ -839,7 +838,7 @@ export const ARTICLES = {
     tag: 'World Championships',
     date: 'September 10, 2023',
     title: 'Kate Hurst Wins Gold for Team USA',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1b92052f-fb66-46b7-940d-fcc862a1e60f/Kate+Wins.jpg',
+    img: '/legacy/kate-wins.jpg',
     imgPos: 'center 30%',
     excerpt: 'Kate Hurst becomes a World Junior National Champion in the 1500M Freestyle with a time of 16:09.37!',
     body: [
@@ -854,7 +853,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'August 5, 2023',
     title: '2023 Speedo Junior National Championships',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/452e648c-5a8b-4cbb-99ad-57459dde132d/Timothy+Lee.jpg',
+    img: '/legacy/timothy-lee.jpg',
     imgPos: 'center 30%',
     excerpt: 'Kate Hurst finishes 2nd in the 1500M Freestyle dropping nearly 10 seconds. Timothy Lee makes his first Summer Junior National Cut!',
     body: [
@@ -870,7 +869,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'July 27, 2023',
     title: 'Grace Lee Commits to Cornell University',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/075a4869-24f3-4e07-8988-7175b5270e9d/Grace+Lee+Testimonial.jpg',
+    img: '/legacy/grace-lee-testimonial.jpg',
     imgPos: 'center 20%',
     excerpt: '"I\'m thrilled to announce my verbal commitment to further my academic and swim career at Cornell University!"',
     body: [
@@ -882,7 +881,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'July 9, 2023',
     title: 'Doyee Kim Commits to West Point',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/ed52330b-b6a9-4d30-b985-6a48bf62cf69/Doyee+Kim.jpg',
+    img: '/legacy/doyee-kim.jpg',
     imgPos: 'center 20%',
     excerpt: '"I am so blessed to announce my commitment to United States Military Academy."',
     body: [
@@ -894,7 +893,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'November 3, 2022',
     title: 'Richard Poplawski Commits to Harvard University',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/ab3694de-efbc-4bf4-9ec2-41c8fc789802/Richard-Poplawski-By-Jack-Spitser-AL2I9007-1-scaled.jpg',
+    img: '/legacy/richard-poplawski-by-jack-spitser-al2i9007-1-scaled.jpg',
     imgPos: 'center 20%',
     excerpt: '"I am honored and excited to announce my verbal commitment to the admissions process to continue my academic and athletic career at Harvard University."',
     body: [
@@ -906,7 +905,7 @@ export const ARTICLES = {
     tag: 'College Commitment',
     date: 'November 3, 2022',
     title: 'Eric Lee Commits to Harvard University',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/a15eaafa-79cb-426c-9b27-3325a0a28fed/Eric+Lee+Testimonial.jpg',
+    img: '/legacy/eric-lee-testimonial.jpg',
     imgPos: 'center 20%',
     excerpt: 'Congratulations Eric Lee! Job well done!',
     body: [
@@ -917,7 +916,7 @@ export const ARTICLES = {
     tag: 'Competition',
     date: 'August 6, 2022',
     title: 'Chloe Kim Wins the 400 Individual Medley at the Speedo Junior National Championships',
-    img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/3d0b4d58-3215-4640-95dc-ea08e4f7ed70/Chloe-Kim-By-Jack-Spitser-CD8I1009-1080x720.jpg',
+    img: '/legacy/chloe-kim-by-jack-spitser-cd8i1009-1080x720.jpg',
     imgPos: 'center 30%',
     excerpt: 'Chloe Kim becomes a Junior National Champion in the 400 Individual Medley in a time of 4:43.45!',
     body: [
@@ -1191,7 +1190,6 @@ export const RECORDS_TABLES = {
   ]),
 }
 
-const CDN = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/'
 export const PLACEMENTS = [
   { name: 'Chloe Kim',            school: 'Princeton University',        photo: '/athletes/chloe-kim.webp', photoStyle: { objectPosition: 'center 5%' } },
   { name: 'Kate Hurst',           school: 'University of Texas',         photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/texassports_com/images/2024/9/4/__0014_Hurst_Kate-2024.jpg', photoStyle: { objectPosition: 'center 10%' } },
@@ -1214,10 +1212,10 @@ export const PLACEMENTS = [
   { name: 'Kathleen Bendoraitis', school: 'University of Maine',         photo: '/athletes/kathleen-bendoraitis.webp' },
   { name: 'Doyee Kim',            school: 'West Point',                  photo: 'https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/goarmywestpoint.com/images/2024/9/4/KIM_DOYEE.jpg', photoStyle: { objectPosition: 'center 10%' } },
   { name: 'Rebekah Jung',         school: 'University of Rochester',     year: '2025', photo: '/photos/rebekah-jung-roster.jpg', photoStyle: { objectPosition: 'center 18%' } },
-  { name: 'Jonas Emerson',        school: 'Wesleyan University',         year: '2025', photo: CDN + '61339be2-39e3-418c-862f-47cbd238837c/Wesleyan.jpg', photoStyle: { objectPosition: 'center 20%' } },
+  { name: 'Jonas Emerson',        school: 'Wesleyan University',         year: '2025', photo: '/legacy/wesleyan.jpg', photoStyle: { objectPosition: 'center 20%' } },
   { name: 'Roy Dafinoiu',         school: 'Lafayette College',           year: '2024', photo: '/photos/roy-dafinoiu.jpg', photoStyle: { objectPosition: 'center 20%', transform: 'scale(0.85)' } },
-  { name: 'Harrison Lee',         school: 'Lehigh University',           year: '2025', photo: CDN + '1762189435887-LS6BS9O946JF5B24GILK/Harrison+Lee+commits.jpg', photoStyle: { objectPosition: 'center 20%' } },
-  { name: 'Sienna Plutzer',       school: 'Holy Cross University',       year: '2025', photo: CDN + '1762189559773-A432QAWJ3081AJNK604W/Sienna+Sacred+Heart.jpg', photoStyle: { objectPosition: 'center 20%' } },
+  { name: 'Harrison Lee',         school: 'Lehigh University',           year: '2025', photo: '/legacy/harrison-lee-commits.jpg', photoStyle: { objectPosition: 'center 20%' } },
+  { name: 'Sienna Plutzer',       school: 'Holy Cross University',       year: '2025', photo: '/legacy/sienna-sacred-heart.jpg', photoStyle: { objectPosition: 'center 20%' } },
 ]
 
 export const TESTIMONIALS = [
@@ -1317,9 +1315,9 @@ export const ABOUT = {
     'Philip received his Economics degree from New York University in 2017 and is now proudly partnered with 24 Hour Fitness to coach swimmers full time.',
   ],
   partners: [
-    { name: '24 Hour Fitness', img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1688644570921-S3QLQDAB9RAB14NLJSLF/1.jpg' },
-    { name: 'Scarlet Aquatics', img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1688644649296-XZLPDDD2JYEZHZPYE1IA/2.jpg' },
-    { name: 'StretchLab', img: 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/1697139043272-PO6DG8YL9XKT01W563U8/Stretchlab.jpg' },
+    { name: '24 Hour Fitness', img: '/legacy/24-hour-fitness.webp' },
+    { name: 'Scarlet Aquatics', img: '/legacy/scarlet-aquatics.webp' },
+    { name: 'StretchLab', img: '/legacy/stretchlab.webp' },
   ],
 }
 

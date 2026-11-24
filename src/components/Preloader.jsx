@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
+const LOGO_URL = '/legacy/peak-aquatic-primary-logo-black.webp'
 
 const TITLE_LETTERS = 'PEAK AQUATIC SPORTS'.split('')
 

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import * as THREE from 'three'
 
-const LOGO_URL = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
+const LOGO_URL = '/legacy/peak-aquatic-primary-logo-black.webp'
 const FONT_URL = 'https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap'
 
 function makeCardCanvas(side, logoImg, W = 1080, H = 640) {

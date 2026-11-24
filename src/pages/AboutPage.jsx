@@ -2,8 +2,8 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { ABOUT } from '../data'
 
-const COACH_IMG = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/a698ca47-fed2-471b-a223-b2d6793a3e4b/V2.jpg'
-const WATER_BG = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7462a441-4975-45be-b932-362b2ec9abfa/bernd-dittrich-pa0-0svIRnM-unsplash.jpg'
+const COACH_IMG = '/legacy/v2.webp'
+const WATER_BG = '/legacy/bernd-dittrich-pa0-0svirnm-unsplash.webp'
 
 export default function AboutPage() {
   return (
