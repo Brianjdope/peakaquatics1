@@ -1,4 +1,4 @@
-import{r as Pi,j as mr}from"./index-Bhj9rfgq.js";/**
+import{r as Pi,j as mr}from"./index-q1mZRB6p.js";/**
  * @license
  * Copyright 2010-2026 Three.js Authors
  * SPDX-License-Identifier: MIT
@@ -3982,7 +3982,7 @@ void main() {
 	`;return i.precision==="highp"?e+=`
 #define HIGH_PRECISION`:i.precision==="mediump"?e+=`
 #define MEDIUM_PRECISION`:i.precision==="lowp"&&(e+=`
-#define LOW_PRECISION`),e}const Dd={[er]:"SHADOWMAP_TYPE_PCF",[vi]:"SHADOWMAP_TYPE_VSM"};function Ld(i){return Dd[i.shadowMapType]||"SHADOWMAP_TYPE_BASIC"}const Id={[Bn]:"ENVMAP_TYPE_CUBE",[ri]:"ENVMAP_TYPE_CUBE",[cr]:"ENVMAP_TYPE_CUBE_UV"};function Ud(i){return i.envMap===!1?"ENVMAP_TYPE_CUBE":Id[i.envMapMode]||"ENVMAP_TYPE_CUBE"}const Nd={[ri]:"ENVMAP_MODE_REFRACTION"};function Fd(i){return i.envMap===!1?"ENVMAP_MODE_REFLECTION":Nd[i.envMapMode]||"ENVMAP_MODE_REFLECTION"}const Od={[ho]:"ENVMAP_BLENDING_MULTIPLY",[El]:"ENVMAP_BLENDING_MIX",[Tl]:"ENVMAP_BLENDING_ADD"};function Bd(i){return i.envMap===!1?"ENVMAP_BLENDING_NONE":Od[i.combine]||"ENVMAP_BLENDING_NONE"}function zd(i){const e=i.envMapCubeUVHeight;if(e===null)return null;const t=Math.log2(e)-2,n=1/e;return{texelWidth:1/(3*Math.max(Math.pow(2,t),7*16)),texelHeight:n,maxMip:t}}function Vd(i,e,t,n){const r=i.getContext(),s=t.defines;let a=t.vertexShader,o=t.fragmentShader;const c=Ld(t),l=Ud(t),f=Fd(t),p=Bd(t),u=zd(t),m=Td(t),g=yd(s),S=r.createProgram();let d,h,M=t.glslVersion?"#version "+t.glslVersion+`
+#define LOW_PRECISION`),e}const Dd={[er]:"SHADOWMAP_TYPE_PCF",[vi]:"SHADOWMAP_TYPE_VSM"};function Ld(i){return Dd[i.shadowMapType]||"SHADOWMAP_TYPE_BASIC"}const Id={[Bn]:"ENVMAP_TYPE_CUBE",[ri]:"ENVMAP_TYPE_CUBE",[cr]:"ENVMAP_TYPE_CUBE_UV"};function Ud(i){return i.envMap===!1?"ENVMAP_TYPE_CUBE":Id[i.envMapMode]||"ENVMAP_TYPE_CUBE"}const Nd={[ri]:"ENVMAP_MODE_REFRACTION"};function Fd(i){return i.envMap===!1?"ENVMAP_MODE_REFLECTION":Nd[i.envMapMode]||"ENVMAP_MODE_REFLECTION"}const Od={[ho]:"ENVMAP_BLENDING_MULTIPLY",[El]:"ENVMAP_BLENDING_MIX",[Tl]:"ENVMAP_BLENDING_ADD"};function Bd(i){return i.envMap===!1?"ENVMAP_BLENDING_NONE":Od[i.combine]||"ENVMAP_BLENDING_NONE"}function zd(i){const e=i.envMapCubeUVHeight;if(e===null)return null;const t=Math.log2(e)-2,n=1/e;return{texelWidth:1/(3*Math.max(Math.pow(2,t),112)),texelHeight:n,maxMip:t}}function Vd(i,e,t,n){const r=i.getContext(),s=t.defines;let a=t.vertexShader,o=t.fragmentShader;const c=Ld(t),l=Ud(t),f=Fd(t),p=Bd(t),u=zd(t),m=Td(t),g=yd(s),S=r.createProgram();let d,h,M=t.glslVersion?"#version "+t.glslVersion+`
 `:"";t.isRawShaderMaterial?(d=["#define SHADER_TYPE "+t.shaderType,"#define SHADER_NAME "+t.shaderName,g].filter(Mi).join(`
 `),d.length>0&&(d+=`
 `),h=["#define SHADER_TYPE "+t.shaderType,"#define SHADER_NAME "+t.shaderName,g].filter(Mi).join(`
