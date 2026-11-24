@@ -1,21 +1,10 @@
 # Security Policy
 
-## Supported Versions
+If you find a security problem with peakaquaticsports.com or its booking system, please
+report it privately by emailing **peakaquaticsports@gmail.com** instead of opening a public
+GitHub issue.
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Include what you found and the steps to reproduce it. We'll reply as soon as we can and let
+you know what we're doing about it.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
-
-## Reporting a Vulnerability
-
-Use this section to tell people how to report a vulnerability.
-
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Only the live site, built from the `main` branch, is supported; older versions are not patched.

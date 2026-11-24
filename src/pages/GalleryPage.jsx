@@ -1,13 +1,55 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { ARTICLES } from '../data'
+import PhotoLightbox from '../components/PhotoLightbox'
 
 // ─── Behold.io widget ────────────────────────────────────────────────────────
-// To activate the live feed:
+// To show a live Instagram feed below the photos:
 //   1. Go to behold.io and create a free account
 //   2. Connect your Instagram account (@peakaquatic_sports)
 //   3. Create a widget and copy your Widget ID
 //   4. Replace null below with your Widget ID string, e.g. 'abc123XYZ'
 const BEHOLD_WIDGET_ID = null
+
+// ─── Photos ──────────────────────────────────────────────────────────────────
+// The gallery shows every photo from the news articles in data.js, newest first,
+// so each new article adds its photos here automatically.
+//
+// Articles whose cover image is a logo, badge, roster or results graphic rather
+// than a photo. Their covers stay out of the gallery; their photo galleries stay
+// in. When a new article uses a graphic as its cover, add its id here.
+const GRAPHIC_COVERS = new Set([
+  'kate-hurst-national-team-2026', 'summer-champs-2026', 'tyr-pro-indy-2026',
+  'zone-select-2026', 'scarlet-memorial-2026', 'chloe-worlds', 'chloe-qualifies-worlds',
+  'ymca-nationals-2025', 'east-coast-elite-2025', 'speedo-sectionals-2025',
+  'njs-scarlet-gold-2025', 'winter-juniors-2024', 'kate-national', 'speedo-summer-2024',
+  'kate-worlds-represent', 'kate-wins-gold',
+])
+// Articles whose extra gallery images are graphics (e.g. a team roster)
+const GRAPHIC_GALLERIES = new Set(['kate-hurst-national-team-2026'])
+
+function collectPhotos() {
+  const articles = Object.entries(ARTICLES)
+    .map(([id, a], order) => ({ id, a, order, time: Date.parse(a.date) || 0 }))
+    .sort((x, y) => (y.time - x.time) || (x.order - y.order))
+
+  const photos = []
+  const seen = new Set()
+  const add = (src, a, alt, position) => {
+    if (!src || seen.has(src)) return
+    seen.add(src)
+    photos.push({ src, alt, caption: a.title, date: a.date, position })
+  }
+  for (const { id, a } of articles) {
+    if (!GRAPHIC_COVERS.has(id)) add(a.img, a, a.title, a.imgPos)
+    if (!GRAPHIC_GALLERIES.has(id)) {
+      (a.gallery || []).forEach((src, i) => add(src, a, `${a.title}, photo ${i + 1}`))
+    }
+  }
+  return photos
+}
+
+const PHOTOS = collectPhotos()
 
 function InstagramFeed() {
   const ref = useRef(null)
@@ -29,7 +71,7 @@ function InstagramFeed() {
     )
   }
 
-  // Placeholder — shown until Behold widget ID is configured
+  // Shown until a Behold widget ID is configured
   return (
     <div style={{
       background: 'var(--surface2)',
@@ -75,18 +117,13 @@ function InstagramFeed() {
       >
         Follow on Instagram
       </a>
-
-      <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
-        <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.7rem', lineHeight: 1.8 }}>
-          To embed your live feed here, create a free account at behold.io,<br />
-          connect @peakaquatic_sports, and add your Widget ID to GalleryPage.jsx.
-        </p>
-      </div>
     </div>
   )
 }
 
 export default function GalleryPage({ setPage }) {
+  const [openIndex, setOpenIndex] = useState(null)
+
   return (
     <div className="page-wrapper">
       <div className="page-header">
@@ -104,6 +141,39 @@ export default function GalleryPage({ setPage }) {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
+          >
+            <p className="gallery-count">{PHOTOS.length} photos · newest first</p>
+            <div className="gallery-grid">
+              {PHOTOS.map((photo, i) => (
+                <button
+                  key={photo.src}
+                  type="button"
+                  className="gallery-tile"
+                  onClick={() => setOpenIndex(i)}
+                  aria-label={`View photo: ${photo.alt}`}
+                >
+                  <img
+                    src={photo.src}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    style={photo.position ? { objectPosition: photo.position } : undefined}
+                  />
+                  <span className="gallery-tile-caption" aria-hidden="true">
+                    {photo.caption}
+                    <small>{photo.date}</small>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            style={{ marginTop: '4rem' }}
           >
             <InstagramFeed />
           </motion.div>
@@ -143,6 +213,8 @@ export default function GalleryPage({ setPage }) {
           </motion.div>
         </div>
       </section>
+
+      <PhotoLightbox photos={PHOTOS} index={openIndex} setIndex={setOpenIndex} />
     </div>
   )
 }

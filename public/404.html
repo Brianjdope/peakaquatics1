@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Peak Aquatic Sports</title>
+  <script>
+    // GitHub Pages serves this file for any address that doesn't exist. The site's
+    // pages live at /#/services, /#/contact, ..., so send typed or old links such as
+    // /services, /contact-us or /news/some-post to the matching page, and anything
+    // else to the home page, instead of leaving visitors on a dead end.
+    (function () {
+      var pages = ['about', 'news', 'records', 'services', 'placements', 'contact', 'gallery', 'terms', 'admin']
+      var aliases = {
+        blog: 'news', events: 'news',
+        coaching: 'services', lessons: 'services', book: 'services', booking: 'services', schedule: 'services',
+        results: 'records', commitments: 'placements', colleges: 'placements',
+        photos: 'gallery', privacy: 'terms'
+      }
+      // 'contact' matches contact and contact-us; 'book' matches book and book-now
+      function matches(word, name) { return word === name || word.indexOf(name + '-') === 0 }
+      var target = ''
+      var parts = location.pathname.toLowerCase().split('/')
+      for (var i = 0; i < parts.length && !target; i++) {
+        var word = parts[i].replace(/\.html?$/, '')
+        if (!word) continue
+        for (var j = 0; j < pages.length && !target; j++) {
+          if (matches(word, pages[j])) target = pages[j]
+        }
+        for (var name in aliases) {
+          if (!target && Object.prototype.hasOwnProperty.call(aliases, name) && matches(word, name)) target = aliases[name]
+        }
+      }
+      location.replace('/' + (target ? '#/' + target : ''))
+    })()
+  </script>
+</head>
+<body style="margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#030303;color:#fcfcfc;font-family:Lato,system-ui,sans-serif;text-align:center">
+  <p>Taking you to <a href="/" style="color:#fcfcfc">Peak Aquatic Sports</a>…</p>
+</body>
+</html>

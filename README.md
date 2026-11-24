@@ -15,7 +15,9 @@ The site is a Vite + React app and must be built before it is served; publishing
 source `index.html` directly renders a blank page.
 
 - **Vercel**: builds with `npm run build:vercel` (`vercel.json` sets the Vite framework).
-- **GitHub Pages**: `npm run deploy` builds `dist/` and pushes it to the `gh-pages` branch.
+- **GitHub Pages**: every push to `main` runs the tests, builds `dist/` and publishes it to the
+  `gh-pages` branch ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)); pull requests
+  get the same tests and build as a check. `npm run deploy` still publishes by hand from your machine.
   The site is served from the root of `peakaquaticsports.com` (`public/CNAME`), so it builds with base `/`.
 
 ## Structure
