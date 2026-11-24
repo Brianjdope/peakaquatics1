@@ -14,6 +14,7 @@ import TermsPage from './pages/TermsPage'
 import GalleryPage from './pages/GalleryPage'
 import AdminPage from './pages/AdminPage'
 import InstallAppBanner from './components/InstallAppBanner'
+import ScrollProgress from './components/ScrollProgress'
 
 const pageVariants = {
   initial: { opacity: 0, y: 18 },
@@ -54,7 +55,6 @@ export default function App() {
   const initialCancel = parseCancelHash()
   const initialPage = initialCancel ? 'services' : pageFromHash()
   const [page, setPage] = useState(initialPage)
-  const [scrollPct, setScrollPct] = useState(0)
   const [scrollToBooking, setScrollToBooking] = useState(!!initialCancel)
   const [cancelParams, setCancelParams] = useState(initialCancel)
 
@@ -109,16 +109,6 @@ export default function App() {
     }
   }, [page])
 
-  useEffect(() => {
-    const onScroll = () => {
-      const el = document.documentElement
-      const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100
-      setScrollPct(Math.min(pct || 0, 100))
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   const renderPage = () => {
     switch (page) {
       case 'home':       return <HomePage setPage={setPage} goToBooking={goToBooking} />
@@ -137,7 +127,7 @@ export default function App() {
 
   return (
     <>
-      <div className="scroll-progress" style={{ width: `${scrollPct}%` }} />
+      <ScrollProgress />
       <InstallAppBanner />
       <Nav page={page} setPage={setPage} goToBooking={goToBooking} />
 

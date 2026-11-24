@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { SERVICES_DATA, FAQS } from '../data'
 import BookingCalendar from '../components/BookingCalendar'
 
-const SERVICES_HERO = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/d5442bc1-106e-4cbb-b97c-1bf08cf27df3/AdobeStock_135671836.jpeg'
+const SERVICES_HERO = '/legacy/adobestock-135671836.webp'
 
 const ServiceIcon = ({ type }) => {
   const size = 28

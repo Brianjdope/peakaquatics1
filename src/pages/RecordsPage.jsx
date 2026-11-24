@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RECORDS_HERO, RECORDS_TABLES } from '../data'
 
-const RECORDS_HERO_IMG = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/f3c1b432-f659-45a9-85b1-3ebc4b019133/AdobeStock_132941702.jpg'
+const RECORDS_HERO_IMG = '/legacy/adobestock-132941702.webp'
 
 const COURSE_TABS = [
   { key: 'scy', label: 'Short Course (SCY)' },

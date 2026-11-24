@@ -4,7 +4,7 @@ import { CONTACT_INFO } from '../data'
 import { lazy, Suspense } from 'react'
 const BusinessCard3D = lazy(() => import('../components/BusinessCard3D'))
 
-const LOGO = 'https://images.squarespace-cdn.com/content/v1/613a5c22540e534e72bda9a1/7fd6ea37-8f94-4626-ac71-1fe5e214471e/peak-aquatic-primary-logo-black.png'
+const LOGO = '/legacy/peak-aquatic-primary-logo-black.webp'
 
 function BusinessCard() {
   const cardRef = useRef(null)
