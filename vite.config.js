@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const base = process.env.VITE_BASE_PATH || '/'
+const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')
 
 export default defineConfig({
   plugins: [
@@ -14,8 +15,11 @@ export default defineConfig({
       workbox: {
         // Precache only the app shell; photos and the lazy three.js chunk are cached on demand
         globPatterns: ['**/*.{js,css,html,svg,woff2}'],
-        globIgnores: ['**/BusinessCard3D-*.js', 'offline.html'],
+        globIgnores: ['**/BusinessCard3D-*.js', 'offline.html', '404.html'],
         navigateFallback: 'index.html',
+        // Only the site root gets the app shell from the service worker. Other paths
+        // (/services, old links) go to the network, where 404.html forwards them.
+        navigateFallbackAllowlist: [new RegExp(`^${escapeRegExp(base)}(\\?.*)?$`)],
         navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,
         runtimeCaching: [

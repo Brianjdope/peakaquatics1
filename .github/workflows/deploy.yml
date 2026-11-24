@@ -1,0 +1,63 @@
+name: Test and deploy
+
+# Pull requests: run the tests and a production build as a check.
+# Pushes to main: the same checks, then publish the site to the gh-pages branch,
+# which GitHub Pages serves at peakaquaticsports.com.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to the same pull request cancels its older run; deploys from main
+# queue up instead of cancelling each other.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    name: Test and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+  deploy:
+    name: Publish to GitHub Pages
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:ghpages
+      - name: Push dist/ to the gh-pages branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # gh-pages' --user option can't parse the bot's bracketed name, so give git
+          # the commit identity directly.
+          GIT_AUTHOR_NAME: 'github-actions[bot]'
+          GIT_AUTHOR_EMAIL: '41898282+github-actions[bot]@users.noreply.github.com'
+          GIT_COMMITTER_NAME: 'github-actions[bot]'
+          GIT_COMMITTER_EMAIL: '41898282+github-actions[bot]@users.noreply.github.com'
+        run: |
+          npx --yes gh-pages@6.3.0 \
+            --dist dist \
+            --message "Deploy ${GITHUB_SHA::7}" \
+            --repo "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
